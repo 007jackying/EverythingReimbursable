@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ReceiptLens | Scan. Extract. Organize.</title>
+<script type='text/javascript' nonce='RVMgJDdDtgEs33GKOhZDyw==' src='https://contribution.usercontent.google.com/g_G5lDXBQhgehOC9bXR5lgJxaazTbBVhknFpa96m5VLfW_hEqinUeVWOZXNuDqppUXTn4ZkzTUvbcvw0Z-wgDCsxPuj8QFty0URGKZBLUqapZgECCNV9bUd7VTsGNKhbvVQe5D3j_EyGbwiVQ8WrMqp-JNKVzm6xB6R2NgmAwDWn_K5f5daB7xKBj3KaXbNeJALFH6e1cIIUMkpH230iU5b01HCdHq6Zp3nNOpRDK0_BmHIk264QitwJItxFfBKGLxEA5tavbuxggckUjtiaW8klTA5YY9cRihgZp-eXkEtyjrj-bbaVFyQKhkTHpj31_ApifybX02Knx_HUUmlr6YlulK_pnolhwoLNvJ5mHmnuyJDTgwNTiGbpI8uSU5QwSFHn3vH-IQ0FybgOCGmrAqSGyYCLRkrc4xGvcGg43EiwXXwq9uyddihVUG46quWDUUy2iH8eOKDW53oe-FI93io0kUasmBpwfNd3TkDCiDK1XlvwLc0MNt2PjsPxqkdUVNUUx5DX6ZYKGg8KaV_POBvFd36yTYwdvnmY3NalFKybz4SA64xvT9iDK7YpSRlbErLlKyfb9LrZJmyt_WtTN7qR_2f9I9cBh3QFAGqCZmaG7KYX6btif-CZhCZrbadE0ulLNu9bJLLOtep9B4R4yG1RIKqYI65DCTn7bD2IAqIag9vNYUurC24ffOT4p9OiWAAn_MoaAagOqjOtY5BqSLJKT75bE4XTS8REYmQSwUYYPFwr4otu33Ov31QwWa2UQFmNgAEqCZ2zvfFfeRgCDYS5FoIZLeqSZ_y0tg'></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#160700",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2f3130",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-secondary-fixed": "#002113",
+                        "inverse-on-surface": "#f1f1ef",
+                        "on-background": "#1a1c1b",
+                        "primary-fixed": "#e3dfff",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#1e1b4b",
+                        "outline": "#787680",
+                        "secondary": "#006c49",
+                        "tertiary-fixed-dim": "#f1bc91",
+                        "surface-container": "#efeeec",
+                        "outline-variant": "#c8c5d0",
+                        "primary-fixed-dim": "#c4c1fb",
+                        "on-surface": "#1a1c1b",
+                        "on-primary-fixed-variant": "#444173",
+                        "secondary-container": "#6cf8bb",
+                        "tertiary-fixed": "#ffdcc2",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-bright": "#faf9f7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#5b598c",
+                        "primary": "#070235",
+                        "on-tertiary-container": "#ae7f59",
+                        "on-tertiary-fixed-variant": "#633e1e",
+                        "surface-container-low": "#f4f3f1",
+                        "surface-container-high": "#e9e8e6",
+                        "on-primary-fixed": "#181445",
+                        "surface-container-highest": "#e3e2e0",
+                        "on-secondary-container": "#00714d",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dbdad8",
+                        "inverse-primary": "#c4c1fb",
+                        "secondary-fixed-dim": "#4edea3",
+                        "tertiary-container": "#371a00",
+                        "background": "#faf9f7",
+                        "on-surface-variant": "#47464f",
+                        "surface": "#faf9f7",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#8683ba",
+                        "on-tertiary-fixed": "#2e1500",
+                        "surface-variant": "#e3e2e0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .confidence-ring {
+            background: conic-gradient(from 0deg, #006c49 var(--percentage), transparent var(--percentage));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body text-on-background antialiased selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Screen Container -->
+<main class="relative min-h-screen flex flex-col items-center justify-between overflow-hidden bg-background">
+<!-- Subtle Ambient Background Element -->
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-secondary-container opacity-10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-primary-container opacity-5 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Top Content: Branding -->
+<div class="flex-1 flex flex-col items-center justify-center z-10 w-full px-8 max-w-md mx-auto">
+<!-- App Logo & Brand Identity -->
+<div class="mb-8 flex flex-col items-center">
+<div class="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center shadow-2xl shadow-primary/20 mb-6 group transition-transform duration-500 active:scale-95">
+<span class="material-symbols-outlined text-surface-container-lowest text-4xl" data-icon="receipt_long">receipt_long</span>
+</div>
+<h1 class="font-headline font-extrabold text-4xl tracking-tighter text-primary mb-2">ReceiptLens</h1>
+<p class="font-headline font-bold text-lg tracking-wide text-on-surface-variant">Scan. Extract. Organize.</p>
+</div>
+<!-- Illustration Area: Semantic Layering -->
+<div class="relative w-full aspect-square max-w-[320px] flex items-center justify-center mb-12">
+<!-- Outer Glow -->
+<div class="absolute inset-0 bg-secondary/10 rounded-full blur-[64px]"></div>
+<!-- The "Scanner" Visual -->
+<div class="relative w-full h-full bg-surface-container-lowest rounded-[40px] shadow-sm flex flex-col items-center justify-center p-6 overflow-hidden">
+<!-- Receipt Mockup -->
+<div class="w-3/4 h-5/6 bg-white border border-outline-variant/15 rounded-sm p-4 flex flex-col gap-3 shadow-inner">
+<div class="w-12 h-1.5 bg-surface-container-highest rounded-full"></div>
+<div class="w-full h-1 bg-surface-container-low rounded-full"></div>
+<div class="w-2/3 h-1 bg-surface-container-low rounded-full"></div>
+<!-- AI Scan Line Overlay -->
+<div class="absolute top-1/4 left-0 w-full h-1 bg-secondary shadow-[0_0_15px_rgba(0,108,73,0.5)] z-20"></div>
+<div class="mt-auto pt-4 border-t border-dashed border-outline-variant/30 flex justify-between">
+<div class="w-8 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-12 h-2 bg-primary/20 rounded-full"></div>
+</div>
+</div>
+<!-- Floating Precision Chips -->
+<div class="absolute top-12 right-4 bg-secondary-container/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2 border border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle" style="font-variation-settings: &#39;FILL&#39; 1;">check_circle</span>
+<span class="font-label text-[10px] font-bold text-on-secondary-container uppercase tracking-widest">Verified</span>
+</div>
+<div class="absolute bottom-16 left-4 bg-primary-container text-surface-container-lowest px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]" data-icon="bolt">bolt</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest">Auto-Extract</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Content: Action Area -->
+<div class="w-full px-6 pb-12 max-w-md mx-auto z-10">
+<div class="flex flex-col gap-4">
+<button class="w-full h-[56px] bg-primary hover:bg-primary-container text-on-primary font-headline font-bold rounded-xl transition-all duration-300 active:scale-[0.98] shadow-xl shadow-primary/10 flex items-center justify-center gap-3 group">
+                    Get Started
+                    <span class="material-symbols-outlined transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<div class="flex items-center justify-between px-2">
+<p class="text-sm text-on-surface-variant font-medium">Already have an account?</p>
+<button class="text-secondary font-headline font-bold text-sm hover:opacity-80 transition-opacity">
+                        Sign In
+                    </button>
+</div>
+</div>
+<!-- Trust Indicator -->
+<div class="mt-12 flex justify-center items-center gap-8 opacity-40 grayscale contrast-125">
+<img alt="" class="h-6" data-alt="minimalist tech security certification badge icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHiXskYAesMRPk9ECNGJUvQTLEB0l8tezyWJiOP6wZbjziREzxQ_JVcfOC-l2_IeZmWJT7U8NxcCF6CNVTe8A5JuoqvKO2-UY0WiRdPkWh-vdl5zi5Ei8I8J56iljy742LSsFLL8S6abtZHYt11axt4M0eochTIE1t9QbcaRxrTToQGN82yQshqL_cWD4eGw7a7ftkumffc8Ki2pwrOPPCf08x4PqzE4LnSi_pmFS_93FLUoESy31aud482Q_WnihUiZFqf60NEgE"/>
+<img alt="" class="h-6" data-alt="minimalist abstract encryption lock symbol" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5QjBDqyr4M-IWKUqVIu3YQ_hkT_jWMB49LGJIAD8kzPx7Y0iPAumuH7kWdk7ZSwXsr1Ylrxgg8uLJddUmvcK0oCduStyN0VLXeOVIJ7XjOW6EMC1SUbZVaehg3FC3dhkV_-ZkFiBoDdYHJCwxubrTZKFmCeXJooWbfdzdgiZzD4bffqa0I-6iAB4ac227KtoUm6DWFaf91K5VBGL4sYQksuZe9npJyoudOVsL3xvFLIJu_RRVmwBC45QIdUYNc_pQsCrS9OWfXNM"/>
+<img alt="" class="h-6" data-alt="minimalist circuit brain intelligence node logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1dihipJm-ZQLlsBiiv4FgOUeTa8JI8Q7b8vW8cP8e9IDY6I4XRE_QwwmRmI3qi26sD4R9HEQK6-Raaj0wgGu3Hffu2S1AzOdOhTelpK23CSYEMpYOhz0QOCEzwKsJiKGILMZT7KjlH-D-cA4RDLPSZDWYVhGVw6xd-QJ3E7RMWJ-CYrWqcPLkN2vBEKsBOWdzcUwKG-aPqMr5voXEZB1SrkFrsWEZfCZO-axJVlGa8ie_jc6NmbpLfVC0Ijaq6BGYRynpO80h1Kc"/>
+</div>
+</div>
+<!-- Navigation Suppression: Transactional Screen (Shell Hidden as per Rules) -->
+</main>
+<!-- Background Decoration -->
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+<div class="absolute top-[20%] right-[-5%] w-[400px] h-[400px] bg-secondary opacity-[0.03] blur-[100px] rounded-full"></div>
+<div class="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-primary opacity-[0.02] blur-[120px] rounded-full"></div>
+</div>
+</body></html>

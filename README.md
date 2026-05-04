@@ -1,17 +1,27 @@
 # EverythingReimbursable
 
-A cross-platform receipt scanner and expense tracking app built with Expo React Native (iOS, Android, Web). Scan receipts, extract data with AI, and manage your reimbursable expenses — all in one place.
+A cross-platform receipt scanner and expense tracker built with Expo React Native.
+Scan a receipt → AI extracts the data → review and save → browse your history.
+
+> **Dev progress log:** see [`PROGRESS.md`](./PROGRESS.md)
+> **Design system:** see [`CLAUDE.md`](./CLAUDE.md)
 
 ---
 
 ## Tech Stack
 
-- **Framework:** Expo (React Native) with file-based routing via Expo Router
-- **Platforms:** iOS, Android, Web
-- **Language:** TypeScript
-- **Styling:** Design tokens (see `CLAUDE.md`)
-- **Fonts:** DM Sans + JetBrains Mono via `@expo-google-fonts`
-- **Icons:** `phosphor-react-native`
+| Layer       | Technology                                                    |
+| ----------- | ------------------------------------------------------------- |
+| Framework   | Expo ~55 / React Native 0.83.4                                |
+| Language    | TypeScript (strict)                                           |
+| Navigation  | Expo Router (file-based)                                      |
+| State       | React Context — `AuthContext`, `ReceiptsContext`              |
+| Persistence | `expo-secure-store` (auth) + `AsyncStorage` (receipts, prefs) |
+| Camera      | `expo-camera` + `expo-image-picker`                           |
+| Animations  | `react-native-reanimated` 4                                   |
+| Fonts       | Plus Jakarta Sans + Space Grotesk (`@expo-google-fonts`)      |
+| Icons       | `@expo/vector-icons` — MaterialIcons + MaterialCommunityIcons |
+| Export      | `expo-file-system` v55 + `expo-sharing`                       |
 
 ---
 
@@ -20,86 +30,134 @@ A cross-platform receipt scanner and expense tracking app built with Expo React 
 ### Prerequisites
 
 - Node.js 18+
-- Expo CLI (`npm install -g expo-cli`)
-- For iOS: Xcode + iOS Simulator
-- For Android: Android Studio + Android Emulator
+- iOS: Xcode + iOS Simulator, or physical device with Expo Go
+- Android: Android Studio + Android Emulator, or physical device with Expo Go
 
-### Install dependencies
+### Install
 
 ```bash
 npm install
 ```
 
-### Start the development server
+### Run
 
 ```bash
 npx expo start
+# iOS Simulator:     press i
+# Android Emulator:  press a
+# Web browser:       press w
+# Physical device:   scan QR with Expo Go
 ```
-
-From the terminal output you can open the app in:
-
-- **iOS Simulator** — press `i`
-- **Android Emulator** — press `a`
-- **Web** — press `w`
-- **Expo Go** — scan the QR code with your phone
 
 ---
 
 ## Project Structure
 
 ```
-EverythingReimbursable/
-├── src/
-│   └── app/
-│       ├── (tabs)/         # Bottom tab screens (Home, History, Profile)
-│       ├── +not-found.tsx  # 404 fallback screen
-│       └── _layout.tsx     # Root layout
-├── assets/
-│   └── images/             # App icons, splash screen, background images
-├── CLAUDE.md               # Design system & coding standards (source of truth)
-├── app.json                # Expo configuration
-└── package.json
+src/
+├── app/
+│   ├── _layout.tsx              # Root layout — font load, auth/receipts rehydration
+│   ├── index.tsx                # Auth-aware redirect → home or splash
+│   ├── ai-processing.tsx        # AI extraction progress screen (modal)
+│   ├── receipt-detail.tsx       # Receipt review/edit screen (modal)
+│   ├── (auth)/
+│   │   ├── _layout.tsx
+│   │   ├── splash.tsx           # 3-slide onboarding with gradient bg
+│   │   ├── login.tsx
+│   │   └── signup.tsx
+│   └── (main)/
+│       ├── _layout.tsx          # Tab navigator + auth guard + Scan FAB
+│       ├── home.tsx             # Dashboard — summary card, quick actions, recent receipts
+│       ├── history.tsx          # Full receipt list — filters, search, timeline, export
+│       ├── scan.tsx             # Camera screen
+│       └── profile.tsx          # User profile — edit name, currency, export, logout
+├── components/
+│   ├── AppButton.tsx            # primary / ghost / quick-action-dark / quick-action-light / disabled
+│   ├── AppInput.tsx             # Labelled input with error state
+│   ├── Chip.tsx                 # Status + category badges
+│   ├── FilterTab.tsx            # Horizontal filter pill
+│   ├── HistoryListItem.tsx      # Receipt row in history
+│   ├── ReceiptCard.tsx          # Receipt card on home
+│   ├── SearchBar.tsx
+│   ├── SummaryCard.tsx          # Dark hero card with monthly stats
+│   └── TimelineHeader.tsx       # Month/category section label
+├── constants/
+│   └── theme.ts                 # All color tokens, spacing, radius, shadows, font families
+├── context/
+│   ├── AuthContext.tsx          # login / signUp / logout / updateName
+│   └── ReceiptsContext.tsx      # CRUD: add / update / delete / get
+├── data/
+│   └── mockReceipts.ts          # 8 seed receipts + format helpers
+├── types/
+│   └── receipt.ts               # Receipt interface, ReceiptCategory, ReceiptStatus
+└── utils/
+    ├── categories.ts            # Category → icon name map
+    └── exportCsv.ts             # CSV generation + share sheet (expo-file-system v55 OOP API)
 ```
+
+---
+
+## Navigation Flow
+
+```
+index.tsx (auth-aware redirect)
+├── /(auth)/splash    ← first launch / logged out
+├── /(auth)/login
+├── /(auth)/signup
+└── /(main)/          ← auth-gated tab navigator
+    ├── home
+    ├── history
+    ├── scan          ← opens camera as tab; hides tab bar
+    └── profile
+
+Modal stack (over tabs):
+├── /ai-processing    ← receives imageUri param
+└── /receipt-detail   ← receives id or extracted JSON param
+```
+
+---
+
+## Core User Flow
+
+1. **Splash** → tap "Get Started" → **Login / Sign Up**
+2. **Home** → tap Scan FAB or "Scan Receipt" quick action
+3. **Camera** → capture photo → navigate to **AI Processing** with `imageUri`
+4. **AI Processing** → `mockExtract` runs (3.5s) → animated progress bar → navigate to **Receipt Detail** with extracted JSON
+5. **Receipt Detail** → review, optionally edit fields → "Save Receipt" → back to **Home**
+6. **History** → filter / search / group by category → long-press to delete
+7. **Profile** → edit display name, select currency, export CSV, logout
 
 ---
 
 ## Design System
 
-All UI decisions — colors, typography, spacing, components, animations — are defined in [`CLAUDE.md`](./CLAUDE.md). This is the single source of truth for the app's design language.
+All UI decisions are defined in [`CLAUDE.md`](./CLAUDE.md):
 
-Key principles:
-
-- Minimalist, fintech-grade aesthetic (Revolut / Linear / Notion inspired)
-- Strict 3-role color system — no gradients, no extra colors
-- 4px base spacing grid
-- DM Sans for all text, JetBrains Mono for amounts and IDs only
+- Material Design 3–derived color token system (never hardcode hex)
+- Plus Jakarta Sans (headings/body) + Space Grotesk (labels/amounts/mono)
+- 4px base spacing grid (`theme.spacing[N]`)
+- `StyleSheet.create()` only — no inline styles
 
 ---
 
 ## Scripts
 
-| Command                 | Description                                        |
-| ----------------------- | -------------------------------------------------- |
-| `npm start`             | Start Expo dev server                              |
-| `npm run android`       | Open on Android emulator                           |
-| `npm run ios`           | Open on iOS simulator                              |
-| `npm run web`           | Open in browser                                    |
-| `npm run lint`          | Run ESLint                                         |
-| `npm run reset-project` | Reset to blank slate (moves starter to `example/`) |
+| Command                    | Description                 |
+| -------------------------- | --------------------------- |
+| `npx expo start`           | Start dev server            |
+| `npx expo start --ios`     | iOS simulator directly      |
+| `npx expo start --android` | Android emulator directly   |
+| `npx tsc --noEmit`         | TypeScript check (0 errors) |
+| `npx expo lint`            | ESLint                      |
 
 ---
 
-## Linting & Formatting
+## Status
 
-```bash
-# Lint
-npx expo lint
+See [`PROGRESS.md`](./PROGRESS.md) for the full phase-by-phase development log, all technical decisions, and the Phase 4 backlog.
 
-# Format (Prettier)
-npx prettier --write .
-```
-
-Pre-commit hooks via Husky enforce lint and format checks before every commit.
+**Current:** Phases 1–3 complete. All screens built, local persistence wired, animations polished.
+**Next:** Real auth API, real OCR/AI API, cloud image storage.
 
 ---
 

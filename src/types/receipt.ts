@@ -23,6 +23,8 @@ export interface Receipt {
   paymentLast4: string | null
   category: ReceiptCategory
   imageUri: string
+  driveFileId?: string | null
+  driveWebViewLink?: string | null
   confidence: number
   status: ReceiptStatus
   createdAt: string

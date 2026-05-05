@@ -1,226 +1,339 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ReceiptLens - Profile</title>
-<script type='text/javascript' nonce='RESwZWzgukjew+8e8hQ2bg==' src='https://contribution.usercontent.google.com/NvvtXPV1x99MFQvt51bCquBmRPMJZtPto8ieK1ygCqzIghCdoRsR_2toyfpg3SjRjyADBjNMPZMtKEzA2mO1JyBtH-bEpsGxx_3WfNx0k8tJCQP-g0VPo6khub5a4QesEZPmlfsHLOlRkHNAkpmTVgvaRGteW34O-Uq2F1UeyfBH0imXgyBz3I8IjG8y6494nDrCWqDE9YK5QABCgRpL2bFiWQVligFwM_PeTw0Kl6vV4aLAHZotwR0e81wi0rSlFvl-OIZyq4787szNHDoojAepaiwJ_2alQFwja37b2RySzyEqkyZFBQhG3NDIc7EKysGDKErd1Ghv1o74VQZ5LIOzlYwX0ZQPuA4UzwtbP69KMdLKCqnWeXow4-5sRa3Oahp3shBFrtAvBdP_Gho5C_G3BRJMiCcAtO_KkT44aKXAqW6FmVrRFQouWIETmsZDrRDwyODJpVR9zrMvhFXYFje5IMP1wT8v-lNJVMbEs5f1FpKbLJMUGwI0ngdLHSvvnYpppzWntvH4K6Ph71pnN1gmS1keQYfddZzqvuBprxKt2bufwIQJ4K_nFp7TUJPvhOC6ldB539-UkNwgXzoeRD7bwwy7SW__03eNuHVz9Q73LE4ZgEXnBjOTnOZQYRkScfbZOIl12MH2K0AOWZ61Lf4HX5YmMtlBKnZlkbLKtxH2A63Uqw0yTLtNGC1Qs2SwKEb9VlYvTk1ICmr7jQGyM5j-7WFXqdAusJO7w2G4xzOfM-FnUmvmAFcTHwfEYWZfWFyuDJ8jNx4gXvmnlx6QAOgJN7B2_-SfaM87qg'></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "tertiary": "#160700",
-                        "on-error-container": "#93000a",
-                        "inverse-surface": "#2f3130",
-                        "on-secondary-fixed-variant": "#005236",
-                        "on-secondary-fixed": "#002113",
-                        "inverse-on-surface": "#f1f1ef",
-                        "on-background": "#1a1c1b",
-                        "primary-fixed": "#e3dfff",
-                        "on-tertiary": "#ffffff",
-                        "primary-container": "#1e1b4b",
-                        "outline": "#787680",
-                        "secondary": "#006c49",
-                        "tertiary-fixed-dim": "#f1bc91",
-                        "surface-container": "#efeeec",
-                        "outline-variant": "#c8c5d0",
-                        "primary-fixed-dim": "#c4c1fb",
-                        "on-surface": "#1a1c1b",
-                        "on-primary-fixed-variant": "#444173",
-                        "secondary-container": "#6cf8bb",
-                        "tertiary-fixed": "#ffdcc2",
-                        "secondary-fixed": "#6ffbbe",
-                        "surface-bright": "#faf9f7",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-tint": "#5b598c",
-                        "primary": "#070235",
-                        "on-tertiary-container": "#ae7f59",
-                        "on-tertiary-fixed-variant": "#633e1e",
-                        "surface-container-low": "#f4f3f1",
-                        "surface-container-high": "#e9e8e6",
-                        "on-primary-fixed": "#181445",
-                        "surface-container-highest": "#e3e2e0",
-                        "on-secondary-container": "#00714d",
-                        "on-secondary": "#ffffff",
-                        "surface-dim": "#dbdad8",
-                        "inverse-primary": "#c4c1fb",
-                        "secondary-fixed-dim": "#4edea3",
-                        "tertiary-container": "#371a00",
-                        "background": "#faf9f7",
-                        "on-surface-variant": "#47464f",
-                        "surface": "#faf9f7",
-                        "error": "#ba1a1a",
-                        "on-primary": "#ffffff",
-                        "on-error": "#ffffff",
-                        "error-container": "#ffdad6",
-                        "on-primary-container": "#8683ba",
-                        "on-tertiary-fixed": "#2e1500",
-                        "surface-variant": "#e3e2e0"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Plus Jakarta Sans"],
-                        "body": ["Plus Jakarta Sans"],
-                        "label": ["Space Grotesk"]
-                    }
-                },
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ReceiptLens - Profile</title>
+    <script
+      type="text/javascript"
+      nonce="RESwZWzgukjew+8e8hQ2bg=="
+      src="https://contribution.usercontent.google.com/NvvtXPV1x99MFQvt51bCquBmRPMJZtPto8ieK1ygCqzIghCdoRsR_2toyfpg3SjRjyADBjNMPZMtKEzA2mO1JyBtH-bEpsGxx_3WfNx0k8tJCQP-g0VPo6khub5a4QesEZPmlfsHLOlRkHNAkpmTVgvaRGteW34O-Uq2F1UeyfBH0imXgyBz3I8IjG8y6494nDrCWqDE9YK5QABCgRpL2bFiWQVligFwM_PeTw0Kl6vV4aLAHZotwR0e81wi0rSlFvl-OIZyq4787szNHDoojAepaiwJ_2alQFwja37b2RySzyEqkyZFBQhG3NDIc7EKysGDKErd1Ghv1o74VQZ5LIOzlYwX0ZQPuA4UzwtbP69KMdLKCqnWeXow4-5sRa3Oahp3shBFrtAvBdP_Gho5C_G3BRJMiCcAtO_KkT44aKXAqW6FmVrRFQouWIETmsZDrRDwyODJpVR9zrMvhFXYFje5IMP1wT8v-lNJVMbEs5f1FpKbLJMUGwI0ngdLHSvvnYpppzWntvH4K6Ph71pnN1gmS1keQYfddZzqvuBprxKt2bufwIQJ4K_nFp7TUJPvhOC6ldB539-UkNwgXzoeRD7bwwy7SW__03eNuHVz9Q73LE4ZgEXnBjOTnOZQYRkScfbZOIl12MH2K0AOWZ61Lf4HX5YmMtlBKnZlkbLKtxH2A63Uqw0yTLtNGC1Qs2SwKEb9VlYvTk1ICmr7jQGyM5j-7WFXqdAusJO7w2G4xzOfM-FnUmvmAFcTHwfEYWZfWFyuDJ8jNx4gXvmnlx6QAOgJN7B2_-SfaM87qg"
+    ></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              tertiary: '#160700',
+              'on-error-container': '#93000a',
+              'inverse-surface': '#2f3130',
+              'on-secondary-fixed-variant': '#005236',
+              'on-secondary-fixed': '#002113',
+              'inverse-on-surface': '#f1f1ef',
+              'on-background': '#1a1c1b',
+              'primary-fixed': '#e3dfff',
+              'on-tertiary': '#ffffff',
+              'primary-container': '#1e1b4b',
+              outline: '#787680',
+              secondary: '#006c49',
+              'tertiary-fixed-dim': '#f1bc91',
+              'surface-container': '#efeeec',
+              'outline-variant': '#c8c5d0',
+              'primary-fixed-dim': '#c4c1fb',
+              'on-surface': '#1a1c1b',
+              'on-primary-fixed-variant': '#444173',
+              'secondary-container': '#6cf8bb',
+              'tertiary-fixed': '#ffdcc2',
+              'secondary-fixed': '#6ffbbe',
+              'surface-bright': '#faf9f7',
+              'surface-container-lowest': '#ffffff',
+              'surface-tint': '#5b598c',
+              primary: '#070235',
+              'on-tertiary-container': '#ae7f59',
+              'on-tertiary-fixed-variant': '#633e1e',
+              'surface-container-low': '#f4f3f1',
+              'surface-container-high': '#e9e8e6',
+              'on-primary-fixed': '#181445',
+              'surface-container-highest': '#e3e2e0',
+              'on-secondary-container': '#00714d',
+              'on-secondary': '#ffffff',
+              'surface-dim': '#dbdad8',
+              'inverse-primary': '#c4c1fb',
+              'secondary-fixed-dim': '#4edea3',
+              'tertiary-container': '#371a00',
+              background: '#faf9f7',
+              'on-surface-variant': '#47464f',
+              surface: '#faf9f7',
+              error: '#ba1a1a',
+              'on-primary': '#ffffff',
+              'on-error': '#ffffff',
+              'error-container': '#ffdad6',
+              'on-primary-container': '#8683ba',
+              'on-tertiary-fixed': '#2e1500',
+              'surface-variant': '#e3e2e0'
             },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px'
+            },
+            fontFamily: {
+              headline: ['Plus Jakarta Sans'],
+              body: ['Plus Jakarta Sans'],
+              label: ['Space Grotesk']
+            }
+          }
         }
+      }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #FAF9F7;
-        }
-        .editorial-shadow {
-            box-shadow: 0 12px 32px -4px rgba(26, 28, 27, 0.04);
-        }
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #faf9f7;
+      }
+      .editorial-shadow {
+        box-shadow: 0 12px 32px -4px rgba(26, 28, 27, 0.04);
+      }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
   </head>
-<body class="bg-surface text-on-surface min-h-screen pb-32">
-<!-- Top App Bar -->
-<header class="flex justify-between items-center px-6 py-4 w-full bg-[#FAF9F7] dark:bg-slate-950 sticky top-0 z-40">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
-<h1 class="font-[&#39;Plus_Jakarta_Sans&#39;] font-bold tracking-tight text-xl text-[#070235] dark:text-indigo-300 tracking-tighter">ReceiptLens</h1>
-</div>
-<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border-2 border-surface-container-lowest">
-<img alt="Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional man with a neutral expression against a soft studio background, high-end editorial style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC3NhY38DUB2sEG0I-xOF4ecZp3KmOO_x84UeUyj1VYbznif8z8nyPGP8q_gb7oOZjFWWmnajJAZ3ff1yexznzPGc321nhh-4UnRW8KJ8Xdo9M9PDjWURIQKIelDdtH3jih3u8zT55_f_NfoibQH-fnSc3QGuqmOgRQhOWbnwtGgp1Uid-Vkzdops2jn_Gng3nxvpZNsLvC8ljQsMSJMjKAwIH2kIFOhIcnQsVPvA0L7k9HploR2rXfuEH0TBkVcTWiqyS4sFIQO0"/>
-</div>
-</header>
-<main class="max-w-md mx-auto px-6 mt-8">
-<!-- Profile Header Section -->
-<section class="mb-12">
-<div class="flex flex-col items-center text-center">
-<div class="relative mb-6">
-<div class="w-28 h-28 rounded-[2rem] bg-surface-container-lowest overflow-hidden editorial-shadow flex items-center justify-center border-4 border-surface-container-low">
-<img alt="Alex Curator" class="w-full h-full object-cover" data-alt="Professional portrait of a man in a dark navy suit against a warm gray architectural background, clean composition" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcyggYKKXvei_sf1UCGWQB2ErzF4s4MBV_Bm72dSDPf3PwWS234Gllado8cgfBOc3DI690opf1UwBTU_iLgLNqVDRE8DZ5CWhLgnZa5lU7MaqJg7vkTMgDPW5xbx5x0-LozzWNatggmPCzqc_t26S3efpJ_H8mwdP3M5rJs1_fo04d8nbE2_01TAfEbD1I69Tc76VzZvQZ-r69nXGkDhm0sx1Zpkom-MT5h2P5jfvE_-_W__WH4xlLABBft9IWLBrAUI8JEkNpQuM"/>
-</div>
-<div class="absolute -bottom-2 -right-2 bg-secondary text-on-secondary p-2 rounded-xl shadow-lg">
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: &#39;FILL&#39; 1;">verified</span>
-</div>
-</div>
-<h2 class="text-3xl font-extrabold text-primary tracking-tight mb-1">Alex Curator</h2>
-<p class="text-on-surface-variant font-medium">alex@receiptlens.ai</p>
-<div class="mt-6 inline-flex items-center gap-2 px-4 py-1.5 bg-secondary-container/30 text-secondary rounded-full">
-<span class="material-symbols-outlined text-base" style="font-variation-settings: &#39;FILL&#39; 1;">stars</span>
-<span class="font-label text-xs font-bold uppercase tracking-widest">Premium Member</span>
-</div>
-</div>
-</section>
-<!-- Stats Grid (Editorial Asymmetry) -->
-<section class="grid grid-cols-12 gap-4 mb-10">
-<div class="col-span-7 bg-surface-container-low p-6 rounded-[1.5rem] flex flex-col justify-between h-32">
-<span class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Receipts Scanned</span>
-<div class="flex items-baseline gap-2">
-<span class="text-4xl font-black text-primary font-label">1,284</span>
-<span class="text-secondary text-xs font-bold">+12%</span>
-</div>
-</div>
-<div class="col-span-5 bg-primary-container p-6 rounded-[1.5rem] flex flex-col justify-between h-32 text-on-primary">
-<span class="text-on-primary-container text-xs font-bold uppercase tracking-widest">Confidence</span>
-<span class="text-4xl font-black font-label">99<span class="text-xl">%</span></span>
-</div>
-</section>
-<!-- Settings List -->
-<section class="space-y-6">
-<h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-[0.2em] ml-2">Preferences &amp; Security</h3>
-<div class="bg-surface-container-low rounded-[2rem] overflow-hidden p-2">
-<!-- Row: Notifications -->
-<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high transition-all rounded-2xl group">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary group-active:scale-95 transition-transform">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-</div>
-<div class="text-left">
-<p class="font-bold text-primary">Notifications</p>
-<p class="text-xs text-on-surface-variant">Manage alerts and summaries</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant/40">chevron_right</span>
-</button>
-<!-- Row: Export Data -->
-<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high transition-all rounded-2xl group">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary group-active:scale-95 transition-transform">
-<span class="material-symbols-outlined" data-icon="ios_share">ios_share</span>
-</div>
-<div class="text-left">
-<p class="font-bold text-primary">Export Data</p>
-<p class="text-xs text-on-surface-variant">CSV, PDF, and Cloud Sync</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant/40">chevron_right</span>
-</button>
-<!-- Row: Settings (General) -->
-<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high transition-all rounded-2xl group">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary group-active:scale-95 transition-transform">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-</div>
-<div class="text-left">
-<p class="font-bold text-primary">General Settings</p>
-<p class="text-xs text-on-surface-variant">Currency and language</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant/40">chevron_right</span>
-</button>
-</div>
-<!-- Logout -->
-<button class="w-full flex items-center justify-center gap-3 p-5 bg-surface-container-high hover:bg-error-container hover:text-on-error-container transition-colors rounded-[1.5rem] font-bold text-primary mt-4 group">
-<span class="material-symbols-outlined text-xl" data-icon="logout">logout</span>
-                Logout Account
-            </button>
-</section>
-<!-- Support Section -->
-<section class="mt-10 mb-20 px-4 py-6 border-t border-outline-variant/10">
-<div class="flex justify-between items-center">
-<div>
-<h4 class="font-bold text-primary">Need Help?</h4>
-<p class="text-sm text-on-surface-variant">Our support team is here 24/7</p>
-</div>
-<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-bold text-sm shadow-xl active:scale-95 transition-transform">
-                    Contact
-                </button>
-</div>
-</section>
-</main>
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 bg-[#FAF9F7]/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_-8px_30px_rgb(0,0,0,0.04)] rounded-t-3xl">
-<a class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300" href="#">
-<span class="material-symbols-outlined" data-icon="home">home</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1">Home</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300" href="#">
-<span class="material-symbols-outlined" data-icon="history">history</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1">History</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300" href="#">
-<span class="material-symbols-outlined" data-icon="document_scanner">document_scanner</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1">Scan</span>
-</a>
-<!-- Active Tab: Profile -->
-<a class="flex flex-col items-center justify-center bg-[#1E1B4B] dark:bg-indigo-600 text-white rounded-2xl p-3 mb-1 active:scale-90 transition-transform duration-300" href="#">
-<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: &#39;FILL&#39; 1;">person</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1">Profile</span>
-</a>
-</nav>
-</body></html>
+  <body class="bg-surface text-on-surface min-h-screen pb-32">
+    <!-- Top App Bar -->
+    <header
+      class="flex justify-between items-center px-6 py-4 w-full bg-[#FAF9F7] dark:bg-slate-950 sticky top-0 z-40"
+    >
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+        <h1
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] font-bold tracking-tight text-xl text-[#070235] dark:text-indigo-300 tracking-tighter"
+        >
+          ReceiptLens
+        </h1>
+      </div>
+      <div
+        class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border-2 border-surface-container-lowest"
+      >
+        <img
+          alt="Profile"
+          class="w-full h-full object-cover"
+          data-alt="Close-up portrait of a professional man with a neutral expression against a soft studio background, high-end editorial style"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC3NhY38DUB2sEG0I-xOF4ecZp3KmOO_x84UeUyj1VYbznif8z8nyPGP8q_gb7oOZjFWWmnajJAZ3ff1yexznzPGc321nhh-4UnRW8KJ8Xdo9M9PDjWURIQKIelDdtH3jih3u8zT55_f_NfoibQH-fnSc3QGuqmOgRQhOWbnwtGgp1Uid-Vkzdops2jn_Gng3nxvpZNsLvC8ljQsMSJMjKAwIH2kIFOhIcnQsVPvA0L7k9HploR2rXfuEH0TBkVcTWiqyS4sFIQO0"
+        />
+      </div>
+    </header>
+    <main class="max-w-md mx-auto px-6 mt-8">
+      <!-- Profile Header Section -->
+      <section class="mb-12">
+        <div class="flex flex-col items-center text-center">
+          <div class="relative mb-6">
+            <div
+              class="w-28 h-28 rounded-[2rem] bg-surface-container-lowest overflow-hidden editorial-shadow flex items-center justify-center border-4 border-surface-container-low"
+            >
+              <img
+                alt="Alex Curator"
+                class="w-full h-full object-cover"
+                data-alt="Professional portrait of a man in a dark navy suit against a warm gray architectural background, clean composition"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcyggYKKXvei_sf1UCGWQB2ErzF4s4MBV_Bm72dSDPf3PwWS234Gllado8cgfBOc3DI690opf1UwBTU_iLgLNqVDRE8DZ5CWhLgnZa5lU7MaqJg7vkTMgDPW5xbx5x0-LozzWNatggmPCzqc_t26S3efpJ_H8mwdP3M5rJs1_fo04d8nbE2_01TAfEbD1I69Tc76VzZvQZ-r69nXGkDhm0sx1Zpkom-MT5h2P5jfvE_-_W__WH4xlLABBft9IWLBrAUI8JEkNpQuM"
+              />
+            </div>
+            <div
+              class="absolute -bottom-2 -right-2 bg-secondary text-on-secondary p-2 rounded-xl shadow-lg"
+            >
+              <span
+                class="material-symbols-outlined text-sm"
+                style="font-variation-settings: &#39;FILL&#39; 1;"
+                >verified</span
+              >
+            </div>
+          </div>
+          <h2 class="text-3xl font-extrabold text-primary tracking-tight mb-1">Alex Curator</h2>
+          <p class="text-on-surface-variant font-medium">alex@receiptlens.ai</p>
+          <div
+            class="mt-6 inline-flex items-center gap-2 px-4 py-1.5 bg-secondary-container/30 text-secondary rounded-full"
+          >
+            <span
+              class="material-symbols-outlined text-base"
+              style="font-variation-settings: &#39;FILL&#39; 1;"
+              >stars</span
+            >
+            <span class="font-label text-xs font-bold uppercase tracking-widest"
+              >Premium Member</span
+            >
+          </div>
+        </div>
+      </section>
+      <!-- Stats Grid (Editorial Asymmetry) -->
+      <section class="grid grid-cols-12 gap-4 mb-10">
+        <div
+          class="col-span-7 bg-surface-container-low p-6 rounded-[1.5rem] flex flex-col justify-between h-32"
+        >
+          <span class="text-on-surface-variant text-xs font-bold uppercase tracking-widest"
+            >Receipts Scanned</span
+          >
+          <div class="flex items-baseline gap-2">
+            <span class="text-4xl font-black text-primary font-label">1,284</span>
+            <span class="text-secondary text-xs font-bold">+12%</span>
+          </div>
+        </div>
+        <div
+          class="col-span-5 bg-primary-container p-6 rounded-[1.5rem] flex flex-col justify-between h-32 text-on-primary"
+        >
+          <span class="text-on-primary-container text-xs font-bold uppercase tracking-widest"
+            >Confidence</span
+          >
+          <span class="text-4xl font-black font-label">99<span class="text-xl">%</span></span>
+        </div>
+      </section>
+      <!-- Settings List -->
+      <section class="space-y-6">
+        <h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-[0.2em] ml-2">
+          Preferences &amp; Security
+        </h3>
+        <div class="bg-surface-container-low rounded-[2rem] overflow-hidden p-2">
+          <!-- Row: Notifications -->
+          <button
+            class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high transition-all rounded-2xl group"
+          >
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary group-active:scale-95 transition-transform"
+              >
+                <span class="material-symbols-outlined" data-icon="notifications"
+                  >notifications</span
+                >
+              </div>
+              <div class="text-left">
+                <p class="font-bold text-primary">Notifications</p>
+                <p class="text-xs text-on-surface-variant">Manage alerts and summaries</p>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant/40">chevron_right</span>
+          </button>
+          <!-- Row: Export Data -->
+          <button
+            class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high transition-all rounded-2xl group"
+          >
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary group-active:scale-95 transition-transform"
+              >
+                <span class="material-symbols-outlined" data-icon="ios_share">ios_share</span>
+              </div>
+              <div class="text-left">
+                <p class="font-bold text-primary">Export Data</p>
+                <p class="text-xs text-on-surface-variant">CSV, PDF, and Cloud Sync</p>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant/40">chevron_right</span>
+          </button>
+          <!-- Row: Settings (General) -->
+          <button
+            class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high transition-all rounded-2xl group"
+          >
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary group-active:scale-95 transition-transform"
+              >
+                <span class="material-symbols-outlined" data-icon="settings">settings</span>
+              </div>
+              <div class="text-left">
+                <p class="font-bold text-primary">General Settings</p>
+                <p class="text-xs text-on-surface-variant">Currency and language</p>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant/40">chevron_right</span>
+          </button>
+        </div>
+        <!-- Logout -->
+        <button
+          class="w-full flex items-center justify-center gap-3 p-5 bg-surface-container-high hover:bg-error-container hover:text-on-error-container transition-colors rounded-[1.5rem] font-bold text-primary mt-4 group"
+        >
+          <span class="material-symbols-outlined text-xl" data-icon="logout">logout</span>
+          Logout Account
+        </button>
+      </section>
+      <!-- Support Section -->
+      <section class="mt-10 mb-20 px-4 py-6 border-t border-outline-variant/10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h4 class="font-bold text-primary">Need Help?</h4>
+            <p class="text-sm text-on-surface-variant">Our support team is here 24/7</p>
+          </div>
+          <button
+            class="bg-primary text-on-primary px-6 py-3 rounded-xl font-bold text-sm shadow-xl active:scale-95 transition-transform"
+          >
+            Contact
+          </button>
+        </div>
+      </section>
+    </main>
+    <!-- Bottom Navigation Bar -->
+    <nav
+      class="fixed bottom-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 bg-[#FAF9F7]/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_-8px_30px_rgb(0,0,0,0.04)] rounded-t-3xl"
+    >
+      <a
+        class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="home">home</span>
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1"
+          >Home</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="history">history</span>
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1"
+          >History</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="document_scanner">document_scanner</span>
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1"
+          >Scan</span
+        >
+      </a>
+      <!-- Active Tab: Profile -->
+      <a
+        class="flex flex-col items-center justify-center bg-[#1E1B4B] dark:bg-indigo-600 text-white rounded-2xl p-3 mb-1 active:scale-90 transition-transform duration-300"
+        href="#"
+      >
+        <span
+          class="material-symbols-outlined"
+          data-icon="person"
+          style="font-variation-settings: &#39;FILL&#39; 1;"
+          >person</span
+        >
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1"
+          >Profile</span
+        >
+      </a>
+    </nav>
+  </body>
+</html>

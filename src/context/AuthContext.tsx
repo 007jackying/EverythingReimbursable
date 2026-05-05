@@ -1,5 +1,5 @@
-import * as SecureStore from 'expo-secure-store'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { secureDelete, secureGet, secureSet } from '@/utils/secureStorage'
 
 const USER_KEY = 'auth_user'
 
@@ -25,17 +25,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Rehydrate session on mount
   useEffect(() => {
     const restore = async () => {
       try {
-        const stored = await SecureStore.getItemAsync(USER_KEY)
+        const stored = await secureGet(USER_KEY)
         if (stored) {
           setUser(JSON.parse(stored) as User)
         }
       } catch {
-        // Corrupt store — start fresh
-        await SecureStore.deleteItemAsync(USER_KEY)
+        await secureDelete(USER_KEY)
       } finally {
         setIsLoading(false)
       }
@@ -44,13 +42,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   const persist = async (u: User) => {
-    await SecureStore.setItemAsync(USER_KEY, JSON.stringify(u))
+    await secureSet(USER_KEY, JSON.stringify(u))
     setUser(u)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const login = useCallback(async (email: string, _password: string) => {
-    // TODO: replace with real API call
     const raw = email.split('@')[0].replace(/[._]/g, ' ')
     const name = raw.charAt(0).toUpperCase() + raw.slice(1)
     await persist({ id: 'user-1', name, email })
@@ -58,12 +55,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const signUp = useCallback(async (name: string, email: string, _password: string) => {
-    // TODO: replace with real API call
     await persist({ id: 'user-1', name, email })
   }, [])
 
   const logout = useCallback(async () => {
-    await SecureStore.deleteItemAsync(USER_KEY)
+    await secureDelete(USER_KEY)
     setUser(null)
   }, [])
 

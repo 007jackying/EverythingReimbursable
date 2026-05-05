@@ -1,8 +1,11 @@
 import theme from '@/constants/theme'
 import Chip from '@/components/Chip'
+import { useGoogle } from '@/context/GoogleContext'
+import { uploadImage } from '@/services/googleDrive'
+import { extractReceiptData } from '@/services/gemini'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import Animated, {
@@ -13,31 +16,12 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated'
 
-// Simulates an AI extraction result from an imageUri.
-// Replace this with a real OCR/AI API call.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mockExtract = async (_imageUri: string) => {
-  await new Promise<void>((res) => {
-    setTimeout(res, 3500)
-  })
-  return {
-    companyName: 'Blue Bottle Coffee',
-    address: '300 S Broadway, Los Angeles, CA',
-    totalAmount: 42.5,
-    taxAmount: 3.75,
-    currency: 'USD',
-    paymentMethod: 'Credit Card' as const,
-    paymentLast4: '4242',
-    category: 'dining' as const,
-    confidence: 0.984,
-    eInvoiceId: null as string | null
-  }
-}
-
 const AIProcessingScreen = () => {
   const { imageUri } = useLocalSearchParams<{ imageUri?: string }>()
+  const { accessToken, isAuthenticated: isGoogleConnected } = useGoogle()
   const [merchantName, setMerchantName] = useState('Analyzing...')
   const [detectedAmount, setDetectedAmount] = useState<string | null>(null)
+  const [driveUploadStatus, setDriveUploadStatus] = useState<string | null>(null)
   const hasNavigated = useRef(false)
 
   const scanY = useSharedValue(0)
@@ -54,13 +38,36 @@ const AIProcessingScreen = () => {
     dot3Y.value = withDelay(400, withRepeat(withTiming(-6, { duration: 500 }), -1, true))
 
     // Run AI extraction
-    mockExtract(imageUri ?? '').then((result) => {
+    extractReceiptData(imageUri ?? '').then(async (result) => {
       if (hasNavigated.current) return
-      hasNavigated.current = true
 
       setMerchantName(result.companyName)
       setDetectedAmount(`$${result.totalAmount.toFixed(2)}`)
       progressAnim.value = withTiming(100, { duration: 400 })
+
+      // Upload to Google Drive if connected
+      let driveFileId: string | null = null
+      let driveWebViewLink: string | null = null
+
+      if (isGoogleConnected && accessToken && imageUri) {
+        setDriveUploadStatus('Uploading to Drive...')
+        try {
+          const fileName = `receipt-${Date.now()}.jpg`
+          const uploadResult = await uploadImage(accessToken, imageUri, fileName)
+          driveFileId = uploadResult.fileId
+          driveWebViewLink = uploadResult.webViewLink
+          setDriveUploadStatus('Uploaded ✓')
+        } catch (error) {
+          console.error('Drive upload failed:', error)
+          setDriveUploadStatus('Upload failed')
+          Alert.alert(
+            'Drive Upload Failed',
+            'Receipt image could not be uploaded to Google Drive. It will be stored locally.'
+          )
+        }
+      }
+
+      hasNavigated.current = true
 
       const newId = `receipt-${Date.now()}`
       setTimeout(() => {
@@ -72,6 +79,8 @@ const AIProcessingScreen = () => {
               ...result,
               id: newId,
               imageUri: imageUri ?? '',
+              driveFileId,
+              driveWebViewLink,
               status: 'verified',
               date: new Date().toISOString().split('T')[0],
               createdAt: new Date().toISOString(),
@@ -139,6 +148,26 @@ const AIProcessingScreen = () => {
           <Text style={styles.privacyText}>
             Your receipt data is encrypted and never shared with third parties.
           </Text>
+
+          {driveUploadStatus && (
+            <View style={styles.driveStatusRow}>
+              <MaterialIcons
+                name="cloud-upload"
+                size={16}
+                color={
+                  driveUploadStatus.includes('failed') ? theme.colors.error : theme.colors.secondary
+                }
+              />
+              <Text
+                style={[
+                  styles.driveStatusText,
+                  driveUploadStatus.includes('failed') && styles.driveStatusError
+                ]}
+              >
+                {driveUploadStatus}
+              </Text>
+            </View>
+          )}
 
           <View style={styles.dataFeed}>
             <View style={styles.merchantCard}>
@@ -298,6 +327,21 @@ const styles = StyleSheet.create({
     color: theme.colors['on-surface-variant'],
     textAlign: 'center',
     marginBottom: theme.spacing[6]
+  },
+  driveStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing[2],
+    marginBottom: theme.spacing[4]
+  },
+  driveStatusText: {
+    fontFamily: theme.fontFamily.mono,
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.secondary
+  },
+  driveStatusError: {
+    color: theme.colors.error
   },
   dataFeed: {
     width: '100%',

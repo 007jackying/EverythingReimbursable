@@ -1,251 +1,384 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>History - ReceiptLens</title>
-<script type='text/javascript' nonce='9JhSRfsTDKGTIDPse82y1A==' src='https://contribution.usercontent.google.com/gBds5zjrTcToe4jEbiZYrpd_RvzotnciEyv8Z0m19KJQxRkC7GQAiPr0zWmrYoElIDOl3mK1K6yXYtMyqVIyPAcdfGaMpigS0S8pG9SKxsIBjM59Jfexl5J3KAaG1VCcnO08cKX9K_HFb-IoX3B3FLXxLNTFEFh0LQKbMTVTaybInnj5P-5zIGOOQL3LAA9ed3UoA1CBzLJjAQT8DR1tv15dWc9oJ3_QOGF0SzQey2I11nn6onX0Sg8azT7RlebeqWDVRSQUCUU4kAFGIn3GV_OsbhjzTA16ohvvlrL9ni_F1EW2Pp-1oS9uuR8VRsZu1uAJrA3D6kxwtcLFYPsHcwKMfXRInZjG0UKyx338S5Eugpz2fJA6rV9CTImxomSEAxcCnINCmDlgrx1JIJfQY8zBA3qIW-nUV_5XJm7UTvAyErjC76oEpNGxLOnvt7KRoiUE1VMIZUoP31vRJ1rvGHSXxiUHReKbW2V1naTMJ0V3fYRKBROHHQTKhQF9WmEGsiIng-cutrrOKKJBnSPNt2A_4A98kWvRn3KcwHEUKXz_Q2J2WYdWpADvzz1kvNztScpU48IFk-Q5fj_DEzVzFnzm4PyqEMMZQtHIkjXdFBfH_sPjy8HolS-eWgaZ6q42K5ahcwvOqsjIzJ2T8abZ3Vodq19OAptl6ISzsntwh56w5k1n0giawrQVulK4mSWYE1Qu4FsTHkoDzstM5KziRlFSBNqqd3Aet-8GXqeAwFEv_ckil99VeA0dEmmDJCTBwu2AQEaEauTu2ACLlL_bI3KxXeOZUIV-XdXq2w'></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "tertiary": "#160700",
-                        "on-error-container": "#93000a",
-                        "inverse-surface": "#2f3130",
-                        "on-secondary-fixed-variant": "#005236",
-                        "on-secondary-fixed": "#002113",
-                        "inverse-on-surface": "#f1f1ef",
-                        "on-background": "#1a1c1b",
-                        "primary-fixed": "#e3dfff",
-                        "on-tertiary": "#ffffff",
-                        "primary-container": "#1e1b4b",
-                        "outline": "#787680",
-                        "secondary": "#006c49",
-                        "tertiary-fixed-dim": "#f1bc91",
-                        "surface-container": "#efeeec",
-                        "outline-variant": "#c8c5d0",
-                        "primary-fixed-dim": "#c4c1fb",
-                        "on-surface": "#1a1c1b",
-                        "on-primary-fixed-variant": "#444173",
-                        "secondary-container": "#6cf8bb",
-                        "tertiary-fixed": "#ffdcc2",
-                        "secondary-fixed": "#6ffbbe",
-                        "surface-bright": "#faf9f7",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-tint": "#5b598c",
-                        "primary": "#070235",
-                        "on-tertiary-container": "#ae7f59",
-                        "on-tertiary-fixed-variant": "#633e1e",
-                        "surface-container-low": "#f4f3f1",
-                        "surface-container-high": "#e9e8e6",
-                        "on-primary-fixed": "#181445",
-                        "surface-container-highest": "#e3e2e0",
-                        "on-secondary-container": "#00714d",
-                        "on-secondary": "#ffffff",
-                        "surface-dim": "#dbdad8",
-                        "inverse-primary": "#c4c1fb",
-                        "secondary-fixed-dim": "#4edea3",
-                        "tertiary-container": "#371a00",
-                        "background": "#faf9f7",
-                        "on-surface-variant": "#47464f",
-                        "surface": "#faf9f7",
-                        "error": "#ba1a1a",
-                        "on-primary": "#ffffff",
-                        "on-error": "#ffffff",
-                        "error-container": "#ffdad6",
-                        "on-primary-container": "#8683ba",
-                        "on-tertiary-fixed": "#2e1500",
-                        "surface-variant": "#e3e2e0"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Plus Jakarta Sans"],
-                        "body": ["Plus Jakarta Sans"],
-                        "label": ["Space Grotesk"]
-                    }
-                },
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>History - ReceiptLens</title>
+    <script
+      type="text/javascript"
+      nonce="9JhSRfsTDKGTIDPse82y1A=="
+      src="https://contribution.usercontent.google.com/gBds5zjrTcToe4jEbiZYrpd_RvzotnciEyv8Z0m19KJQxRkC7GQAiPr0zWmrYoElIDOl3mK1K6yXYtMyqVIyPAcdfGaMpigS0S8pG9SKxsIBjM59Jfexl5J3KAaG1VCcnO08cKX9K_HFb-IoX3B3FLXxLNTFEFh0LQKbMTVTaybInnj5P-5zIGOOQL3LAA9ed3UoA1CBzLJjAQT8DR1tv15dWc9oJ3_QOGF0SzQey2I11nn6onX0Sg8azT7RlebeqWDVRSQUCUU4kAFGIn3GV_OsbhjzTA16ohvvlrL9ni_F1EW2Pp-1oS9uuR8VRsZu1uAJrA3D6kxwtcLFYPsHcwKMfXRInZjG0UKyx338S5Eugpz2fJA6rV9CTImxomSEAxcCnINCmDlgrx1JIJfQY8zBA3qIW-nUV_5XJm7UTvAyErjC76oEpNGxLOnvt7KRoiUE1VMIZUoP31vRJ1rvGHSXxiUHReKbW2V1naTMJ0V3fYRKBROHHQTKhQF9WmEGsiIng-cutrrOKKJBnSPNt2A_4A98kWvRn3KcwHEUKXz_Q2J2WYdWpADvzz1kvNztScpU48IFk-Q5fj_DEzVzFnzm4PyqEMMZQtHIkjXdFBfH_sPjy8HolS-eWgaZ6q42K5ahcwvOqsjIzJ2T8abZ3Vodq19OAptl6ISzsntwh56w5k1n0giawrQVulK4mSWYE1Qu4FsTHkoDzstM5KziRlFSBNqqd3Aet-8GXqeAwFEv_ckil99VeA0dEmmDJCTBwu2AQEaEauTu2ACLlL_bI3KxXeOZUIV-XdXq2w"
+    ></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              tertiary: '#160700',
+              'on-error-container': '#93000a',
+              'inverse-surface': '#2f3130',
+              'on-secondary-fixed-variant': '#005236',
+              'on-secondary-fixed': '#002113',
+              'inverse-on-surface': '#f1f1ef',
+              'on-background': '#1a1c1b',
+              'primary-fixed': '#e3dfff',
+              'on-tertiary': '#ffffff',
+              'primary-container': '#1e1b4b',
+              outline: '#787680',
+              secondary: '#006c49',
+              'tertiary-fixed-dim': '#f1bc91',
+              'surface-container': '#efeeec',
+              'outline-variant': '#c8c5d0',
+              'primary-fixed-dim': '#c4c1fb',
+              'on-surface': '#1a1c1b',
+              'on-primary-fixed-variant': '#444173',
+              'secondary-container': '#6cf8bb',
+              'tertiary-fixed': '#ffdcc2',
+              'secondary-fixed': '#6ffbbe',
+              'surface-bright': '#faf9f7',
+              'surface-container-lowest': '#ffffff',
+              'surface-tint': '#5b598c',
+              primary: '#070235',
+              'on-tertiary-container': '#ae7f59',
+              'on-tertiary-fixed-variant': '#633e1e',
+              'surface-container-low': '#f4f3f1',
+              'surface-container-high': '#e9e8e6',
+              'on-primary-fixed': '#181445',
+              'surface-container-highest': '#e3e2e0',
+              'on-secondary-container': '#00714d',
+              'on-secondary': '#ffffff',
+              'surface-dim': '#dbdad8',
+              'inverse-primary': '#c4c1fb',
+              'secondary-fixed-dim': '#4edea3',
+              'tertiary-container': '#371a00',
+              background: '#faf9f7',
+              'on-surface-variant': '#47464f',
+              surface: '#faf9f7',
+              error: '#ba1a1a',
+              'on-primary': '#ffffff',
+              'on-error': '#ffffff',
+              'error-container': '#ffdad6',
+              'on-primary-container': '#8683ba',
+              'on-tertiary-fixed': '#2e1500',
+              'surface-variant': '#e3e2e0'
             },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px'
+            },
+            fontFamily: {
+              headline: ['Plus Jakarta Sans'],
+              body: ['Plus Jakarta Sans'],
+              label: ['Space Grotesk']
+            }
+          }
         }
+      }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #FAF9F7;
-        }
-        .editorial-shadow {
-            box-shadow: 0 12px 32px -4px rgba(26, 28, 27, 0.04);
-        }
-        .label-mono {
-            font-family: 'Space Grotesk', monospace;
-        }
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #faf9f7;
+      }
+      .editorial-shadow {
+        box-shadow: 0 12px 32px -4px rgba(26, 28, 27, 0.04);
+      }
+      .label-mono {
+        font-family: 'Space Grotesk', monospace;
+      }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
   </head>
-<body class="bg-surface text-on-surface antialiased min-h-screen pb-32">
-<header class="bg-[#FAF9F7] dark:bg-slate-950 flex justify-between items-center px-6 py-4 w-full sticky top-0 z-40">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
-<h1 class="font-[&#39;Plus_Jakarta_Sans&#39;] font-bold tracking-tight text-xl text-[#070235] dark:text-indigo-300 tracking-tighter">ReceiptLens</h1>
-</div>
-<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden">
-<img alt="User Profile" class="w-full h-full object-cover" data-alt="minimalist professional avatar of a young creative professional with short hair and glasses on a soft neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAamztXEabafO3H-ldGr6JVkYKekvj_63HGQ167eK3_rts2irF_7APLwykI8taaOtwVkBYwbH8SMmwoaA3oHRCL4CF2jfjyBAGiYw7DIjA-snIxT9zgkrF_sfSUYe7gSijHdv8-LIxpoPy0amKuBEMXEdEooWFsCvxe1qU1QoAzg2wGLb6zfKJH2wJN-lJpJ9eOmmTpGocb-f5AlXPrIruPkrHmPunM_b27cMJygA0S5XghPcLXLYENP2xWaL22b4HKAMqTpUYY5z4"/>
-</div>
-</header>
-<main class="max-w-xl mx-auto px-6 py-4">
-<div class="mb-8 mt-2">
-<h2 class="text-3xl font-extrabold tracking-tight text-primary mb-2">History</h2>
-<p class="text-on-surface-variant font-medium opacity-70">Your digital archive of curated expenses.</p>
-</div>
-<div class="relative mb-6">
-<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
-</div>
-<input class="w-full h-12 pl-12 pr-4 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline/60" placeholder="Search merchants or categories..." type="text"/>
-</div>
-<div class="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
-<button class="px-5 py-2.5 rounded-full bg-primary text-on-primary font-semibold text-sm whitespace-nowrap active:scale-95 transition-transform">All</button>
-<button class="px-5 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant font-semibold text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors">This Month</button>
-<button class="px-5 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant font-semibold text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors">By Category</button>
-<button class="px-5 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant font-semibold text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
-                Filters
-            </button>
-</div>
-<div class="space-y-4">
-<div class="text-[10px] label-mono uppercase tracking-[0.2em] text-on-surface-variant/50 mb-2 px-1">October 2023</div>
-<div class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4 group">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="coffee">coffee</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-start">
-<h3 class="font-bold text-primary truncate pr-2">Blue Bottle Coffee</h3>
-<span class="label-mono font-bold text-primary text-sm">$12.45</span>
-</div>
-<div class="flex items-center gap-2 mt-1">
-<span class="text-xs text-on-surface-variant font-medium">Oct 24</span>
-<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-<div class="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[10px] font-bold label-mono flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                            Verified
-                        </div>
-</div>
-</div>
-</div>
-<div class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-start">
-<h3 class="font-bold text-primary truncate pr-2">Apple Store Soho</h3>
-<span class="label-mono font-bold text-primary text-sm">$1,299.00</span>
-</div>
-<div class="flex items-center gap-2 mt-1">
-<span class="text-xs text-on-surface-variant font-medium">Oct 21</span>
-<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-<div class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold label-mono">Technology</div>
-</div>
-</div>
-</div>
-<div class="text-[10px] label-mono uppercase tracking-[0.2em] text-on-surface-variant/50 mt-8 mb-2 px-1">September 2023</div>
-<div class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="flight_takeoff">flight_takeoff</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-start">
-<h3 class="font-bold text-primary truncate pr-2">Lufthansa Air</h3>
-<span class="label-mono font-bold text-primary text-sm">$842.10</span>
-</div>
-<div class="flex items-center gap-2 mt-1">
-<span class="text-xs text-on-surface-variant font-medium">Sep 28</span>
-<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-<div class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold label-mono">Travel</div>
-</div>
-</div>
-</div>
-<div class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-start">
-<h3 class="font-bold text-primary truncate pr-2">Le Coucou NYC</h3>
-<span class="label-mono font-bold text-primary text-sm">$312.00</span>
-</div>
-<div class="flex items-center gap-2 mt-1">
-<span class="text-xs text-on-surface-variant font-medium">Sep 24</span>
-<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-<div class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold label-mono">Dining</div>
-</div>
-</div>
-</div>
-<div class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="local_taxi">local_taxi</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-start">
-<h3 class="font-bold text-primary truncate pr-2">Uber Technologies</h3>
-<span class="label-mono font-bold text-primary text-sm">$28.40</span>
-</div>
-<div class="flex items-center gap-2 mt-1">
-<span class="text-xs text-on-surface-variant font-medium">Sep 24</span>
-<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-<div class="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[10px] font-bold label-mono flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                            Verified
-                        </div>
-</div>
-</div>
-</div>
-</div>
-<div class="mt-12 mb-8 bg-surface-container-low rounded-2xl p-6 relative overflow-hidden">
-<div class="relative z-10">
-<h4 class="text-lg font-bold text-primary mb-1">Export History</h4>
-<p class="text-sm text-on-surface-variant pr-12">Generate a detailed PDF or CSV report of all receipts from the last quarter.</p>
-<button class="mt-4 bg-primary text-on-primary px-6 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all">Download Report</button>
-</div>
-<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-9xl text-primary/5 select-none" data-icon="ios_share">ios_share</span>
-</div>
-</main>
-<nav class="fixed bottom-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 bg-[#FAF9F7]/80 dark:bg-slate-900/80 backdrop-blur-xl">
-<div class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 transition-colors hover:text-[#006C49]">
-<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase">Home</span>
-</div>
-<div class="flex flex-col items-center justify-center bg-[#1E1B4B] dark:bg-indigo-600 text-white rounded-2xl p-3 mb-1 shadow-lg active:scale-90 transition-transform duration-300">
-<span class="material-symbols-outlined mb-1" data-icon="history">history</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase">History</span>
-</div>
-<div class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 transition-colors hover:text-[#006C49]">
-<span class="material-symbols-outlined mb-1" data-icon="document_scanner">document_scanner</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase">Scan</span>
-</div>
-<div class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 transition-colors hover:text-[#006C49]">
-<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase">Profile</span>
-</div>
-</nav>
-<button class="fixed right-6 bottom-24 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform z-40">
-<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
-</button>
-</body></html>
+  <body class="bg-surface text-on-surface antialiased min-h-screen pb-32">
+    <header
+      class="bg-[#FAF9F7] dark:bg-slate-950 flex justify-between items-center px-6 py-4 w-full sticky top-0 z-40"
+    >
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+        <h1
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] font-bold tracking-tight text-xl text-[#070235] dark:text-indigo-300 tracking-tighter"
+        >
+          ReceiptLens
+        </h1>
+      </div>
+      <div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden">
+        <img
+          alt="User Profile"
+          class="w-full h-full object-cover"
+          data-alt="minimalist professional avatar of a young creative professional with short hair and glasses on a soft neutral background"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAamztXEabafO3H-ldGr6JVkYKekvj_63HGQ167eK3_rts2irF_7APLwykI8taaOtwVkBYwbH8SMmwoaA3oHRCL4CF2jfjyBAGiYw7DIjA-snIxT9zgkrF_sfSUYe7gSijHdv8-LIxpoPy0amKuBEMXEdEooWFsCvxe1qU1QoAzg2wGLb6zfKJH2wJN-lJpJ9eOmmTpGocb-f5AlXPrIruPkrHmPunM_b27cMJygA0S5XghPcLXLYENP2xWaL22b4HKAMqTpUYY5z4"
+        />
+      </div>
+    </header>
+    <main class="max-w-xl mx-auto px-6 py-4">
+      <div class="mb-8 mt-2">
+        <h2 class="text-3xl font-extrabold tracking-tight text-primary mb-2">History</h2>
+        <p class="text-on-surface-variant font-medium opacity-70">
+          Your digital archive of curated expenses.
+        </p>
+      </div>
+      <div class="relative mb-6">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+        </div>
+        <input
+          class="w-full h-12 pl-12 pr-4 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline/60"
+          placeholder="Search merchants or categories..."
+          type="text"
+        />
+      </div>
+      <div class="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+        <button
+          class="px-5 py-2.5 rounded-full bg-primary text-on-primary font-semibold text-sm whitespace-nowrap active:scale-95 transition-transform"
+        >
+          All
+        </button>
+        <button
+          class="px-5 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant font-semibold text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors"
+        >
+          This Month
+        </button>
+        <button
+          class="px-5 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant font-semibold text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors"
+        >
+          By Category
+        </button>
+        <button
+          class="px-5 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant font-semibold text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors flex items-center gap-1"
+        >
+          <span class="material-symbols-outlined text-[18px]" data-icon="filter_list"
+            >filter_list</span
+          >
+          Filters
+        </button>
+      </div>
+      <div class="space-y-4">
+        <div
+          class="text-[10px] label-mono uppercase tracking-[0.2em] text-on-surface-variant/50 mb-2 px-1"
+        >
+          October 2023
+        </div>
+        <div
+          class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4 group"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined" data-icon="coffee">coffee</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-primary truncate pr-2">Blue Bottle Coffee</h3>
+              <span class="label-mono font-bold text-primary text-sm">$12.45</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs text-on-surface-variant font-medium">Oct 24</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <div
+                class="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[10px] font-bold label-mono flex items-center gap-1"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Verified
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-primary truncate pr-2">Apple Store Soho</h3>
+              <span class="label-mono font-bold text-primary text-sm">$1,299.00</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs text-on-surface-variant font-medium">Oct 21</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <div
+                class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold label-mono"
+              >
+                Technology
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-[10px] label-mono uppercase tracking-[0.2em] text-on-surface-variant/50 mt-8 mb-2 px-1"
+        >
+          September 2023
+        </div>
+        <div
+          class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined" data-icon="flight_takeoff">flight_takeoff</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-primary truncate pr-2">Lufthansa Air</h3>
+              <span class="label-mono font-bold text-primary text-sm">$842.10</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs text-on-surface-variant font-medium">Sep 28</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <div
+                class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold label-mono"
+              >
+                Travel
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-primary truncate pr-2">Le Coucou NYC</h3>
+              <span class="label-mono font-bold text-primary text-sm">$312.00</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs text-on-surface-variant font-medium">Sep 24</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <div
+                class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded-full text-[10px] font-bold label-mono"
+              >
+                Dining
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-surface-container-lowest rounded-xl p-4 editorial-shadow flex items-center gap-4"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined" data-icon="local_taxi">local_taxi</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-primary truncate pr-2">Uber Technologies</h3>
+              <span class="label-mono font-bold text-primary text-sm">$28.40</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs text-on-surface-variant font-medium">Sep 24</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <div
+                class="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[10px] font-bold label-mono flex items-center gap-1"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Verified
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 mb-8 bg-surface-container-low rounded-2xl p-6 relative overflow-hidden">
+        <div class="relative z-10">
+          <h4 class="text-lg font-bold text-primary mb-1">Export History</h4>
+          <p class="text-sm text-on-surface-variant pr-12">
+            Generate a detailed PDF or CSV report of all receipts from the last quarter.
+          </p>
+          <button
+            class="mt-4 bg-primary text-on-primary px-6 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all"
+          >
+            Download Report
+          </button>
+        </div>
+        <span
+          class="material-symbols-outlined absolute -right-4 -bottom-4 text-9xl text-primary/5 select-none"
+          data-icon="ios_share"
+          >ios_share</span
+        >
+      </div>
+    </main>
+    <nav
+      class="fixed bottom-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 bg-[#FAF9F7]/80 dark:bg-slate-900/80 backdrop-blur-xl"
+    >
+      <div
+        class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 transition-colors hover:text-[#006C49]"
+      >
+        <span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase"
+          >Home</span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center bg-[#1E1B4B] dark:bg-indigo-600 text-white rounded-2xl p-3 mb-1 shadow-lg active:scale-90 transition-transform duration-300"
+      >
+        <span class="material-symbols-outlined mb-1" data-icon="history">history</span>
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase"
+          >History</span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 transition-colors hover:text-[#006C49]"
+      >
+        <span class="material-symbols-outlined mb-1" data-icon="document_scanner"
+          >document_scanner</span
+        >
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase"
+          >Scan</span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 transition-colors hover:text-[#006C49]"
+      >
+        <span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase"
+          >Profile</span
+        >
+      </div>
+    </nav>
+    <button
+      class="fixed right-6 bottom-24 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform z-40"
+    >
+      <span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+    </button>
+  </body>
+</html>

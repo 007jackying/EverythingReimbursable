@@ -78,6 +78,43 @@ module.exports = {
     '@typescript-eslint/no-throw-literal': 'off',
 
     // React Native uses Alert.alert() — suppress global alert() warning
-    'no-alert': 'off'
-  }
+    'no-alert': 'off',
+
+    // Console statements - warn in development
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+
+    // Prefer const for variables that don't change
+    'prefer-const': ['error', { destructuring: 'all' }],
+
+    // Disallow var
+    'no-var': 'error',
+
+    // Require template literals instead of string concatenation
+    'prefer-template': 'error',
+
+    // Disallow unnecessary return await
+    'no-return-await': 'error',
+
+    // Require await in async functions that return promises
+    'require-await': 'error',
+
+    // Enforce consistent return in async functions
+    'no-return-assign': ['error', 'except-parens']
+  },
+  overrides: [
+    {
+      // Test files - allow console.log
+      files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', '**/__tests__/**/*.{ts,tsx}'],
+      rules: {
+        'no-console': 'off'
+      }
+    },
+    {
+      // Config files - allow CommonJS
+      files: ['*.js', '*.cjs'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off'
+      }
+    }
+  ]
 }

@@ -1,262 +1,388 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ReceiptLens - Dashboard</title>
-<script type='text/javascript' nonce='iwy3x29qCc/y1fpkz7+WMg==' src='https://contribution.usercontent.google.com/lAj-rMn26U3ocmN_8Es8jqDmwRpd7Lx9Y0DtNJJcgrKdsZjdEE-NQFb329LAmr1vMQzaC1nK3ToRz3jKJ42qHaxP6nODfXsW5W3UBMC5IUtLNlAJlXEIFvpG97-kjTtjwyzatRuzDSEXfHH88KMPKJHU2ALRq9mMlEWCGXFDK2tKNpx6JtgdiFipjmwtItgVtG1YqMKRiIlUqHOIcg4oPI0bWOhr1XjNulTMrFCmYTjF4_aPCoGS1h9AlZQ85Rceccz_8-PZjVsUSAwsJp2Jip6-NokITu3PJU_eA8qV9na3y7D8I_DGdCCZH5UZYg79__KW3f_9VmJ1NCMLaj5qa0sV8Njt-zdd0QKoGOap8C-3YVEIAke-s3ju7_aCpiSPIRJyAvaztNbNiPHimiZRklmKs0rnQE_2i3CRCT-iaYbA6l4whl4bg-DSwniko8FpmiyK4_n5uJmtRT0GTjroE1aoF6XkMxv594v7TcNi8321RhS3pbO9q6XhTWW1BBmV1zLRmjFlF3YlOC7z8xFjKcBun9B500f4Cr5_R8QTHBdYk9RsOeyk8p_R0Uy0AzuBAxKwd2Ez0Z7FhxHYUyqIkC24HndsupcVQ4MNLOm5mEazPTxUdS6Q7zoVcl4EEPIzX3AJu2QA2FMjoPcMaKuGoVvOspj3cFdkxMX1EvIzKx0nf9vit7OjrC4THqYVitoke_kiCvTK_pK2HimYleDKI58S2Sn2H47MS8GMiiVDW28AK1lu-dt6rF0lTKRei7LpPdzsjQN1PV9BqVArMi1Gu_ygpy_LorUT9lWsYA'></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "tertiary": "#160700",
-                        "on-error-container": "#93000a",
-                        "inverse-surface": "#2f3130",
-                        "on-secondary-fixed-variant": "#005236",
-                        "on-secondary-fixed": "#002113",
-                        "inverse-on-surface": "#f1f1ef",
-                        "on-background": "#1a1c1b",
-                        "primary-fixed": "#e3dfff",
-                        "on-tertiary": "#ffffff",
-                        "primary-container": "#1e1b4b",
-                        "outline": "#787680",
-                        "secondary": "#006c49",
-                        "tertiary-fixed-dim": "#f1bc91",
-                        "surface-container": "#efeeec",
-                        "outline-variant": "#c8c5d0",
-                        "primary-fixed-dim": "#c4c1fb",
-                        "on-surface": "#1a1c1b",
-                        "on-primary-fixed-variant": "#444173",
-                        "secondary-container": "#6cf8bb",
-                        "tertiary-fixed": "#ffdcc2",
-                        "secondary-fixed": "#6ffbbe",
-                        "surface-bright": "#faf9f7",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-tint": "#5b598c",
-                        "primary": "#070235",
-                        "on-tertiary-container": "#ae7f59",
-                        "on-tertiary-fixed-variant": "#633e1e",
-                        "surface-container-low": "#f4f3f1",
-                        "surface-container-high": "#e9e8e6",
-                        "on-primary-fixed": "#181445",
-                        "surface-container-highest": "#e3e2e0",
-                        "on-secondary-container": "#00714d",
-                        "on-secondary": "#ffffff",
-                        "surface-dim": "#dbdad8",
-                        "inverse-primary": "#c4c1fb",
-                        "secondary-fixed-dim": "#4edea3",
-                        "tertiary-container": "#371a00",
-                        "background": "#faf9f7",
-                        "on-surface-variant": "#47464f",
-                        "surface": "#faf9f7",
-                        "error": "#ba1a1a",
-                        "on-primary": "#ffffff",
-                        "on-error": "#ffffff",
-                        "error-container": "#ffdad6",
-                        "on-primary-container": "#8683ba",
-                        "on-tertiary-fixed": "#2e1500",
-                        "surface-variant": "#e3e2e0"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Plus Jakarta Sans"],
-                        "body": ["Plus Jakarta Sans"],
-                        "label": ["Space Grotesk"]
-                    }
-                },
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ReceiptLens - Dashboard</title>
+    <script
+      type="text/javascript"
+      nonce="iwy3x29qCc/y1fpkz7+WMg=="
+      src="https://contribution.usercontent.google.com/lAj-rMn26U3ocmN_8Es8jqDmwRpd7Lx9Y0DtNJJcgrKdsZjdEE-NQFb329LAmr1vMQzaC1nK3ToRz3jKJ42qHaxP6nODfXsW5W3UBMC5IUtLNlAJlXEIFvpG97-kjTtjwyzatRuzDSEXfHH88KMPKJHU2ALRq9mMlEWCGXFDK2tKNpx6JtgdiFipjmwtItgVtG1YqMKRiIlUqHOIcg4oPI0bWOhr1XjNulTMrFCmYTjF4_aPCoGS1h9AlZQ85Rceccz_8-PZjVsUSAwsJp2Jip6-NokITu3PJU_eA8qV9na3y7D8I_DGdCCZH5UZYg79__KW3f_9VmJ1NCMLaj5qa0sV8Njt-zdd0QKoGOap8C-3YVEIAke-s3ju7_aCpiSPIRJyAvaztNbNiPHimiZRklmKs0rnQE_2i3CRCT-iaYbA6l4whl4bg-DSwniko8FpmiyK4_n5uJmtRT0GTjroE1aoF6XkMxv594v7TcNi8321RhS3pbO9q6XhTWW1BBmV1zLRmjFlF3YlOC7z8xFjKcBun9B500f4Cr5_R8QTHBdYk9RsOeyk8p_R0Uy0AzuBAxKwd2Ez0Z7FhxHYUyqIkC24HndsupcVQ4MNLOm5mEazPTxUdS6Q7zoVcl4EEPIzX3AJu2QA2FMjoPcMaKuGoVvOspj3cFdkxMX1EvIzKx0nf9vit7OjrC4THqYVitoke_kiCvTK_pK2HimYleDKI58S2Sn2H47MS8GMiiVDW28AK1lu-dt6rF0lTKRei7LpPdzsjQN1PV9BqVArMi1Gu_ygpy_LorUT9lWsYA"
+    ></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              tertiary: '#160700',
+              'on-error-container': '#93000a',
+              'inverse-surface': '#2f3130',
+              'on-secondary-fixed-variant': '#005236',
+              'on-secondary-fixed': '#002113',
+              'inverse-on-surface': '#f1f1ef',
+              'on-background': '#1a1c1b',
+              'primary-fixed': '#e3dfff',
+              'on-tertiary': '#ffffff',
+              'primary-container': '#1e1b4b',
+              outline: '#787680',
+              secondary: '#006c49',
+              'tertiary-fixed-dim': '#f1bc91',
+              'surface-container': '#efeeec',
+              'outline-variant': '#c8c5d0',
+              'primary-fixed-dim': '#c4c1fb',
+              'on-surface': '#1a1c1b',
+              'on-primary-fixed-variant': '#444173',
+              'secondary-container': '#6cf8bb',
+              'tertiary-fixed': '#ffdcc2',
+              'secondary-fixed': '#6ffbbe',
+              'surface-bright': '#faf9f7',
+              'surface-container-lowest': '#ffffff',
+              'surface-tint': '#5b598c',
+              primary: '#070235',
+              'on-tertiary-container': '#ae7f59',
+              'on-tertiary-fixed-variant': '#633e1e',
+              'surface-container-low': '#f4f3f1',
+              'surface-container-high': '#e9e8e6',
+              'on-primary-fixed': '#181445',
+              'surface-container-highest': '#e3e2e0',
+              'on-secondary-container': '#00714d',
+              'on-secondary': '#ffffff',
+              'surface-dim': '#dbdad8',
+              'inverse-primary': '#c4c1fb',
+              'secondary-fixed-dim': '#4edea3',
+              'tertiary-container': '#371a00',
+              background: '#faf9f7',
+              'on-surface-variant': '#47464f',
+              surface: '#faf9f7',
+              error: '#ba1a1a',
+              'on-primary': '#ffffff',
+              'on-error': '#ffffff',
+              'error-container': '#ffdad6',
+              'on-primary-container': '#8683ba',
+              'on-tertiary-fixed': '#2e1500',
+              'surface-variant': '#e3e2e0'
             },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px'
+            },
+            fontFamily: {
+              headline: ['Plus Jakarta Sans'],
+              body: ['Plus Jakarta Sans'],
+              label: ['Space Grotesk']
+            }
+          }
         }
+      }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .label-mono { font-family: 'Space Grotesk', monospace; }
-        .confidence-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #006c49;
-            box-shadow: 0 0 8px #6cf8bb;
-        }
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+      .label-mono {
+        font-family: 'Space Grotesk', monospace;
+      }
+      .confidence-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #006c49;
+        box-shadow: 0 0 8px #6cf8bb;
+      }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-</head>
-<body class="bg-background text-on-background min-h-screen pb-32">
-<!-- Top Navigation Bar -->
-<header class="flex justify-between items-center px-6 py-4 w-full bg-[#FAF9F7] sticky top-0 z-40">
-<div class="flex items-center gap-3">
-<div class="p-2 rounded-xl bg-surface-container-high transition-transform active:scale-95 duration-200">
-<span class="material-symbols-outlined text-primary">menu</span>
-</div>
-<h1 class="font-[&#39;Plus_Jakarta_Sans&#39;] font-bold tracking-tight text-xl text-[#070235] tracking-tighter">ReceiptLens</h1>
-</div>
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-container-high">
-<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional man with a friendly expression in a bright modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQWG6sL5bDVm3mjiI8svkfZ0IcTnuzVZ4f77-ErR2Ka9MaawYm01yefFVxoksRwageeKANF0lmyzmP7i46tkf6DIlClyhK0OhoBSso7b6Ssi7UFjr6B9G8IWL0v7CYqF_nm9qg5J8JfBlgwjUFcGvfiOcuIMBlmYit7t0naZpcRLEeccdQcAf3EVdqr-eG7Lf0Jio1EQQsW6QMuhqjj70ot45ZRiWo6WJKLh6b7dck0Zur-fRlSzoT6hTBFXr00y1SHDiqVSCJv54"/>
-</div>
-</div>
-</header>
-<main class="px-6 pt-6 max-w-2xl mx-auto">
-<!-- Greeting Section -->
-<section class="mb-8">
-<h2 class="text-3xl font-bold text-primary -tracking-wide">Good morning, Jack</h2>
-<p class="text-on-surface-variant font-medium mt-1">Ready to organize your finances?</p>
-</section>
-<!-- Summary Card (Editorial Bento Style) -->
-<section class="mb-8 relative overflow-hidden bg-primary-container rounded-[2rem] p-8 text-white shadow-2xl">
-<!-- Decorative Elements -->
-<div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
-<div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
-<div class="relative z-10 flex flex-col gap-6">
-<div class="flex justify-between items-start">
-<div>
-<p class="text-on-primary-container font-label uppercase tracking-widest text-xs mb-1">Total Expenses</p>
-<h3 class="text-4xl font-extrabold tracking-tight">$3,482.50</h3>
-</div>
-<div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-center min-w-[80px]">
-<p class="text-xs text-on-primary-container uppercase font-label tracking-tighter">Monthly</p>
-<p class="text-xl font-bold">28</p>
-<p class="text-[10px] opacity-60">Scans</p>
-</div>
-</div>
-<div class="h-[1px] w-full bg-white/10"></div>
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<div class="confidence-indicator"></div>
-<span class="text-xs font-label text-secondary-fixed">AI Accuracy 99.2%</span>
-</div>
-<button class="flex items-center gap-2 text-sm font-semibold hover:opacity-80 transition-opacity">
-                        View Insights
-                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</button>
-</div>
-</div>
-</section>
-<!-- Quick Actions -->
-<section class="grid grid-cols-2 gap-4 mb-10">
-<button class="bg-primary text-white py-5 px-6 rounded-2xl flex flex-col items-start gap-3 hover:opacity-90 transition-all active:scale-95 duration-200 shadow-lg">
-<div class="bg-white/10 p-2 rounded-lg">
-<span class="material-symbols-outlined">document_scanner</span>
-</div>
-<span class="font-bold tracking-tight">Scan Receipt</span>
-</button>
-<button class="bg-surface-container-high text-primary py-5 px-6 rounded-2xl flex flex-col items-start gap-3 hover:bg-surface-container-highest transition-all active:scale-95 duration-200">
-<div class="bg-primary/5 p-2 rounded-lg">
-<span class="material-symbols-outlined">upload_file</span>
-</div>
-<span class="font-bold tracking-tight">Upload Photo</span>
-</button>
-</section>
-<!-- Recent Receipts Header -->
-<div class="flex justify-between items-end mb-6">
-<h4 class="text-xl font-bold text-primary">Recent Receipts</h4>
-<a class="text-secondary font-semibold text-sm" href="#">View All</a>
-</div>
-<!-- Receipt List (No-Divider Pattern) -->
-<div class="space-y-4">
-<!-- Receipt Item 1 -->
-<div class="bg-surface-container-lowest p-5 rounded-3xl shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow">
-<div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary overflow-hidden">
-<img alt="Merchant" class="w-full h-full object-cover opacity-80" data-alt="Close up shot of a steaming coffee cup and artisan pastry in a rustic cafe atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUegPhGeHaaHhtdavNX6LdiwqTa3Lx2XpedbAtifi5S94nXLUY85rutlS_oGKFXPj866gF8Tu3Dr_qpdSh1lF_jkoZ2NTAa57aoChZxgvx1iENBzYo1m4JLaXK7xrAXUhiksp4oC1e2rRcv41kiWyorvZctWIfzkKt0O-p0hs5RWDysWHkiyLDLyrBr6lSvGs-cQ11vFvRh5-7SlrdDdSSmMqDmj2APNWyJsNjRCMaZMrvKm9B5TFYEJBNwomd-ODe9gPqXsx_UJ0"/>
-</div>
-<div>
-<p class="font-bold text-primary">Blue Bottle Coffee</p>
-<p class="text-xs text-on-surface-variant label-mono">Oct 24, 2023</p>
-<div class="mt-2 flex items-center gap-2">
-<span class="px-3 py-1 bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider">Dining</span>
-</div>
-</div>
-</div>
-<div class="text-right">
-<p class="font-bold text-primary text-lg label-mono">$18.42</p>
-<div class="flex items-center justify-end gap-1 mt-1">
-<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: &#39;FILL&#39; 1;">verified</span>
-<span class="text-[10px] text-secondary font-bold uppercase tracking-tighter">Verified</span>
-</div>
-</div>
-</div>
-<!-- Receipt Item 2 -->
-<div class="bg-surface-container-lowest p-5 rounded-3xl shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow">
-<div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary overflow-hidden">
-<img alt="Merchant" class="w-full h-full object-cover opacity-80" data-alt="Vibrant fresh vegetable aisle in a high-end organic grocery store with professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ_smjYHOCua5JOQhR7vIGkasK3GE9I_qG80__L8uv1_434nHnmmHSV0AmJ7DL1UipbzvpZiHHSXpy1Kh2F2UAJECQcK0xWAh2h4XQMzKDC2oxXirVl8DA6PxDMSzQzAsFtyKT7G8s4sQxQBPUnXRGU-nQLBiyMHev6H5mw-o3LlYHQG9-705Vsi_08LRyGeN7A-lenKmUWA4RVKKcEzBnfeLsscXIZVxqlTQsQcKVzI8g1XkvDPV4M813khEsig6HivDnyKhJTN4"/>
-</div>
-<div>
-<p class="font-bold text-primary">Whole Foods Market</p>
-<p class="text-xs text-on-surface-variant label-mono">Oct 22, 2023</p>
-<div class="mt-2 flex items-center gap-2">
-<span class="px-3 py-1 bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider">Grocery</span>
-</div>
-</div>
-</div>
-<div class="text-right">
-<p class="font-bold text-primary text-lg label-mono">$142.90</p>
-<div class="flex items-center justify-end gap-1 mt-1">
-<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: &#39;FILL&#39; 1;">verified</span>
-<span class="text-[10px] text-secondary font-bold uppercase tracking-tighter">Verified</span>
-</div>
-</div>
-</div>
-<!-- Receipt Item 3 -->
-<div class="bg-surface-container-lowest p-5 rounded-3xl shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow">
-<div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary overflow-hidden">
-<img alt="Merchant" class="w-full h-full object-cover opacity-80" data-alt="Modern retail clothing store interior with minimalist racks and warm designer lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAropgYUpDogKq8pdhJRW_KjqowsB-H6nzJIUstLCernUh5uXmm5q-LNM0Qak6SOzX-9xVHv2nkIrtYQmBFllHl5XGxYzFzNFcSubbMDhROOe1r5np46ZDd2wuiITNRm2BNmd1yJvN2KzJJST2GF_MqtduG5hLbw3OlW_PXi8NzW5yXYiaD-bW_peo0uVssbhtuSjEi78wcBlJqfAxt_oIO_7LQu5zwx_Nuk5Q84H8_grRv4M5IqT-yaqpgKyuLSO-j3b0roaq_qmA"/>
-</div>
-<div>
-<p class="font-bold text-primary">Apple Store Union Sq</p>
-<p class="text-xs text-on-surface-variant label-mono">Oct 20, 2023</p>
-<div class="mt-2 flex items-center gap-2">
-<span class="px-3 py-1 bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider">Electronics</span>
-</div>
-</div>
-</div>
-<div class="text-right">
-<p class="font-bold text-primary text-lg label-mono">$999.00</p>
-<div class="flex items-center justify-end gap-1 mt-1">
-<span class="material-symbols-outlined text-outline text-sm">schedule</span>
-<span class="text-[10px] text-outline font-bold uppercase tracking-tighter">Pending</span>
-</div>
-</div>
-</div>
-</div>
-</main>
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 w-full z-50 flex items-end px-4 pb-6 pt-2 bg-[#FAF9F7]/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_-8px_30px_rgb(0,0,0,0.04)] rounded-t-3xl justify-center gap-16">
-<!-- Home (Active) -->
-<a class="flex flex-col items-center justify-center bg-[#1E1B4B] dark:bg-indigo-600 text-white rounded-2xl p-3 mb-1 active:scale-90 transition-transform duration-300" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: &#39;FILL&#39; 1;">home</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1">Home</span>
-</a>
-<!-- History -->
-<!-- Scan -->
-<div class="relative -top-8">
-<button class="w-16 h-16 bg-secondary text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform duration-300 ring-8 ring-background">
-<span class="material-symbols-outlined text-3xl">document_scanner</span>
-</button>
-<span class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-bold text-secondary tracking-wide uppercase">Scan</span>
-</div>
-<!-- Profile -->
-<a class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300" href="#">
-<span class="material-symbols-outlined">person</span>
-<span class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1">Profile</span>
-</a>
-</nav>
-</body></html>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background min-h-screen pb-32">
+    <!-- Top Navigation Bar -->
+    <header
+      class="flex justify-between items-center px-6 py-4 w-full bg-[#FAF9F7] sticky top-0 z-40"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="p-2 rounded-xl bg-surface-container-high transition-transform active:scale-95 duration-200"
+        >
+          <span class="material-symbols-outlined text-primary">menu</span>
+        </div>
+        <h1
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] font-bold tracking-tight text-xl text-[#070235] tracking-tighter"
+        >
+          ReceiptLens
+        </h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-container-high">
+          <img
+            alt="User Profile"
+            class="w-full h-full object-cover"
+            data-alt="Close-up portrait of a professional man with a friendly expression in a bright modern office setting"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQWG6sL5bDVm3mjiI8svkfZ0IcTnuzVZ4f77-ErR2Ka9MaawYm01yefFVxoksRwageeKANF0lmyzmP7i46tkf6DIlClyhK0OhoBSso7b6Ssi7UFjr6B9G8IWL0v7CYqF_nm9qg5J8JfBlgwjUFcGvfiOcuIMBlmYit7t0naZpcRLEeccdQcAf3EVdqr-eG7Lf0Jio1EQQsW6QMuhqjj70ot45ZRiWo6WJKLh6b7dck0Zur-fRlSzoT6hTBFXr00y1SHDiqVSCJv54"
+          />
+        </div>
+      </div>
+    </header>
+    <main class="px-6 pt-6 max-w-2xl mx-auto">
+      <!-- Greeting Section -->
+      <section class="mb-8">
+        <h2 class="text-3xl font-bold text-primary -tracking-wide">Good morning, Jack</h2>
+        <p class="text-on-surface-variant font-medium mt-1">Ready to organize your finances?</p>
+      </section>
+      <!-- Summary Card (Editorial Bento Style) -->
+      <section
+        class="mb-8 relative overflow-hidden bg-primary-container rounded-[2rem] p-8 text-white shadow-2xl"
+      >
+        <!-- Decorative Elements -->
+        <div
+          class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 bg-primary/20 rounded-full blur-2xl"
+        ></div>
+        <div class="relative z-10 flex flex-col gap-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <p
+                class="text-on-primary-container font-label uppercase tracking-widest text-xs mb-1"
+              >
+                Total Expenses
+              </p>
+              <h3 class="text-4xl font-extrabold tracking-tight">$3,482.50</h3>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-center min-w-[80px]">
+              <p class="text-xs text-on-primary-container uppercase font-label tracking-tighter">
+                Monthly
+              </p>
+              <p class="text-xl font-bold">28</p>
+              <p class="text-[10px] opacity-60">Scans</p>
+            </div>
+          </div>
+          <div class="h-[1px] w-full bg-white/10"></div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="confidence-indicator"></div>
+              <span class="text-xs font-label text-secondary-fixed">AI Accuracy 99.2%</span>
+            </div>
+            <button
+              class="flex items-center gap-2 text-sm font-semibold hover:opacity-80 transition-opacity"
+            >
+              View Insights
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Quick Actions -->
+      <section class="grid grid-cols-2 gap-4 mb-10">
+        <button
+          class="bg-primary text-white py-5 px-6 rounded-2xl flex flex-col items-start gap-3 hover:opacity-90 transition-all active:scale-95 duration-200 shadow-lg"
+        >
+          <div class="bg-white/10 p-2 rounded-lg">
+            <span class="material-symbols-outlined">document_scanner</span>
+          </div>
+          <span class="font-bold tracking-tight">Scan Receipt</span>
+        </button>
+        <button
+          class="bg-surface-container-high text-primary py-5 px-6 rounded-2xl flex flex-col items-start gap-3 hover:bg-surface-container-highest transition-all active:scale-95 duration-200"
+        >
+          <div class="bg-primary/5 p-2 rounded-lg">
+            <span class="material-symbols-outlined">upload_file</span>
+          </div>
+          <span class="font-bold tracking-tight">Upload Photo</span>
+        </button>
+      </section>
+      <!-- Recent Receipts Header -->
+      <div class="flex justify-between items-end mb-6">
+        <h4 class="text-xl font-bold text-primary">Recent Receipts</h4>
+        <a class="text-secondary font-semibold text-sm" href="#">View All</a>
+      </div>
+      <!-- Receipt List (No-Divider Pattern) -->
+      <div class="space-y-4">
+        <!-- Receipt Item 1 -->
+        <div
+          class="bg-surface-container-lowest p-5 rounded-3xl shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary overflow-hidden"
+            >
+              <img
+                alt="Merchant"
+                class="w-full h-full object-cover opacity-80"
+                data-alt="Close up shot of a steaming coffee cup and artisan pastry in a rustic cafe atmosphere"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUegPhGeHaaHhtdavNX6LdiwqTa3Lx2XpedbAtifi5S94nXLUY85rutlS_oGKFXPj866gF8Tu3Dr_qpdSh1lF_jkoZ2NTAa57aoChZxgvx1iENBzYo1m4JLaXK7xrAXUhiksp4oC1e2rRcv41kiWyorvZctWIfzkKt0O-p0hs5RWDysWHkiyLDLyrBr6lSvGs-cQ11vFvRh5-7SlrdDdSSmMqDmj2APNWyJsNjRCMaZMrvKm9B5TFYEJBNwomd-ODe9gPqXsx_UJ0"
+              />
+            </div>
+            <div>
+              <p class="font-bold text-primary">Blue Bottle Coffee</p>
+              <p class="text-xs text-on-surface-variant label-mono">Oct 24, 2023</p>
+              <div class="mt-2 flex items-center gap-2">
+                <span
+                  class="px-3 py-1 bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider"
+                  >Dining</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-primary text-lg label-mono">$18.42</p>
+            <div class="flex items-center justify-end gap-1 mt-1">
+              <span
+                class="material-symbols-outlined text-secondary text-sm"
+                style="font-variation-settings: &#39;FILL&#39; 1;"
+                >verified</span
+              >
+              <span class="text-[10px] text-secondary font-bold uppercase tracking-tighter"
+                >Verified</span
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Receipt Item 2 -->
+        <div
+          class="bg-surface-container-lowest p-5 rounded-3xl shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary overflow-hidden"
+            >
+              <img
+                alt="Merchant"
+                class="w-full h-full object-cover opacity-80"
+                data-alt="Vibrant fresh vegetable aisle in a high-end organic grocery store with professional lighting"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ_smjYHOCua5JOQhR7vIGkasK3GE9I_qG80__L8uv1_434nHnmmHSV0AmJ7DL1UipbzvpZiHHSXpy1Kh2F2UAJECQcK0xWAh2h4XQMzKDC2oxXirVl8DA6PxDMSzQzAsFtyKT7G8s4sQxQBPUnXRGU-nQLBiyMHev6H5mw-o3LlYHQG9-705Vsi_08LRyGeN7A-lenKmUWA4RVKKcEzBnfeLsscXIZVxqlTQsQcKVzI8g1XkvDPV4M813khEsig6HivDnyKhJTN4"
+              />
+            </div>
+            <div>
+              <p class="font-bold text-primary">Whole Foods Market</p>
+              <p class="text-xs text-on-surface-variant label-mono">Oct 22, 2023</p>
+              <div class="mt-2 flex items-center gap-2">
+                <span
+                  class="px-3 py-1 bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider"
+                  >Grocery</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-primary text-lg label-mono">$142.90</p>
+            <div class="flex items-center justify-end gap-1 mt-1">
+              <span
+                class="material-symbols-outlined text-secondary text-sm"
+                style="font-variation-settings: &#39;FILL&#39; 1;"
+                >verified</span
+              >
+              <span class="text-[10px] text-secondary font-bold uppercase tracking-tighter"
+                >Verified</span
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Receipt Item 3 -->
+        <div
+          class="bg-surface-container-lowest p-5 rounded-3xl shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary overflow-hidden"
+            >
+              <img
+                alt="Merchant"
+                class="w-full h-full object-cover opacity-80"
+                data-alt="Modern retail clothing store interior with minimalist racks and warm designer lighting"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAropgYUpDogKq8pdhJRW_KjqowsB-H6nzJIUstLCernUh5uXmm5q-LNM0Qak6SOzX-9xVHv2nkIrtYQmBFllHl5XGxYzFzNFcSubbMDhROOe1r5np46ZDd2wuiITNRm2BNmd1yJvN2KzJJST2GF_MqtduG5hLbw3OlW_PXi8NzW5yXYiaD-bW_peo0uVssbhtuSjEi78wcBlJqfAxt_oIO_7LQu5zwx_Nuk5Q84H8_grRv4M5IqT-yaqpgKyuLSO-j3b0roaq_qmA"
+              />
+            </div>
+            <div>
+              <p class="font-bold text-primary">Apple Store Union Sq</p>
+              <p class="text-xs text-on-surface-variant label-mono">Oct 20, 2023</p>
+              <div class="mt-2 flex items-center gap-2">
+                <span
+                  class="px-3 py-1 bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider"
+                  >Electronics</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-primary text-lg label-mono">$999.00</p>
+            <div class="flex items-center justify-end gap-1 mt-1">
+              <span class="material-symbols-outlined text-outline text-sm">schedule</span>
+              <span class="text-[10px] text-outline font-bold uppercase tracking-tighter"
+                >Pending</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Bottom Navigation Bar -->
+    <nav
+      class="fixed bottom-0 w-full z-50 flex items-end px-4 pb-6 pt-2 bg-[#FAF9F7]/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_-8px_30px_rgb(0,0,0,0.04)] rounded-t-3xl justify-center gap-16"
+    >
+      <!-- Home (Active) -->
+      <a
+        class="flex flex-col items-center justify-center bg-[#1E1B4B] dark:bg-indigo-600 text-white rounded-2xl p-3 mb-1 active:scale-90 transition-transform duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined" style="font-variation-settings: &#39;FILL&#39; 1;"
+          >home</span
+        >
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1"
+          >Home</span
+        >
+      </a>
+      <!-- History -->
+      <!-- Scan -->
+      <div class="relative -top-8">
+        <button
+          class="w-16 h-16 bg-secondary text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform duration-300 ring-8 ring-background"
+        >
+          <span class="material-symbols-outlined text-3xl">document_scanner</span>
+        </button>
+        <span
+          class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-bold text-secondary tracking-wide uppercase"
+          >Scan</span
+        >
+      </div>
+      <!-- Profile -->
+      <a
+        class="flex flex-col items-center justify-center text-[#1E1B4B]/60 dark:text-slate-400 p-3 hover:text-[#006C49] transition-colors active:scale-90 duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined">person</span>
+        <span
+          class="font-[&#39;Plus_Jakarta_Sans&#39;] text-[10px] font-medium tracking-wide uppercase mt-1"
+          >Profile</span
+        >
+      </a>
+    </nav>
+  </body>
+</html>

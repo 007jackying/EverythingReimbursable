@@ -1,5 +1,6 @@
 import theme from '@/constants/theme'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
+import { GoogleProvider } from '@/context/GoogleContext'
 import { ReceiptsProvider, useReceipts } from '@/context/ReceiptsContext'
 import {
   PlusJakartaSans_400Regular,
@@ -57,7 +58,9 @@ const RootLayout = () => {
   return (
     <AuthProvider>
       <ReceiptsProvider>
-        <AppContent fontsLoaded={fontsLoaded ?? false} />
+        <GoogleProvider>
+          <AppContent fontsLoaded={fontsLoaded ?? false} />
+        </GoogleProvider>
       </ReceiptsProvider>
     </AuthProvider>
   )

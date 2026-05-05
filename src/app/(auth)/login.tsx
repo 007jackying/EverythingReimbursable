@@ -1,7 +1,16 @@
 import theme from '@/constants/theme'
 import { useAuth } from '@/context/AuthContext'
+import { useGoogle } from '@/context/GoogleContext'
 import { router } from 'expo-router'
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from 'react-native'
 import AppButton from '@/components/AppButton'
 import AppInput from '@/components/AppInput'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
@@ -10,6 +19,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated'
 
 const LoginScreen = () => {
   const { login } = useAuth()
+  const { signIn: googleSignIn } = useGoogle()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -35,6 +45,14 @@ const LoginScreen = () => {
     if (!valid) return
     await login(email, password)
     router.replace('/(main)/home')
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn()
+    } catch (error) {
+      console.error('Google sign-in failed:', error)
+    }
   }
 
   return (
@@ -101,16 +119,10 @@ const LoginScreen = () => {
           <View style={styles.dividerLine} />
         </View>
 
-        <View style={styles.socialRow}>
-          <View style={styles.socialButton}>
-            <MaterialIcons name="g-translate" size={20} color={theme.colors.primary} />
-            <Text style={styles.socialLabel}>Google</Text>
-          </View>
-          <View style={styles.socialButton}>
-            <MaterialIcons name="apple" size={20} color={theme.colors.primary} />
-            <Text style={styles.socialLabel}>Apple</Text>
-          </View>
-        </View>
+        <TouchableOpacity style={styles.socialButton} onPress={handleGoogleSignIn}>
+          <MaterialIcons name="g-translate" size={20} color={theme.colors.primary} />
+          <Text style={styles.socialLabel}>Continue with Google</Text>
+        </TouchableOpacity>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>New to the Lens? </Text>
@@ -206,12 +218,7 @@ const styles = StyleSheet.create({
     color: theme.colors['on-surface-variant'],
     letterSpacing: 1.5
   },
-  socialRow: {
-    flexDirection: 'row',
-    gap: theme.spacing[3]
-  },
   socialButton: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

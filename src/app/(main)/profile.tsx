@@ -1,5 +1,6 @@
 import theme from '@/constants/theme'
 import { useAuth } from '@/context/AuthContext'
+import { useGoogle } from '@/context/GoogleContext'
 import { useReceipts } from '@/context/ReceiptsContext'
 import { exportReceiptsCsv } from '@/utils/exportCsv'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -33,6 +34,12 @@ const CURRENCIES = [
 const ProfileScreen = () => {
   const { user, logout, updateName } = useAuth()
   const { receipts } = useReceipts()
+  const {
+    isAuthenticated: isGoogleConnected,
+    signIn: googleSignIn,
+    signOut: googleSignOut,
+    user: googleUser
+  } = useGoogle()
   const [isExporting, setIsExporting] = useState(false)
 
   // Edit name modal
@@ -85,6 +92,21 @@ const ProfileScreen = () => {
 
   const handleNotifications = () => {
     Alert.alert('Notifications', 'Push notification settings coming soon.')
+  }
+
+  const handleGoogleConnect = async () => {
+    if (isGoogleConnected) {
+      Alert.alert(
+        'Disconnect Google Drive',
+        'Are you sure you want to disconnect Google Drive? Your uploaded receipt images will remain in your Drive.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Disconnect', style: 'destructive', onPress: () => googleSignOut() }
+        ]
+      )
+    } else {
+      await googleSignIn()
+    }
   }
 
   const activeCurrency = CURRENCIES.find((c) => c.code === currency) ?? CURRENCIES[0]
@@ -159,6 +181,27 @@ const ProfileScreen = () => {
                 <Text style={styles.settingsDesc}>Push & email alerts</Text>
               </View>
               <MaterialIcons name="chevron-right" size={24} color={theme.colors.outline} />
+            </Pressable>
+
+            <Pressable style={styles.settingsRow} onPress={handleGoogleConnect}>
+              <View style={styles.settingsIcon}>
+                <MaterialIcons name="cloud" size={24} color={theme.colors['primary-container']} />
+              </View>
+              <View style={styles.settingsContent}>
+                <Text style={styles.settingsLabel}>Google Drive</Text>
+                <Text style={styles.settingsDesc}>
+                  {isGoogleConnected
+                    ? (googleUser?.email ?? 'Connected')
+                    : 'Connect to backup receipt images'}
+                </Text>
+              </View>
+              {isGoogleConnected ? (
+                <View style={styles.connectedBadge}>
+                  <MaterialIcons name="check-circle" size={16} color={theme.colors.secondary} />
+                </View>
+              ) : (
+                <MaterialIcons name="chevron-right" size={24} color={theme.colors.outline} />
+              )}
             </Pressable>
 
             <Pressable style={styles.settingsRow} onPress={() => setCurrencySheetOpen(true)}>
@@ -492,6 +535,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: theme.colors['on-primary']
+  },
+  connectedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   logoutRow: {
     flexDirection: 'row',

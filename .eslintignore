@@ -1,8 +1,11 @@
 node_modules/
 .expo/
 dist/
-build/
+web-build/
 coverage/
-babel.config.js
-metro.config.js
-.eslintrc.js
+*.tsbuildinfo
+expo-env.d.ts
+.env
+.env.local
+.env.*.local
+.DS_Store

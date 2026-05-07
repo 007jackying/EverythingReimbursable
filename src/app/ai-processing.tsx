@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import theme from '@/constants/theme'
+import { AI_CONFIDENCE_DISPLAY } from '@/constants/app'
 import Chip from '@/components/Chip'
+import ScreenHeader from '@/components/ScreenHeader'
 import { useGoogle } from '@/context/GoogleContext'
 import { uploadImage } from '@/services/googleDrive'
 import { extractReceiptData } from '@/services/gemini'
@@ -138,15 +140,7 @@ const AIProcessingScreen = () => {
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <View style={styles.topBar}>
-            <Text style={styles.topAppName}>EverythingReimbursable</Text>
-            <MaterialIcons
-              name="close"
-              size={24}
-              color={theme.colors.primary}
-              onPress={() => router.back()}
-            />
-          </View>
+          <ScreenHeader showMenu={false} showClose onClose={() => router.back()} />
 
           <View style={styles.receiptIconContainer}>
             <View style={styles.receiptIcon}>
@@ -165,7 +159,7 @@ const AIProcessingScreen = () => {
           <View style={styles.metaBento}>
             <View style={styles.metaItem}>
               <Text style={styles.metaLabel}>CONFIDENCE</Text>
-              <Text style={styles.confidenceValue}>98.4%</Text>
+              <Text style={styles.confidenceValue}>{AI_CONFIDENCE_DISPLAY}</Text>
             </View>
             <View style={styles.metaDivider} />
             <View style={styles.metaItem}>
@@ -242,19 +236,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing[6],
     paddingBottom: theme.spacing[10],
     alignItems: 'center'
-  },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    paddingVertical: theme.spacing[4]
-  },
-  topAppName: {
-    fontFamily: theme.fontFamily.headline,
-    fontSize: 14,
-    fontWeight: '700',
-    color: theme.colors.primary
   },
   receiptIconContainer: {
     marginTop: theme.spacing[6],

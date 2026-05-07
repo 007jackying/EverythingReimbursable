@@ -10,13 +10,7 @@ export const copyImageToCache = async (sourceUri: string): Promise<string> => {
   }
 
   const destUri = `${cacheDir}${fileName}`
-  console.log('[FileHandler] Copying image from:', sourceUri)
-  console.log('[FileHandler] Copying image to:', destUri)
-
   await FileSystem.copyAsync({ from: sourceUri, to: destUri })
-
-  const info = await FileSystem.getInfoAsync(destUri)
-  console.log('[FileHandler] Copied file info:', JSON.stringify(info))
 
   return destUri
 }

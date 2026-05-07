@@ -26,3 +26,9 @@ export const CATEGORY_LABELS: Record<string, string> = {
   utilities: 'Utilities',
   other: 'Other'
 } as const
+
+export const STATUS_LABELS: Record<string, string> = {
+  verified: 'Verified',
+  pending: 'Pending',
+  failed: 'Failed'
+} as const

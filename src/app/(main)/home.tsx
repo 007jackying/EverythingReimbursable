@@ -11,6 +11,7 @@ import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native
 import SummaryCard from '@/components/SummaryCard'
 import ReceiptCard from '@/components/ReceiptCard'
 import AppButton from '@/components/AppButton'
+import ScreenHeader from '@/components/ScreenHeader'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { RECENT_RECEIPTS_LIMIT } from '@/constants/app'
@@ -61,13 +62,7 @@ const HomeScreen = () => {
         }
       >
         <View style={styles.container}>
-          <View style={styles.header}>
-            <MaterialIcons name="menu" size={24} color={theme.colors.primary} />
-            <Text style={styles.headerAppName}>EverythingReimbursable</Text>
-            <View style={styles.avatar}>
-              <MaterialIcons name="person" size={20} color={theme.colors['on-primary']} />
-            </View>
-          </View>
+          <ScreenHeader />
 
           <View style={styles.greeting}>
             <Text style={styles.greetingText}>
@@ -164,26 +159,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: theme.spacing[6],
     paddingBottom: theme.spacing[10]
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: theme.spacing[4]
-  },
-  headerAppName: {
-    fontFamily: theme.fontFamily.headline,
-    fontSize: 14,
-    fontWeight: '700',
-    color: theme.colors.primary
-  },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: theme.radius.full,
-    backgroundColor: theme.colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   greeting: {
     marginBottom: theme.spacing[6]

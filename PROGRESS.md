@@ -9,7 +9,7 @@
 
 ### App Overview
 
-EverythingReimbursable is a cross-platform receipt scanner and expense tracker built with Expo React Native. The core flow is: **Scan → AI Extract → Review → Save → History**. Production-ready AI integration with Google Gemini 2.0 Flash and Google Drive backup.
+EverythingReimbursable is a cross-platform receipt scanner and expense tracker built with Expo React Native. The core flow is: **Scan → AI Extract → Review → Save → History**. Production-ready AI integration with Google Gemini 3 Pro Preview and Google Drive backup.
 
 ---
 
@@ -88,7 +88,7 @@ getReceipt(id): Receipt | undefined
 | `MaterialIcons` + `MaterialCommunityIcons`                | MaterialIcons lacks `home-outline`; use `MaterialCommunityIcons` for that icon only              |
 | `StyleSheet.create()` only, no inline styles              | Enforced by CLAUDE.md; tokens from `src/constants/theme.ts`                                      |
 | File-based routing via Expo Router                        | Cleaner navigation tree; auth guard is one `if (!isAuthenticated)` check in `(main)/_layout.tsx` |
-| Google Gemini 2.0 Flash for OCR                           | Production-ready model with fast response times (2-3s), better than mock implementation          |
+| Google Gemini 3 Pro Preview for OCR                       | Production-ready model with fast response times (2-3s), better than mock implementation          |
 | Base64 image encoding for Gemini API                      | Reliable transmission across platforms; avoids file URI issues                                   |
 | Modular utility functions                                 | Separation of concerns: validators, formatters, file handlers, time utilities                    |
 
@@ -138,7 +138,7 @@ getReceipt(id): Receipt | undefined
 
 ### Session 7 — Production AI Integration ✅
 
-- **Gemini AI Integration**: Upgraded from mock to Google Gemini 2.0 Flash for real receipt OCR
+- **Gemini AI Integration**: Upgraded from mock to Google Gemini 3 Pro Preview for real receipt OCR
 - **gemini.ts**: Production-ready extraction with robust error handling, base64 image encoding, confidence scoring
 - **googleDrive.ts**: Complete Google Drive backup implementation with folder creation, file upload, and sync status
 - **Utility modules**: Created validators.ts, formatters.ts, fileHandler.ts, time.ts for better code organization

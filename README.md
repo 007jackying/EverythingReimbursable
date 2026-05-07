@@ -23,7 +23,7 @@ All core screens are built with local/mock data persistence. Ready for backend i
 | Persistence | `expo-secure-store` (auth) + `AsyncStorage` (receipts, prefs) |
 | Camera      | `expo-camera` + `expo-image-picker`                           |
 | Animations  | `react-native-reanimated` 4                                   |
-| AI/OCR      | Google Gemini 2.0 Flash (`@google/generative-ai`)             |
+| AI/OCR      | Google Gemini 3 Pro Preview (`@google/generative-ai`)         |
 | Fonts       | Plus Jakarta Sans + Space Grotesk (`@expo-google-fonts`)      |
 | Icons       | `@expo/vector-icons` — MaterialIcons + MaterialCommunityIcons |
 | Export      | `expo-file-system` v55 + `expo-sharing`                       |
@@ -209,7 +209,7 @@ All UI decisions are defined in [`CLAUDE.md`](./CLAUDE.md):
 
 **AI Integration:**
 
-- ✅ Google Gemini 2.0 Flash integration for production OCR
+- ✅ Google Gemini 3 Pro Preview integration for production OCR
 - ✅ Intelligent receipt data extraction with confidence scoring
 - ✅ Automatic category inference from merchant names
 - ✅ Robust error handling and fallback mechanisms

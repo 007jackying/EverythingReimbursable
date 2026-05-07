@@ -11,7 +11,7 @@ if (!GEMINI_API_KEY) {
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null
 
-const model = genAI?.getGenerativeModel({ model: 'gemini-3.1-pro-preview' })
+const model = genAI?.getGenerativeModel({ model: 'gemini-3-pro-preview' })
 
 const MAX_RETRIES = 5
 const INITIAL_DELAY = 1000

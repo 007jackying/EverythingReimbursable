@@ -1,4 +1,6 @@
 // Mock Platform as web before any imports
+import { secureGet, secureSet, secureDelete } from '@/utils/secureStorage'
+
 jest.mock('react-native', () => ({
   Platform: { OS: 'web' }
 }))
@@ -8,8 +10,6 @@ jest.mock('expo-secure-store', () => ({
   setItemAsync: jest.fn(),
   deleteItemAsync: jest.fn()
 }))
-
-import { secureGet, secureSet, secureDelete } from '@/utils/secureStorage'
 
 describe('secureStorage utility (web)', () => {
   beforeEach(() => {

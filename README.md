@@ -23,7 +23,7 @@ All core screens are built with local/mock data persistence. Ready for backend i
 | Persistence | `expo-secure-store` (auth) + `AsyncStorage` (receipts, prefs) |
 | Camera      | `expo-camera` + `expo-image-picker`                           |
 | Animations  | `react-native-reanimated` 4                                   |
-| AI/OCR      | Google Gemini 3.1 Pro Preview (`@google/generative-ai`)       |
+| AI/OCR      | Google Gemini 2.0 Flash (`@google/generative-ai`)             |
 | Fonts       | Plus Jakarta Sans + Space Grotesk (`@expo-google-fonts`)      |
 | Icons       | `@expo/vector-icons` — MaterialIcons + MaterialCommunityIcons |
 | Export      | `expo-file-system` v55 + `expo-sharing`                       |
@@ -116,7 +116,14 @@ src/
 └── utils/
     ├── categories.ts            # Category → icon name map
     ├── exportCsv.ts             # CSV generation + share sheet (expo-file-system v55 OOP API)
-    └── secureStorage.ts         # Platform-compatible secure storage (web + native)
+    ├── secureStorage.ts         # Platform-compatible secure storage (web + native)
+    ├── validators.ts            # Form validation utilities
+    ├── formatters.ts            # Data formatting helpers
+    ├── fileHandler.ts           # File encoding and processing utilities
+    └── time.ts                  # Date/time formatting utilities
+├── hooks/
+│   ├── useAuthForm.ts           # Reusable auth form logic
+│   └── useReceiptFilter.ts      # Receipt filtering and search logic
 ├── services/
 │   ├── gemini.ts                # Google Gemini AI client for receipt OCR
 │   └── googleDrive.ts           # Google Drive API for receipt backup
@@ -149,7 +156,7 @@ Modal stack (over tabs):
 1. **Splash** → tap "Get Started" → **Login / Sign Up**
 2. **Home** → tap Scan FAB or "Scan Receipt" quick action
 3. **Camera** → capture photo → navigate to **AI Processing** with `imageUri`
-4. **AI Processing** → `mockExtract` runs (3.5s) → animated progress bar → navigate to **Receipt Detail** with extracted JSON
+4. **AI Processing** → Gemini 2.0 Flash extracts receipt data (2-3s) → animated progress bar → navigate to **Receipt Detail** with extracted JSON
 5. **Receipt Detail** → review, optionally edit fields → "Save Receipt" → back to **Home**
 6. **History** → filter / search / group by category → long-press to delete
 7. **Profile** → edit display name, select currency, export CSV, logout
@@ -169,28 +176,29 @@ All UI decisions are defined in [`CLAUDE.md`](./CLAUDE.md):
 
 ## Scripts
 
-| Command                    | Description                     |
-| -------------------------- | ------------------------------- |
-| `npx expo start`           | Start dev server                |
-| `npx expo start --ios`     | iOS simulator directly          |
-| `npx expo start --android` | Android emulator directly       |
-| `npx tsc --noEmit`         | TypeScript check (0 errors)     |
-| `npx expo lint`            | ESLint                          |
-| `npm run lint:fix`         | Auto-fix ESLint errors          |
-| `npm run format`           | Format code with Prettier       |
-| `npm test`                 | Run tests                       |
-| `npm run test:watch`       | Run tests in watch mode         |
-| `npm run test:coverage`    | Generate coverage report        |
+| Command                    | Description                 |
+| -------------------------- | --------------------------- |
+| `npx expo start`           | Start dev server            |
+| `npx expo start --ios`     | iOS simulator directly      |
+| `npx expo start --android` | Android emulator directly   |
+| `npx tsc --noEmit`         | TypeScript check (0 errors) |
+| `npx expo lint`            | ESLint                      |
+| `npm run lint:fix`         | Auto-fix ESLint errors      |
+| `npm run format`           | Format code with Prettier   |
+| `npm test`                 | Run tests                   |
+| `npm run test:watch`       | Run tests in watch mode     |
+| `npm run test:coverage`    | Generate coverage report    |
 
 ---
 
 ## Status
 
-**Current:** Phases 1–3 complete. All screens built, local persistence wired, animations polished.
+**Current:** Phases 1–3 complete with production-ready AI integration and Google services.
 
 ### ✅ Completed Features
 
 **Core App:**
+
 - ✅ Full auth flow (splash, login, signup) with SecureStore persistence
 - ✅ Home dashboard with summary card, quick actions, recent receipts
 - ✅ Camera scan → AI processing → receipt detail flow
@@ -200,29 +208,36 @@ All UI decisions are defined in [`CLAUDE.md`](./CLAUDE.md):
 - ✅ All animations with react-native-reanimated
 
 **AI Integration:**
-- ✅ Google Gemini 3.1 Pro Preview integration
-- ✅ Receipt OCR and data extraction
-- ✅ Confidence scoring
-- ✅ Automatic category inference
+
+- ✅ Google Gemini 2.0 Flash integration for production OCR
+- ✅ Intelligent receipt data extraction with confidence scoring
+- ✅ Automatic category inference from merchant names
+- ✅ Robust error handling and fallback mechanisms
+- ✅ Base64 image encoding for reliable API transmission
 
 **Google Integration:**
-- ✅ Google OAuth sign-in
-- ✅ Google Drive backup for receipts
-- ✅ Secure token management
+
+- ✅ Google OAuth sign-in with secure token management
+- ✅ Google Drive backup for receipt images and data
+- ✅ Automatic folder creation and file organization
+- ✅ Real-time sync status indicators
 
 **Code Quality:**
+
 - ✅ ESLint + Prettier + Husky pre-commit hooks
 - ✅ TypeScript strict mode
 - ✅ Jest test suite (37 tests passing)
 - ✅ Comprehensive documentation
+- ✅ Modular utility functions for validation, formatting, and file handling
 
 **Testing:**
+
 - ✅ 37 unit tests for utility functions (100% coverage)
 - ✅ Jest infrastructure configured
 - ✅ Test coverage reporting
 - ✅ CI/CD ready scripts
 
-**Next:** Phase 4 — Real auth API, cloud image storage, push notifications.
+**Next:** Phase 4 — Real auth API backend, cloud image storage optimization, push notifications.
 
 See [`PROGRESS.md`](./PROGRESS.md) for the full phase-by-phase development log, technical decisions, and backlog.
 
@@ -235,6 +250,7 @@ See [`PROGRESS.md`](./PROGRESS.md) for the full phase-by-phase development log, 
 The project includes a comprehensive test suite with Jest and React Native Testing Library.
 
 **Test Coverage:**
+
 - 37 unit tests for utility functions
 - 100% coverage of utility modules
 - Tests for categories, CSV export, and secure storage

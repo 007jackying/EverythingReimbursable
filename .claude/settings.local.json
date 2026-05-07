@@ -5,7 +5,9 @@
       "Bash(npx tsc *)",
       "Bash(node *)",
       "Bash(git *)",
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "Bash(npm list *)",
+      "Bash(grep -E '\\\\.\\(tsx?|json\\)$')"
     ]
   }
 }

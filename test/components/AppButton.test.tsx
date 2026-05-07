@@ -1,6 +1,6 @@
-import { render, fireEvent } from '../test-utils'
 import AppButton from '@/components/AppButton'
 import { Text } from 'react-native'
+import { render, fireEvent } from '../test-utils'
 
 describe('AppButton Component', () => {
   describe('rendering', () => {
@@ -38,17 +38,13 @@ describe('AppButton Component', () => {
 
   describe('icons', () => {
     it('renders leading icon', () => {
-      const { getByText } = render(
-        <AppButton label="With Icon" icon={<Text>Icon</Text>} />
-      )
+      const { getByText } = render(<AppButton label="With Icon" icon={<Text>Icon</Text>} />)
       expect(getByText('Icon')).toBeTruthy()
       expect(getByText('With Icon')).toBeTruthy()
     })
 
     it('renders trailing icon', () => {
-      const { getByText } = render(
-        <AppButton label="With Arrow" trailingIcon={<Text>→</Text>} />
-      )
+      const { getByText } = render(<AppButton label="With Arrow" trailingIcon={<Text>→</Text>} />)
       expect(getByText('→')).toBeTruthy()
       expect(getByText('With Arrow')).toBeTruthy()
     })
@@ -66,7 +62,7 @@ describe('AppButton Component', () => {
     it('calls onPress when pressed', () => {
       const onPress = jest.fn()
       const { getByText } = render(<AppButton label="Click Me" onPress={onPress} />)
-      
+
       fireEvent.press(getByText('Click Me'))
       expect(onPress).toHaveBeenCalledTimes(1)
     })
@@ -76,14 +72,14 @@ describe('AppButton Component', () => {
       const { getByText } = render(
         <AppButton label="Disabled" variant="disabled" onPress={onPress} />
       )
-      
+
       fireEvent.press(getByText('Disabled'))
       expect(onPress).not.toHaveBeenCalled()
     })
 
     it('does not call onPress when onPress is undefined', () => {
       const { getByText } = render(<AppButton label="No Handler" />)
-      
+
       // Should not throw
       expect(() => fireEvent.press(getByText('No Handler'))).not.toThrow()
     })

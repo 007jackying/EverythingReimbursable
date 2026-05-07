@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import theme from '@/constants/theme'
 import Chip from '@/components/Chip'
 import { useGoogle } from '@/context/GoogleContext'
@@ -18,7 +19,7 @@ import Animated, {
 
 const AIProcessingScreen = () => {
   const { imageUri } = useLocalSearchParams<{ imageUri?: string }>()
-  const { accessToken, isAuthenticated: isGoogleConnected } = useGoogle()
+  const { accessToken, isAuthenticated: isGoogleConnected, refreshTokens } = useGoogle()
   const [merchantName, setMerchantName] = useState('Analyzing...')
   const [detectedAmount, setDetectedAmount] = useState<string | null>(null)
   const [driveUploadStatus, setDriveUploadStatus] = useState<string | null>(null)
@@ -58,12 +59,44 @@ const AIProcessingScreen = () => {
           driveWebViewLink = uploadResult.webViewLink
           setDriveUploadStatus('Uploaded ✓')
         } catch (error) {
-          console.error('Drive upload failed:', error)
-          setDriveUploadStatus('Upload failed')
-          Alert.alert(
-            'Drive Upload Failed',
-            'Receipt image could not be uploaded to Google Drive. It will be stored locally.'
-          )
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+          console.error('Drive upload failed:', errorMessage)
+
+          // Check if token expired - try to refresh and retry once
+          if (errorMessage.includes('TOKEN_EXPIRED') || errorMessage.includes('401')) {
+            console.log('Token expired, attempting refresh...')
+            setDriveUploadStatus('Refreshing token...')
+            const newToken = await refreshTokens()
+
+            if (newToken && imageUri) {
+              try {
+                const fileName = `receipt-${Date.now()}.jpg`
+                const uploadResult = await uploadImage(newToken, imageUri, fileName)
+                driveFileId = uploadResult.fileId
+                driveWebViewLink = uploadResult.webViewLink
+                setDriveUploadStatus('Uploaded ✓')
+              } catch (retryError) {
+                console.error('Retry upload failed:', retryError)
+                setDriveUploadStatus('Upload failed')
+                Alert.alert(
+                  'Drive Upload Failed',
+                  'Receipt image could not be uploaded to Google Drive. It will be stored locally.'
+                )
+              }
+            } else {
+              setDriveUploadStatus('Session expired')
+              Alert.alert(
+                'Google Session Expired',
+                'Please reconnect Google Drive in Profile settings.'
+              )
+            }
+          } else {
+            setDriveUploadStatus('Upload failed')
+            Alert.alert(
+              'Drive Upload Failed',
+              'Receipt image could not be uploaded to Google Drive. It will be stored locally.'
+            )
+          }
         }
       }
 
@@ -82,7 +115,7 @@ const AIProcessingScreen = () => {
               driveFileId,
               driveWebViewLink,
               status: 'verified',
-              date: new Date().toISOString().split('T')[0],
+              date: result.date || new Date().toISOString().split('T')[0],
               createdAt: new Date().toISOString(),
               notes: null
             })
@@ -97,6 +130,9 @@ const AIProcessingScreen = () => {
   const progressBarStyle = useAnimatedStyle(() => ({
     width: `${progressAnim.value}%` as `${number}%`
   }))
+  const dot1Style = useAnimatedStyle(() => ({ transform: [{ translateY: dot1Y.value }] }))
+  const dot2Style = useAnimatedStyle(() => ({ transform: [{ translateY: dot2Y.value }] }))
+  const dot3Style = useAnimatedStyle(() => ({ transform: [{ translateY: dot3Y.value }] }))
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -181,15 +217,9 @@ const AIProcessingScreen = () => {
               {!detectedAmount && (
                 <View style={styles.categorizingRow}>
                   <Text style={styles.categorizingText}>Categorizing</Text>
-                  <Animated.Text style={[styles.dot, { transform: [{ translateY: dot1Y.value }] }]}>
-                    ●
-                  </Animated.Text>
-                  <Animated.Text style={[styles.dot, { transform: [{ translateY: dot2Y.value }] }]}>
-                    ●
-                  </Animated.Text>
-                  <Animated.Text style={[styles.dot, { transform: [{ translateY: dot3Y.value }] }]}>
-                    ●
-                  </Animated.Text>
+                  <Animated.Text style={dot1Style}>●</Animated.Text>
+                  <Animated.Text style={dot2Style}>●</Animated.Text>
+                  <Animated.Text style={dot3Style}>●</Animated.Text>
                 </View>
               )}
             </View>

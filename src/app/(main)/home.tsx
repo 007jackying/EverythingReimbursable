@@ -1,5 +1,7 @@
 import theme from '@/constants/theme'
-import { formatAmount, formatDate } from '@/data/mockReceipts'
+import { formatAmount, formatDate } from '@/utils/formatters'
+import { getGreeting, isCurrentMonth } from '@/utils/time'
+import { copyImageToCache } from '@/utils/fileHandler'
 import { useReceipts } from '@/context/ReceiptsContext'
 import { useAuth } from '@/context/AuthContext'
 import * as ImagePicker from 'expo-image-picker'
@@ -11,21 +13,7 @@ import ReceiptCard from '@/components/ReceiptCard'
 import AppButton from '@/components/AppButton'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
-const RECENT_LIMIT = 5
-
-const getGreeting = () => {
-  const hour = new Date().getHours()
-  if (hour < 12) return 'Good morning'
-  if (hour < 18) return 'Good afternoon'
-  return 'Good evening'
-}
-
-const isCurrentMonth = (isoDate: string) => {
-  const d = new Date(isoDate)
-  const now = new Date()
-  return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-}
+import { RECENT_RECEIPTS_LIMIT } from '@/constants/app'
 
 const HomeScreen = () => {
   const { receipts } = useReceipts()
@@ -35,12 +23,11 @@ const HomeScreen = () => {
   const monthlyReceipts = receipts.filter((r) => isCurrentMonth(r.date))
   const monthlyTotal = monthlyReceipts.reduce((sum, r) => sum + r.totalAmount, 0)
   const totalExpenses = receipts.reduce((sum, r) => sum + r.totalAmount, 0)
-  const recentReceipts = receipts.slice(0, RECENT_LIMIT)
-  const hasMore = receipts.length > RECENT_LIMIT
+  const recentReceipts = receipts.slice(0, RECENT_RECEIPTS_LIMIT)
+  const hasMore = receipts.length > RECENT_RECEIPTS_LIMIT
 
   const onRefresh = useCallback(() => {
     setRefreshing(true)
-    // Data is local/in-memory — brief delay gives tactile feedback
     setTimeout(() => setRefreshing(false), 600)
   }, [])
 
@@ -50,7 +37,12 @@ const HomeScreen = () => {
       quality: 0.85
     })
     if (!result.canceled && result.assets[0]) {
-      router.push({ pathname: '/ai-processing', params: { imageUri: result.assets[0].uri } })
+      try {
+        const destUri = await copyImageToCache(result.assets[0].uri)
+        router.push({ pathname: '/ai-processing', params: { imageUri: destUri } })
+      } catch (error) {
+        console.error('[Home] Failed to copy image:', error)
+      }
     }
   }
 
@@ -149,7 +141,7 @@ const HomeScreen = () => {
               {hasMore && (
                 <View style={styles.viewMoreRow}>
                   <Text style={styles.viewMoreText} onPress={() => router.push('/(main)/history')}>
-                    {receipts.length - RECENT_LIMIT} more in History →
+                    {receipts.length - RECENT_RECEIPTS_LIMIT} more in History →
                   </Text>
                 </View>
               )}

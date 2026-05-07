@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import theme from '@/constants/theme'
 import { CameraView, FlashMode, useCameraPermissions } from 'expo-camera'
 import * as ImagePicker from 'expo-image-picker'
+import { copyImageToCache } from '@/utils/fileHandler'
 import { router } from 'expo-router'
 import { useRef, useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
@@ -27,7 +29,16 @@ const ScanScreen = () => {
     setIsCapturing(true)
     try {
       const photo = await cameraRef.current.takePictureAsync({ quality: 0.85 })
-      router.push({ pathname: '/ai-processing', params: { imageUri: photo?.uri ?? '' } })
+      console.log('[Scan] Photo captured:', photo?.uri)
+      if (!photo?.uri) {
+        console.log('[Scan] No photo URI, returning')
+        return
+      }
+
+      const destUri = await copyImageToCache(photo.uri)
+      router.push({ pathname: '/ai-processing', params: { imageUri: destUri } })
+    } catch (error) {
+      console.error('[Scan] Capture error:', error)
     } finally {
       setIsCapturing(false)
     }
@@ -39,7 +50,12 @@ const ScanScreen = () => {
       quality: 0.85
     })
     if (!result.canceled && result.assets[0]) {
-      router.push({ pathname: '/ai-processing', params: { imageUri: result.assets[0].uri } })
+      try {
+        const destUri = await copyImageToCache(result.assets[0].uri)
+        router.push({ pathname: '/ai-processing', params: { imageUri: destUri } })
+      } catch (error) {
+        console.error('[Scan] Gallery error:', error)
+      }
     }
   }
 

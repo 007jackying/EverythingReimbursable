@@ -2,9 +2,8 @@ import { render, RenderOptions } from '@testing-library/react-native'
 import React from 'react'
 
 // Custom render function that includes providers if needed
-const customRender = (ui: React.ReactElement, options?: Omit<RenderOptions, 'wrapper'>) => {
-  return render(ui, { ...options })
-}
+const customRender = (ui: React.ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
+  render(ui, { ...options })
 
 // Re-export everything from testing library
 export * from '@testing-library/react-native'
@@ -42,4 +41,7 @@ export const createMockUser = (overrides = {}) => ({
 })
 
 // Wait for async updates
-export const waitFor = () => new Promise(resolve => setTimeout(resolve, 0))
+export const waitFor = () =>
+  new Promise((resolve) => {
+    setTimeout(resolve, 0)
+  })

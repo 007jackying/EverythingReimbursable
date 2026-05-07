@@ -1,18 +1,19 @@
 export const GOOGLE_CONFIG = {
-  // Web client ID (for Expo on web)
-  clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
+  // Web client ID — from Google Cloud Console → OAuth 2.0 → Web client
+  // Used by Android and for Drive API token exchange
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '',
 
-  // No client secret for web OAuth (PKCE is used instead)
-  clientSecret: undefined,
+  // iOS client ID — from Google Cloud Console → OAuth 2.0 → iOS client
+  // Required for native iOS Sign-In
+  iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || '',
 
   androidPackage: 'com.everythingreimbursable.app',
   iosBundleId: 'com.everythingreimbursable.app',
 
+  // Scopes for Google Drive access
   scopes: [
     'https://www.googleapis.com/auth/drive.file',
-    'https://www.googleapis.com/auth/drive.readonly',
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile'
+    'https://www.googleapis.com/auth/drive.readonly'
   ],
 
   driveFolderName: 'EverythingReimbursable'

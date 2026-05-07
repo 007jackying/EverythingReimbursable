@@ -1,5 +1,7 @@
 import theme from '@/constants/theme'
-import { formatAmount, formatDate, getMonthYear } from '@/data/mockReceipts'
+import { formatAmount, formatDate } from '@/utils/formatters'
+import { getMonthYear, isCurrentMonth } from '@/utils/time'
+import { CATEGORY_LABELS } from '@/constants/app'
 import { useReceipts } from '@/context/ReceiptsContext'
 import type { Receipt, ReceiptCategory, ReceiptStatus } from '@/types/receipt'
 import { getCategoryIcon } from '@/utils/categories'
@@ -19,31 +21,12 @@ type FilterMode = 'All' | 'This Month' | 'By Category' | 'Filters'
 
 const FILTER_MODES: FilterMode[] = ['All', 'This Month', 'By Category', 'Filters']
 
-const CATEGORY_LABELS: Record<ReceiptCategory, string> = {
-  dining: 'Dining',
-  grocery: 'Grocery',
-  electronics: 'Electronics',
-  travel: 'Travel',
-  transport: 'Transport',
-  healthcare: 'Healthcare',
-  utilities: 'Utilities',
-  other: 'Other'
-}
-
 const STATUS_OPTIONS: { label: string; value: ReceiptStatus | 'all' }[] = [
   { label: 'All Statuses', value: 'all' },
   { label: 'Verified', value: 'verified' },
   { label: 'Pending', value: 'pending' },
   { label: 'Failed', value: 'failed' }
 ]
-
-// ── helpers ─────────────────────────────────────────────────────────────────
-
-const isThisMonth = (isoDate: string) => {
-  const d = new Date(isoDate)
-  const now = new Date()
-  return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-}
 
 const groupByMonth = (list: Receipt[]) =>
   list.reduce<Record<string, Receipt[]>>((acc, r) => {
@@ -96,7 +79,7 @@ const HistoryScreen = () => {
   const filtered = (() => {
     switch (activeFilter) {
       case 'This Month':
-        return searched.filter((r) => isThisMonth(r.date))
+        return searched.filter((r) => isCurrentMonth(r.date))
       case 'Filters':
         return statusFilter === 'all' ? searched : searched.filter((r) => r.status === statusFilter)
       default:

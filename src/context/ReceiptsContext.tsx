@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { mockReceipts } from '@/data/mockReceipts'
 import type { Receipt } from '@/types/receipt'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { STORAGE_KEYS } from '@/constants/app'
 
-const STORAGE_KEY = 'receipts_v1'
+const STORAGE_KEY = STORAGE_KEYS.receipts
 
 interface ReceiptsContextValue {
   receipts: Receipt[]
@@ -24,21 +24,21 @@ export const ReceiptsProvider = ({ children }: { children: React.ReactNode }) =>
   const [receipts, setReceipts] = useState<Receipt[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  // Rehydrate on mount — seed with mock data only on first launch
   useEffect(() => {
     const restore = async () => {
       try {
         const stored = await AsyncStorage.getItem(STORAGE_KEY)
         if (stored) {
-          setReceipts(JSON.parse(stored) as Receipt[])
-        } else {
-          // First launch — seed with mock data and persist it
-          setReceipts(mockReceipts)
-          await save(mockReceipts)
+          const parsed = JSON.parse(stored) as Receipt[]
+          // Strip legacy seeded mock receipts (IDs were plain integers: '1'–'8')
+          const real = parsed.filter((r) => !/^\d+$/.test(r.id))
+          if (real.length !== parsed.length) {
+            await save(real)
+          }
+          setReceipts(real)
         }
       } catch {
-        // Corrupt store — fall back to mock data
-        setReceipts(mockReceipts)
+        setReceipts([])
       } finally {
         setIsLoading(false)
       }
@@ -46,7 +46,7 @@ export const ReceiptsProvider = ({ children }: { children: React.ReactNode }) =>
     restore()
   }, [])
 
-  const addReceipt = useCallback(async (receipt: Receipt) => {
+  const addReceipt = useCallback((receipt: Receipt) => {
     setReceipts((prev) => {
       const next = [receipt, ...prev]
       save(next)
@@ -54,7 +54,7 @@ export const ReceiptsProvider = ({ children }: { children: React.ReactNode }) =>
     })
   }, [])
 
-  const updateReceipt = useCallback(async (id: string, updates: Partial<Receipt>) => {
+  const updateReceipt = useCallback((id: string, updates: Partial<Receipt>) => {
     setReceipts((prev) => {
       const next = prev.map((r) => (r.id === id ? { ...r, ...updates } : r))
       save(next)
@@ -62,7 +62,7 @@ export const ReceiptsProvider = ({ children }: { children: React.ReactNode }) =>
     })
   }, [])
 
-  const deleteReceipt = useCallback(async (id: string) => {
+  const deleteReceipt = useCallback((id: string) => {
     setReceipts((prev) => {
       const next = prev.filter((r) => r.id !== id)
       save(next)

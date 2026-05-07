@@ -1,6 +1,6 @@
-import { render } from '../test-utils'
 import Chip from '@/components/Chip'
 import { Text } from 'react-native'
+import { render } from '../test-utils'
 
 describe('Chip Component', () => {
   describe('rendering variants', () => {
@@ -90,9 +90,16 @@ describe('Chip Component', () => {
 
   describe('styling', () => {
     it('applies correct styling for each variant', () => {
-      const variants = ['verified', 'pending', 'category', 'category-large', 'ai-verified', 'bank-grade'] as const
-      
-      variants.forEach(variant => {
+      const variants = [
+        'verified',
+        'pending',
+        'category',
+        'category-large',
+        'ai-verified',
+        'bank-grade'
+      ] as const
+
+      variants.forEach((variant) => {
         const { getByText } = render(<Chip variant={variant} label={variant} />)
         expect(getByText(variant)).toBeTruthy()
       })

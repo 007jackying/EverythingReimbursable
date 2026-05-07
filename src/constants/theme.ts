@@ -32,7 +32,9 @@ const colors = {
   'on-error': '#FFFFFF',
 
   'inverse-surface': '#2F3130',
-  'inverse-on-surface': '#F1F1EF'
+  'inverse-on-surface': '#F1F1EF',
+
+  scrim: 'rgba(26, 28, 27, 0.4)'
 } as const
 
 export type ColorToken = keyof typeof colors
@@ -57,7 +59,7 @@ const radius = {
   md: 12,
   lg: 16,
   xl: 24,
-  '2xl': 24,
+  '2xl': 28,
   hero: 32,
   full: 9999
 } as const

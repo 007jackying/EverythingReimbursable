@@ -1,4 +1,6 @@
 // Mock expo-file-system
+import { extractReceiptData } from '@/services/gemini'
+
 jest.mock('expo-file-system', () => ({
   readAsStringAsync: jest.fn().mockResolvedValue('base64data')
 }))
@@ -14,9 +16,6 @@ jest.mock('@google/generative-ai', () => ({
     }))
   }))
 }))
-
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import { extractReceiptData } from '@/services/gemini'
 
 describe('Gemini AI Service', () => {
   beforeEach(() => {

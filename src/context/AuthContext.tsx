@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { secureDelete, secureGet, secureSet } from '@/utils/secureStorage'
+import { STORAGE_KEYS } from '@/constants/app'
 
-const USER_KEY = 'auth_user'
+const USER_KEY = STORAGE_KEYS.authUser
 
 export interface User {
   id: string
@@ -48,8 +49,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const login = useCallback(async (email: string, _password: string) => {
-    const raw = email.split('@')[0].replace(/[._]/g, ' ')
-    const name = raw.charAt(0).toUpperCase() + raw.slice(1)
+    // Extract name from email: john.doe+alias@gmail.com -> John Doe
+    const localPart = email.split('@')[0]
+    // Remove everything after + and replace dots/underscores with spaces
+    const cleanName = localPart.split('+')[0].replace(/[._]/g, ' ')
+    // Capitalize each word
+    const name = cleanName
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
     await persist({ id: 'user-1', name, email })
   }, [])
 

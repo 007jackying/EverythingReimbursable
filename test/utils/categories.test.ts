@@ -49,7 +49,7 @@ describe('categories utility', () => {
         'other'
       ]
 
-      expectedCategories.forEach(category => {
+      expectedCategories.forEach((category) => {
         expect(categoryIconMap[category]).toBeDefined()
       })
     })
@@ -60,7 +60,7 @@ describe('categories utility', () => {
     })
 
     it('all icons are non-empty strings', () => {
-      Object.values(categoryIconMap).forEach(icon => {
+      Object.values(categoryIconMap).forEach((icon) => {
         expect(icon).toBeTruthy()
         expect(typeof icon).toBe('string')
       })

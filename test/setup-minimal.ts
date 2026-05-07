@@ -11,7 +11,7 @@ const localStorageMock = {
     delete localStorageStore[key]
   }),
   clear: jest.fn(() => {
-    Object.keys(localStorageStore).forEach(key => delete localStorageStore[key])
+    Object.keys(localStorageStore).forEach((key) => delete localStorageStore[key])
   }),
   length: 0,
   key: jest.fn()
@@ -31,5 +31,5 @@ global.fetch = jest.fn()
 // Reset all mocks after each test
 afterEach(() => {
   jest.clearAllMocks()
-  Object.keys(localStorageStore).forEach(key => delete localStorageStore[key])
+  Object.keys(localStorageStore).forEach((key) => delete localStorageStore[key])
 })

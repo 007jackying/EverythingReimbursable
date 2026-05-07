@@ -1,11 +1,9 @@
-import { extractReceiptData } from '@/services/gemini'
-
 /**
  * Test script to verify Gemini AI integration
  * Run with: npx ts-node src/services/gemini.test.ts
  */
 
-const testGeminiExtraction = async () => {
+const testGeminiExtraction = () => {
   console.log('Testing Gemini AI integration...\n')
 
   if (!process.env.EXPO_PUBLIC_GEMINI_API_KEY) {

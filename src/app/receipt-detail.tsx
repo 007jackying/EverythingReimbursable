@@ -1,11 +1,12 @@
 import theme from '@/constants/theme'
-import { formatAmount, formatDate } from '@/data/mockReceipts'
+import { formatAmount, formatDate } from '@/utils/formatters'
 import { useReceipts } from '@/context/ReceiptsContext'
 import type { Receipt } from '@/types/receipt'
 import { router, useLocalSearchParams } from 'expo-router'
 import {
   Alert,
   Image,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -24,12 +25,28 @@ const ReceiptDetailScreen = () => {
   const { receipts, addReceipt, updateReceipt, deleteReceipt } = useReceipts()
 
   const extractedReceipt = extracted ? (JSON.parse(extracted) as Receipt) : null
-  const baseReceipt = extractedReceipt ?? receipts.find((r) => r.id === id) ?? receipts[0]
+  const storedReceipt = receipts.find((r) => r.id === id)
+  const baseReceipt = extractedReceipt ?? storedReceipt
 
   const [isEditing, setIsEditing] = useState(false)
-  const [editedName, setEditedName] = useState(baseReceipt.companyName)
-  const [editedAmount, setEditedAmount] = useState(String(baseReceipt.totalAmount))
-  const [editedNotes, setEditedNotes] = useState(baseReceipt.notes ?? '')
+  const [editedName, setEditedName] = useState(baseReceipt?.companyName ?? '')
+  const [editedAmount, setEditedAmount] = useState(String(baseReceipt?.totalAmount ?? 0))
+  const [editedNotes, setEditedNotes] = useState(baseReceipt?.notes ?? '')
+  const [showImageModal, setShowImageModal] = useState(false)
+
+  // Show error state if no receipt found
+  if (!baseReceipt) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <View style={styles.errorContainer}>
+          <MaterialIcons name="error-outline" size={64} color={theme.colors.outline} />
+          <Text style={styles.errorTitle}>Receipt Not Found</Text>
+          <Text style={styles.errorText}>This receipt may have been deleted.</Text>
+          <AppButton label="Go Back" variant="primary" onPress={() => router.back()} />
+        </View>
+      </SafeAreaView>
+    )
+  }
 
   const receipt: Receipt = {
     ...baseReceipt,
@@ -53,6 +70,12 @@ const ReceiptDetailScreen = () => {
 
   const handleRescan = () => {
     router.replace('/(main)/scan')
+  }
+
+  const handleViewImage = () => {
+    if (receipt.imageUri) {
+      setShowImageModal(true)
+    }
   }
 
   const handleDelete = () => {
@@ -194,7 +217,7 @@ const ReceiptDetailScreen = () => {
           </View>
 
           {/* Receipt image */}
-          <View style={styles.receiptImage}>
+          <Pressable style={styles.receiptImage} onPress={handleViewImage}>
             {receipt.imageUri ? (
               <Image
                 source={{ uri: receipt.imageUri }}
@@ -211,7 +234,7 @@ const ReceiptDetailScreen = () => {
                 {receipt.imageUri ? 'View Full Image' : 'No Image'}
               </Text>
             </View>
-          </View>
+          </Pressable>
 
           {/* Actions */}
           <View style={styles.actions}>
@@ -238,6 +261,41 @@ const ReceiptDetailScreen = () => {
           </View>
         </View>
       </ScrollView>
+
+      {/* Full Image Modal */}
+      <Modal
+        visible={showImageModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowImageModal(false)}
+      >
+        <Pressable style={styles.modalBackdrop} onPress={() => setShowImageModal(false)}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Receipt Image</Text>
+              <Pressable onPress={() => setShowImageModal(false)} hitSlop={8}>
+                <MaterialIcons name="close" size={24} color={theme.colors.primary} />
+              </Pressable>
+            </View>
+            <ScrollView
+              style={styles.modalScroll}
+              contentContainerStyle={styles.modalScrollContent}
+              maximumZoomScale={3}
+              minimumZoomScale={1}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+            >
+              {receipt.imageUri && (
+                <Image
+                  source={{ uri: receipt.imageUri }}
+                  style={styles.fullImage}
+                  resizeMode="contain"
+                />
+              )}
+            </ScrollView>
+          </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   )
 }
@@ -492,6 +550,65 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: theme.colors['on-primary']
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalContent: {
+    backgroundColor: theme.colors['surface-container-lowest'],
+    borderRadius: theme.radius.xl,
+    width: '90%',
+    maxHeight: '90%',
+    overflow: 'hidden'
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: theme.spacing[4],
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors['outline-variant']
+  },
+  modalTitle: {
+    fontFamily: theme.fontFamily.headline,
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.primary
+  },
+  modalScroll: {
+    flexGrow: 0
+  },
+  modalScrollContent: {
+    alignItems: 'center',
+    padding: theme.spacing[4]
+  },
+  fullImage: {
+    width: 320,
+    height: 480,
+    borderRadius: theme.radius.lg
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: theme.spacing[8],
+    gap: theme.spacing[4]
+  },
+  errorTitle: {
+    fontFamily: theme.fontFamily.headline,
+    fontSize: 24,
+    fontWeight: '700',
+    color: theme.colors.primary
+  },
+  errorText: {
+    fontFamily: theme.fontFamily.headline,
+    fontSize: 15,
+    color: theme.colors['on-surface-variant'],
+    textAlign: 'center',
+    marginBottom: theme.spacing[4]
   }
 })
 

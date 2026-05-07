@@ -1,16 +1,8 @@
 import theme from '@/constants/theme'
 import { useAuth } from '@/context/AuthContext'
-import { useGoogle } from '@/context/GoogleContext'
+import { validateEmail, validatePassword } from '@/utils/validators'
 import { router } from 'expo-router'
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity
-} from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import AppButton from '@/components/AppButton'
 import AppInput from '@/components/AppInput'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
@@ -19,40 +11,22 @@ import Animated, { FadeInDown } from 'react-native-reanimated'
 
 const LoginScreen = () => {
   const { login } = useAuth()
-  const { signIn: googleSignIn } = useGoogle()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
 
   const handleLogin = async () => {
-    let valid = true
-    if (!email.trim()) {
-      setEmailError('Email is required')
-      valid = false
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Enter a valid email address')
-      valid = false
-    } else {
-      setEmailError('')
-    }
-    if (!password) {
-      setPasswordError('Password is required')
-      valid = false
-    } else {
-      setPasswordError('')
-    }
-    if (!valid) return
+    const emailErr = validateEmail(email)
+    const passErr = validatePassword(password)
+
+    setEmailError(emailErr || '')
+    setPasswordError(passErr || '')
+
+    if (emailErr || passErr) return
+
     await login(email, password)
     router.replace('/(main)/home')
-  }
-
-  const handleGoogleSignIn = async () => {
-    try {
-      await googleSignIn()
-    } catch (error) {
-      console.error('Google sign-in failed:', error)
-    }
   }
 
   return (
@@ -112,17 +86,6 @@ const LoginScreen = () => {
             trailingIcon={<Text style={styles.arrow}>→</Text>}
           />
         </Animated.View>
-
-        <View style={styles.dividerRow}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>AUTHENTICATION PROXY</Text>
-          <View style={styles.dividerLine} />
-        </View>
-
-        <TouchableOpacity style={styles.socialButton} onPress={handleGoogleSignIn}>
-          <MaterialIcons name="g-translate" size={20} color={theme.colors.primary} />
-          <Text style={styles.socialLabel}>Continue with Google</Text>
-        </TouchableOpacity>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>New to the Lens? </Text>
@@ -199,41 +162,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: theme.colors['on-primary']
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: theme.spacing[6],
-    gap: theme.spacing[3]
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: theme.colors['outline-variant']
-  },
-  dividerText: {
-    fontFamily: theme.fontFamily.mono,
-    fontSize: 10,
-    fontWeight: '700',
-    color: theme.colors['on-surface-variant'],
-    letterSpacing: 1.5
-  },
-  socialButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: theme.spacing[2],
-    height: 52,
-    backgroundColor: theme.colors['surface-container-lowest'],
-    borderWidth: 1,
-    borderColor: theme.colors['outline-variant'],
-    borderRadius: theme.radius.md
-  },
-  socialLabel: {
-    fontFamily: theme.fontFamily.mono,
-    fontSize: 14,
-    fontWeight: '700',
-    color: theme.colors.primary
   },
   footer: {
     flexDirection: 'row',

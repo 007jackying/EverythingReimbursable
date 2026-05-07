@@ -1,16 +1,8 @@
 import theme from '@/constants/theme'
 import { useAuth } from '@/context/AuthContext'
-import { useGoogle } from '@/context/GoogleContext'
+import { validateEmail, validatePassword, validateName } from '@/utils/validators'
 import { router } from 'expo-router'
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity
-} from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import AppButton from '@/components/AppButton'
 import AppInput from '@/components/AppInput'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
@@ -18,7 +10,6 @@ import { useState } from 'react'
 
 const SignUpScreen = () => {
   const { signUp } = useAuth()
-  const { signIn: googleSignIn } = useGoogle()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,39 +19,18 @@ const SignUpScreen = () => {
   const [passwordError, setPasswordError] = useState('')
 
   const handleSignUp = async () => {
-    let valid = true
-    if (!fullName.trim()) {
-      setNameError('Full name is required')
-      valid = false
-    } else {
-      setNameError('')
-    }
-    if (!email.trim()) {
-      setEmailError('Email is required')
-      valid = false
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Enter a valid email address')
-      valid = false
-    } else {
-      setEmailError('')
-    }
-    if (!password || password.length < 6) {
-      setPasswordError('Password must be at least 6 characters')
-      valid = false
-    } else {
-      setPasswordError('')
-    }
-    if (!valid) return
+    const nameErr = validateName(fullName)
+    const emailErr = validateEmail(email)
+    const passErr = validatePassword(password)
+
+    setNameError(nameErr || '')
+    setEmailError(emailErr || '')
+    setPasswordError(passErr || '')
+
+    if (nameErr || emailErr || passErr) return
+
     await signUp(fullName, email, password)
     router.replace('/(main)/home')
-  }
-
-  const handleGoogleSignIn = async () => {
-    try {
-      await googleSignIn()
-    } catch (error) {
-      console.error('Google sign-in failed:', error)
-    }
   }
 
   return (
@@ -137,17 +107,6 @@ const SignUpScreen = () => {
           trailingIcon={agreeTerms ? <Text style={styles.arrow}>→</Text> : undefined}
         />
 
-        <View style={styles.dividerRow}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>OR CONTINUE WITH</Text>
-          <View style={styles.dividerLine} />
-        </View>
-
-        <TouchableOpacity style={styles.socialButton} onPress={handleGoogleSignIn}>
-          <MaterialIcons name="g-translate" size={20} color={theme.colors.primary} />
-          <Text style={styles.socialLabel}>Continue with Google</Text>
-        </TouchableOpacity>
-
         <View style={styles.footer}>
           <Text style={styles.footerText}>Already part of the collection? </Text>
           <Text style={styles.footerLink} onPress={() => router.back()}>
@@ -216,41 +175,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: theme.colors['on-primary']
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: theme.spacing[6],
-    gap: theme.spacing[3]
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: theme.colors['outline-variant']
-  },
-  dividerText: {
-    fontFamily: theme.fontFamily.mono,
-    fontSize: 10,
-    fontWeight: '700',
-    color: theme.colors['on-surface-variant'],
-    letterSpacing: 1.5
-  },
-  socialButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: theme.spacing[2],
-    height: 52,
-    backgroundColor: theme.colors['surface-container-lowest'],
-    borderWidth: 1,
-    borderColor: theme.colors['outline-variant'],
-    borderRadius: theme.radius.md
-  },
-  socialLabel: {
-    fontFamily: theme.fontFamily.mono,
-    fontSize: 14,
-    fontWeight: '700',
-    color: theme.colors.primary
   },
   footer: {
     flexDirection: 'row',

@@ -78,7 +78,7 @@ export const GoogleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         webClientId: GOOGLE_CONFIG.webClientId,
         iosClientId: GOOGLE_CONFIG.iosClientId,
         scopes: GOOGLE_CONFIG.scopes,
-        offlineAccess: false
+        offlineAccess: true
       })
 
       console.log('[Google] Checking play services...')

@@ -1,5 +1,5 @@
 import theme from '@/constants/theme'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 type Props = {
   totalAmount: string
@@ -7,6 +7,8 @@ type Props = {
   monthlyAmount?: string
   monthlyCount?: number
   aiAccuracy?: string
+  mixedCurrencies?: boolean
+  onInsightsPress?: () => void
 }
 
 const SummaryCard = ({
@@ -14,13 +16,16 @@ const SummaryCard = ({
   receiptCount,
   monthlyAmount,
   monthlyCount,
-  aiAccuracy
+  aiAccuracy,
+  mixedCurrencies,
+  onInsightsPress
 }: Props) => (
   <View style={styles.container}>
     <View style={styles.decorativeCircleTop} />
     <View style={styles.decorativeCircleBottom} />
     <Text style={styles.label}>TOTAL EXPENSES</Text>
     <Text style={styles.amount}>{totalAmount}</Text>
+    {mixedCurrencies && <Text style={styles.mixedNote}>INCLUDES MIXED CURRENCIES</Text>}
     <View style={styles.statsRow}>
       <View style={styles.statItem}>
         <Text style={styles.statLabel}>THIS MONTH</Text>
@@ -40,7 +45,17 @@ const SummaryCard = ({
       <View style={styles.accuracyRow}>
         <View style={styles.accuracyDot} />
         <Text style={styles.accuracyText}>AI Accuracy {aiAccuracy}</Text>
-        <Text style={styles.accuracyLink}>View Insights →</Text>
+        {onInsightsPress && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="View insights"
+            onPress={onInsightsPress}
+            hitSlop={12}
+            style={({ pressed }) => [styles.accuracyLinkButton, pressed && styles.linkPressed]}
+          >
+            <Text style={styles.accuracyLink}>View Insights →</Text>
+          </Pressable>
+        )}
       </View>
     )}
   </View>
@@ -85,6 +100,14 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: theme.colors['on-primary'],
     marginTop: theme.spacing[2]
+  },
+  mixedNote: {
+    fontFamily: theme.fontFamily.mono,
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    color: theme.colors['on-primary-container'],
+    marginTop: theme.spacing[1]
   },
   statsRow: {
     flexDirection: 'row',
@@ -142,12 +165,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: theme.colors['secondary-fixed']
   },
+  accuracyLinkButton: {
+    marginLeft: 'auto'
+  },
+  linkPressed: {
+    opacity: 0.7
+  },
   accuracyLink: {
     fontFamily: theme.fontFamily.mono,
     fontSize: 12,
     fontWeight: '700',
-    color: theme.colors['on-primary'],
-    marginLeft: 'auto'
+    color: theme.colors['on-primary']
   }
 })
 

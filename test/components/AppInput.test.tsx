@@ -1,4 +1,5 @@
 import AppInput from '@/components/AppInput'
+import { TextInput } from 'react-native'
 import { render, fireEvent } from '../test-utils'
 
 describe('AppInput Component', () => {
@@ -10,7 +11,8 @@ describe('AppInput Component', () => {
 
     it('renders label in uppercase', () => {
       const { getByText } = render(<AppInput label="email" value="" onChangeText={jest.fn()} />)
-      expect(getByText('EMAIL')).toBeTruthy()
+      // RN applies uppercase via textTransform style; the text node keeps original casing
+      expect(getByText('email')).toHaveStyle({ textTransform: 'uppercase' })
     })
 
     it('renders with placeholder', () => {
@@ -72,7 +74,7 @@ describe('AppInput Component', () => {
         <AppInput label="PASSWORD" value="secret" onChangeText={jest.fn()} secureTextEntry />
       )
       // The eye icon should be present
-      const input = queryByType('TextInput')
+      const input = queryByType(TextInput)
       expect(input).toBeTruthy()
     })
 

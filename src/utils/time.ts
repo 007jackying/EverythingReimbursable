@@ -20,5 +20,3 @@ export const formatDate = (isoDate: string): string => {
   const d = new Date(isoDate)
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
-
-export const getTodayISO = (): string => new Date().toISOString().split('T')[0]

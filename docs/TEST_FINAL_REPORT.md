@@ -15,28 +15,29 @@
 
 ### Passing Tests (26/69)
 
-| Test File | Tests | Status |
-|-----------|-------|--------|
-| `test/simple.test.ts` | 4 | ✅ Pass |
-| `test/utils/categories.test.ts` | 11 | ✅ Pass |
-| `test/utils/categories-simple.test.ts` | 11 | ✅ Pass |
-| **Total** | **26** | **✅ Pass** |
+| Test File                              | Tests  | Status      |
+| -------------------------------------- | ------ | ----------- |
+| `test/simple.test.ts`                  | 4      | ✅ Pass     |
+| `test/utils/categories.test.ts`        | 11     | ✅ Pass     |
+| `test/utils/categories-simple.test.ts` | 11     | ✅ Pass     |
+| **Total**                              | **26** | **✅ Pass** |
 
 ### Tests Needing Fixes (43/69)
 
-| Test File | Tests | Issue |
-|-----------|-------|-------|
-| `test/utils/exportCsv.test.ts` | 8 | TypeScript mock casting errors |
-| `test/utils/secureStorage.test.ts` | 12 | Expo module import errors |
-| `test/components/AppButton.test.tsx` | 15 | JSX transformation needed |
-| `test/components/AppInput.test.tsx` | 12 | JSX transformation needed |
-| `test/components/Chip.test.tsx` | 12 | JSX transformation needed |
+| Test File                            | Tests | Issue                          |
+| ------------------------------------ | ----- | ------------------------------ |
+| `test/utils/exportCsv.test.ts`       | 8     | TypeScript mock casting errors |
+| `test/utils/secureStorage.test.ts`   | 12    | Expo module import errors      |
+| `test/components/AppButton.test.tsx` | 15    | JSX transformation needed      |
+| `test/components/AppInput.test.tsx`  | 12    | JSX transformation needed      |
+| `test/components/Chip.test.tsx`      | 12    | JSX transformation needed      |
 
 ---
 
 ## 🎯 What's Working
 
 ### 1. Jest Infrastructure ✅
+
 - Jest installed and configured
 - TypeScript support via ts-jest
 - Module path mapping (`@/` alias)
@@ -44,11 +45,13 @@
 - Watch mode available
 
 ### 2. Simple Tests ✅
+
 - Basic JavaScript/TypeScript tests work
 - No Expo dependencies needed
 - Fast execution (< 4 seconds)
 
 ### 3. Utility Function Tests ✅
+
 - `categories.test.ts` - All 11 tests passing
 - Pure TypeScript, no React Native
 - Tests category icon mapping
@@ -58,6 +61,7 @@
 ## ⚠️ Known Issues
 
 ### 1. Expo Module Imports
+
 **Error**: `Cannot use import statement outside a module`
 
 **Cause**: Expo modules use ES modules, Jest expects CommonJS
@@ -65,6 +69,7 @@
 **Solution**: Need to add transformIgnorePatterns or mock Expo modules
 
 ### 2. React Native Components
+
 **Error**: `Unexpected token '<'`
 
 **Cause**: JSX not being transformed
@@ -72,6 +77,7 @@
 **Solution**: Need React Native testing library setup
 
 ### 3. TypeScript Mock Casting
+
 **Error**: `Conversion of type 'typeof File' to type 'Mock<any, any, any>'`
 
 **Cause**: Incorrect mock type casting

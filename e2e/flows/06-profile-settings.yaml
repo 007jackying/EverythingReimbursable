@@ -1,0 +1,192 @@
+# J6 — Profile Settings (EXPANDED)
+# Tests: Edit name modal (open/save/cancel), currency picker
+#        (all 5 currencies), Google Drive connect button,
+#        notifications alert, export from profile, logout,
+#        help section, avatar display
+
+appId: com.everythingreimbursable.app
+env:
+  TEST_EMAIL: e2e-test@example.com
+  TEST_PASSWORD: Test1234!
+  TEST_NAME: E2E User
+---
+- launchApp:
+    clearState: false
+
+# Login
+- assertVisible: 'Welcome back.'
+- tapOn: 'EMAIL ADDRESS'
+- inputText: ${TEST_EMAIL}
+- tapOn: 'PASSWORD'
+- inputText: ${TEST_PASSWORD}
+- pressKey: Enter
+- assertVisible: 'TOTAL EXPENSES'
+
+# Go to Profile
+- tapOn:
+    text: 'Profile'
+    index: 0
+
+# ============================================================
+# AVATAR & NAME DISPLAY
+# ============================================================
+# User name with edit icon next to it
+- assertVisible:
+    text: ${TEST_NAME}
+    optional: true
+# Email displayed below name
+- assertVisible:
+    text: ${TEST_EMAIL}
+    optional: true
+
+# ============================================================
+# EDIT NAME: open modal
+# ============================================================
+- tapOn:
+    text: ${TEST_NAME}
+    optional: true
+# Modal should slide up
+- extendedWaitUntil:
+    visible:
+      text: 'Edit Display Name'
+    timeout: 5000
+- assertVisible: 'NAME'
+- assertVisible: 'Save Name'
+- assertVisible: 'Cancel'
+
+# Change name
+- tapOn:
+    text: 'Your name'
+    optional: true
+- eraseText: 50
+- inputText: 'Updated E2E User'
+
+# Save
+- tapOn: 'Save Name'
+# Modal closes; name should update
+- assertVisible: 'Updated E2E User'
+
+# ============================================================
+# EDIT NAME: cancel (re-open, dismiss without saving)
+# ============================================================
+- tapOn:
+    text: 'Updated E2E User'
+    optional: true
+- extendedWaitUntil:
+    visible:
+      text: 'Edit Display Name'
+    timeout: 5000
+- tapOn: 'Cancel'
+# Modal closes without change
+- assertVisible: 'Updated E2E User'
+
+# Restore original name
+- tapOn:
+    text: 'Updated E2E User'
+    optional: true
+- extendedWaitUntil:
+    visible:
+      text: 'Edit Display Name'
+    timeout: 5000
+- eraseText: 50
+- inputText: ${TEST_NAME}
+- tapOn: 'Save Name'
+
+# ============================================================
+# CURRENCY PICKER: open
+# ============================================================
+- scrollUntilVisible:
+    element:
+      text: 'Currency'
+    direction: DOWN
+- tapOn: 'Currency'
+# Currency bottom sheet
+- assertVisible: 'Select Currency'
+- assertVisible: 'CURRENCY'
+
+# All 5 currencies
+- assertVisible: 'US Dollar'
+- assertVisible: 'Malaysian Ringgit'
+- assertVisible: 'Euro'
+- assertVisible: 'British Pound'
+- assertVisible: 'Singapore Dollar'
+
+# Select Euro
+- tapOn: 'Euro'
+# Profile should show EUR
+- assertVisible: 'EUR'
+
+# Re-open and select USD (default)
+- tapOn: 'Currency'
+- tapOn: 'US Dollar'
+- assertVisible: 'USD'
+
+# ============================================================
+# NOTIFICATIONS (placeholder alert)
+# ============================================================
+- scrollUntilVisible:
+    element:
+      text: 'Notifications'
+    direction: UP
+- tapOn: 'Notifications'
+# Alert: "Push notification settings coming soon."
+- assertVisible:
+    text: 'Push notification settings coming soon.'
+    optional: true
+- tapOn:
+    text: 'OK'
+    optional: true
+
+# ============================================================
+# GOOGLE DRIVE: tap (should trigger sign-in or show alert)
+# ============================================================
+- scrollUntilVisible:
+    element:
+      text: 'Google Drive'
+    direction: DOWN
+- tapOn: 'Google Drive'
+# If not connected, triggers OAuth flow (cannot test without real account)
+# If already connected, shows disconnect alert → Cancel
+- tapOn:
+    text: 'Cancel'
+    optional: true
+
+# ============================================================
+# EXPORT DATA from profile
+# ============================================================
+- scrollUntilVisible:
+    element:
+      text: 'Export Data'
+    direction: DOWN
+- tapOn: 'Export Data'
+# Share sheet; dismiss
+- tapOn:
+    text: 'Cancel'
+    optional: true
+- tapOn:
+    point: '50%,60%'
+    optional: true
+
+# ============================================================
+# HELP: "Contact" button
+# ============================================================
+- scrollUntilVisible:
+    element:
+      text: 'Contact'
+    direction: DOWN
+- assertVisible: 'Need Help? Our support team is here 24/7'
+# Tap contact (opens email or alert)
+- tapOn:
+    text: 'Contact'
+    optional: true
+
+# ============================================================
+# LOGOUT
+# ============================================================
+- scrollUntilVisible:
+    element:
+      text: 'Logout Account'
+    direction: DOWN
+- tapOn: 'Logout Account'
+# Should redirect to Login
+- assertVisible: 'Welcome back.'

@@ -1,21 +1,51 @@
-// Mock expo-file-system
-import { extractReceiptData } from '@/services/gemini'
+import type { ExtractedReceiptData } from '@/services/gemini'
 
-jest.mock('expo-file-system', () => ({
-  readAsStringAsync: jest.fn().mockResolvedValue('base64data')
+const mockGenerateContent = jest.fn()
+
+jest.mock('expo-file-system/legacy', () => ({
+  readAsStringAsync: jest.fn().mockResolvedValue('base64data'),
+  getInfoAsync: jest.fn().mockResolvedValue({ exists: true, size: 1024 }),
+  copyAsync: jest.fn().mockResolvedValue(undefined),
+  cacheDirectory: 'file:///cache/',
+  EncodingType: { Base64: 'base64' }
 }))
 
-// Mock fetch globally
-global.fetch = jest.fn()
-
-// Mock Google Generative AI
 jest.mock('@google/generative-ai', () => ({
   GoogleGenerativeAI: jest.fn().mockImplementation(() => ({
     getGenerativeModel: jest.fn(() => ({
-      generateContent: jest.fn()
+      generateContent: mockGenerateContent
     }))
   }))
 }))
+
+// The service reads EXPO_PUBLIC_GEMINI_API_KEY at module load, so each test
+// loads a fresh copy of the module after configuring the environment.
+const loadExtractReceiptData = (): ((uri: string) => Promise<ExtractedReceiptData>) => {
+  let extract: ((uri: string) => Promise<ExtractedReceiptData>) | undefined
+  jest.isolateModules(() => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+    extract = require('@/services/gemini').extractReceiptData
+  })
+  return extract!
+}
+
+const mockModelResponse = (payload: object | string) => {
+  const text = typeof payload === 'string' ? payload : JSON.stringify(payload)
+  mockGenerateContent.mockResolvedValue({ response: { text: () => text } })
+}
+
+const fullReceiptJson = {
+  companyName: 'Blue Bottle Coffee',
+  address: '123 Main St',
+  date: '2024-10-24',
+  totalAmount: 42.5,
+  taxAmount: 2.5,
+  currency: 'USD',
+  paymentMethod: 'Credit Card',
+  paymentLast4: '4242',
+  eInvoiceId: 'INV-001',
+  confidence: 0.98
+}
 
 describe('Gemini AI Service', () => {
   beforeEach(() => {
@@ -28,88 +58,103 @@ describe('Gemini AI Service', () => {
   })
 
   describe('extractReceiptData', () => {
-    it('returns mock data when API key is not set', async () => {
+    it('throws when API key is not set', async () => {
       delete process.env.EXPO_PUBLIC_GEMINI_API_KEY
+      const extractReceiptData = loadExtractReceiptData()
 
-      const result = await extractReceiptData('test://image.jpg')
-
-      expect(result.companyName).toBe('Blue Bottle Coffee')
-      expect(result.totalAmount).toBe(42.5)
-      expect(result.confidence).toBe(0.984)
+      await expect(extractReceiptData('test://image.jpg')).rejects.toThrow(
+        'Gemini AI not initialized'
+      )
     })
 
-    it('returns mock data when model is not initialized', async () => {
-      const result = await extractReceiptData('test://image.jpg')
+    it('extracts all fields from the model response', async () => {
+      mockModelResponse(fullReceiptJson)
+      const extractReceiptData = loadExtractReceiptData()
 
-      // Since we're mocking, it should fall back to mock data
-      expect(result).toHaveProperty('companyName')
-      expect(result).toHaveProperty('totalAmount')
-      expect(result).toHaveProperty('category')
-      expect(result).toHaveProperty('confidence')
-    })
-
-    it('includes all required fields in response', async () => {
       const result = await extractReceiptData('test://image.jpg')
 
       expect(result).toMatchObject({
-        companyName: expect.any(String),
-        address: expect.anything(),
-        totalAmount: expect.any(Number),
-        taxAmount: expect.anything(),
-        currency: expect.any(String),
-        paymentMethod: expect.anything(),
-        paymentLast4: expect.anything(),
-        category: expect.any(String),
-        confidence: expect.any(Number),
-        eInvoiceId: expect.anything()
+        companyName: 'Blue Bottle Coffee',
+        address: '123 Main St',
+        date: '2024-10-24',
+        totalAmount: 42.5,
+        taxAmount: 2.5,
+        currency: 'USD',
+        paymentMethod: 'Credit Card',
+        paymentLast4: '4242',
+        eInvoiceId: 'INV-001',
+        confidence: 0.98
       })
     })
 
-    it('returns valid category', async () => {
+    it('applies safe defaults for missing fields', async () => {
+      mockModelResponse({})
+      const extractReceiptData = loadExtractReceiptData()
+
       const result = await extractReceiptData('test://image.jpg')
 
-      const validCategories = [
-        'dining',
-        'grocery',
-        'electronics',
-        'travel',
-        'transport',
-        'healthcare',
-        'utilities',
-        'other'
-      ]
+      expect(result.companyName).toBe('Unknown Merchant')
+      expect(result.address).toBeNull()
+      expect(result.totalAmount).toBe(0)
+      expect(result.taxAmount).toBeNull()
+      expect(result.currency).toBe('USD')
+      expect(result.paymentMethod).toBeNull()
+      expect(result.confidence).toBe(0.85)
+      expect(result.eInvoiceId).toBeNull()
+    })
 
-      expect(validCategories).toContain(result.category)
+    it('infers a valid category from the merchant name', async () => {
+      mockModelResponse(fullReceiptJson)
+      const extractReceiptData = loadExtractReceiptData()
+
+      const result = await extractReceiptData('test://image.jpg')
+
+      // "Blue Bottle Coffee" matches the "coffee" keyword
+      expect(result.category).toBe('dining')
+    })
+
+    it('falls back to "other" category for unknown merchants', async () => {
+      mockModelResponse({ ...fullReceiptJson, companyName: 'Mystery Shop' })
+      const extractReceiptData = loadExtractReceiptData()
+
+      const result = await extractReceiptData('test://image.jpg')
+
+      expect(result.category).toBe('other')
     })
 
     it('returns confidence between 0 and 1', async () => {
+      mockModelResponse(fullReceiptJson)
+      const extractReceiptData = loadExtractReceiptData()
+
       const result = await extractReceiptData('test://image.jpg')
 
       expect(result.confidence).toBeGreaterThanOrEqual(0)
       expect(result.confidence).toBeLessThanOrEqual(1)
     })
 
-    it('returns valid currency code', async () => {
+    it('parses JSON wrapped in markdown fences', async () => {
+      mockModelResponse(`\`\`\`json\n${JSON.stringify(fullReceiptJson)}\n\`\`\``)
+      const extractReceiptData = loadExtractReceiptData()
+
       const result = await extractReceiptData('test://image.jpg')
 
-      expect(result.currency).toMatch(/^[A-Z]{3}$/)
+      expect(result.companyName).toBe('Blue Bottle Coffee')
     })
   })
 
   describe('error handling', () => {
-    it('handles missing image URI gracefully', async () => {
-      const result = await extractReceiptData('')
+    it('throws when the response contains no JSON', async () => {
+      mockModelResponse('Sorry, I could not read this receipt.')
+      const extractReceiptData = loadExtractReceiptData()
 
-      expect(result).toHaveProperty('companyName')
-      expect(result).toHaveProperty('totalAmount')
+      await expect(extractReceiptData('test://image.jpg')).rejects.toThrow()
     })
 
-    it('falls back to mock data on error', async () => {
-      // Mock an error scenario
-      const result = await extractReceiptData('invalid://image')
+    it('propagates model errors', async () => {
+      mockGenerateContent.mockRejectedValue(new Error('API failure'))
+      const extractReceiptData = loadExtractReceiptData()
 
-      expect(result).toHaveProperty('companyName')
-      expect(result.confidence).toBeGreaterThanOrEqual(0)
+      await expect(extractReceiptData('test://image.jpg')).rejects.toThrow()
     })
   })
 })

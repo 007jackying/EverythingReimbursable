@@ -1,7 +1,7 @@
 # EverythingReimbursable — Development Progress Log
 
-> Last updated: 2026-05-07
-> Status: **Phase 3 complete with production AI integration. Phase 4 (real backend) pending.**
+> Last updated: 2026-05-20
+> Status: **Phase 4 in progress — Supabase cloud storage and auth integration complete.**
 
 ---
 
@@ -147,18 +147,82 @@ getReceipt(id): Receipt | undefined
 - **Error handling**: Comprehensive try-catch blocks, fallback values, and user-friendly error messages
 - **Type safety**: All new utilities fully typed with TypeScript
 
+### Session 8 — Supabase Cloud Storage & Auth Integration ✅
+
+- **Supabase Integration**: Installed `@supabase/supabase-js` and configured client with AsyncStorage persistence
+- **Cloud Storage Service**: Created `cloudStorage.ts` for receipt image upload/delete/download operations
+- **Image Compression**: Added `expo-image-manipulator` for optimizing images before upload (1920px max, 80% quality)
+- **Receipt Sync**: Updated `ReceiptsContext` to automatically sync receipt images to cloud on save
+- **Offline Queue**: Implemented `offlineQueue.ts` with `@react-native-community/netinfo` for network detection
+- **Lazy Loading**: Created `useLazyImage.ts` hook for efficient image loading in history list
+- **Supabase Auth**: Created `supabaseAuth.ts` service with email sign-up, sign-in, password reset
+- **AuthContext Update**: Replaced stub auth with real Supabase authentication (falls back to local if not configured)
+- **Receipt Type**: Added `cloudPath` and `syncedAt` fields to track cloud sync status
+- **Setup Guide**: Created `docs/SUPABASE_SETUP.md` with step-by-step instructions for bucket creation and policies
+
+### Session 9 — Production Hardening: Cloud DB Sync, Offline Worker, Error Boundary ✅
+
+- **Build fixes**: Upgraded `@supabase/supabase-js` to 2.108.1 (2.106 broke Hermes builds with a raw dynamic `import()`); downgraded Jest to 29 for `jest-expo` compatibility; consolidated three broken Jest configs into one `jest-expo`-based `jest.config.js` — 94/94 tests pass
+- **Fixed image upload corruption**: `cloudStorage.ts` read binary JPEGs with `file.text()` (UTF-8) — now uses `file.bytes()`; uploads use `upsert: true` so offline retries don't conflict
+- **cloudReceipts.ts**: New service syncing receipt rows to the Supabase `receipts` table (upsert/delete/fetch, snake_case mapping, graceful no-op when unconfigured)
+- **Offline sync worker**: Wired the previously-orphaned `offlineQueue.ts` into `ReceiptsContext` — failed/offline syncs queue, queue flushes on login and on network reconnect (NetInfo listener)
+- **Cloud pull on login**: receipts missing locally are fetched from the cloud and merged
+- **ErrorBoundary**: Root-level error boundary with design-system fallback UI and retry
+- **Receipt IDs**: now `crypto.randomUUID()` (collision-safe) with timestamp fallback
+- **SUPABASE_SETUP.md**: receipts table schema corrected (TEXT primary key for client IDs, added `cloud_path`/`synced_at`, user index)
+
+### Session 10 — List Virtualization, Onboarding Flag, Model Constant ✅
+
+- **History screen virtualized**: replaced the `ScrollView` + `.map()` render (all receipts mounted at once) with a `SectionList` — header/filters/empty-state/export card moved to `ListHeaderComponent`/`ListEmptyComponent`/`ListFooterComponent`, month groups become sections
+- **Onboarding "has seen" flag**: `has_onboarded_v1` in AsyncStorage — splash/onboarding shows only on first launch; returning (logged-out) users land on Login directly
+- **Gemini model constant**: `GEMINI_MODEL` in `constants/app.ts` was stale (`gemini-2.0-flash`) while `gemini.ts` hardcoded its own — `gemini.ts` now uses the constant, updated to `gemini-3-pro-preview`
+
+### Session 11 — Offline Delete Tombstones ✅
+
+- **offlineQueue.ts**: queue items now carry a `type` (`upsert` | `delete`); a delete supersedes any pending upsert for the same receipt; legacy persisted items default to `upsert`
+- **ReceiptsContext.deleteReceipt**: cloud cleanup (image + row) is attempted online; on failure or offline a delete tombstone is queued
+- **flushOfflineQueue**: replays both upserts and deletes on reconnect/login; queue items are only removed after the operation succeeds
+- **Login sync ordering fixed**: queue flush now runs _before_ the cloud pull, and the pull skips IDs with pending delete tombstones — offline-deleted receipts can no longer resurrect
+- **Tests**: new `offlineQueue.test.ts` (7 cases) — 101/101 passing
+
 ---
 
-## What's Still Missing (Phase 4)
+### Session 12 — Final Production Sweep ✅
 
-| Feature                    | Priority | Notes                                                    |
-| -------------------------- | -------- | -------------------------------------------------------- |
-| Real auth API backend      | High     | Supabase / Firebase / custom — swap `AuthContext` stubs  |
-| Cloud storage optimization | Medium   | Compress images before upload, implement lazy loading    |
-| Push notifications         | Low      | `expo-notifications` — token registration, server needed |
-| Error boundaries           | Medium   | Network errors, large list performance                   |
-| Onboarding "has seen" flag | Low      | Show splash only on first launch, skip on reinstall      |
-| Offline mode               | Medium   | Queue receipts when offline, sync when online            |
+- Re-reviewed the full uncommitted diff (sync layer, onboarding, virtualization) — no further defects found
+- Verified **Android** production bundle exports (iOS verified each session)
+- `.gitignore`: excluded local tooling artifacts (`data/`, `.understand-anything/`)
+- Final state: 101/101 tests, TypeScript clean, ESLint clean, iOS + Android Hermes bundles build
+
+### Session 13 — Fake Data Removal & Docs Refresh ✅
+
+- **Scanned the whole app for fake/mock data** — everything a user sees is now computed from their own receipts:
+  - Home summary card: hardcoded `aiAccuracy="99.2%"` → real average extraction confidence (hidden when no receipts)
+  - Profile: fake `+12%` growth stat → real "N this month" count; confidence shows `—` instead of `0.0%` when empty; removed the fake "PREMIUM MEMBER" badge (no membership system exists)
+  - AI processing screen: hardcoded `98.4%` confidence → `—` during analysis, real confidence once extraction completes; "OCR_v4" label → "Gemini"
+  - Splash: removed the unverifiable "99.2% accuracy" marketing claim (the static receipt-card illustration on the onboarding slide remains — it is decorative, per the design mockup)
+  - Removed the now-unused `AI_CONFIDENCE_DISPLAY` constant
+- **Docs refreshed**: README.md (features, structure, cloud sync section, 101-test status), CLAUDE.md §16 (Phase 4 done, new key-files table), docs/ONBOARDING.md and test/README.md brought in line with the current codebase
+
+### Session 14 — Currency Wiring & Insights Link ✅
+
+- **CurrencyContext**: new provider persisting the preferred display currency (`pref_currency`); Profile's currency picker now writes through it
+- **Per-receipt currency**: list rows (home, history), receipt detail (grand total symbol + tax), and the AI-processing detected amount now format with the receipt's own extracted currency instead of a hardcoded `$`
+- **Aggregate amounts** (summary card total + monthly) format with the user's preferred currency (no FX conversion — sums are nominal)
+- **"View Insights →"** on the summary card is now a real button (accessible, pressed state) navigating to History — previously dead text
+
+### Session 15 — Password Recovery, Auth Listener, Sync Conflicts, Polish ✅
+
+- **Forgot-password flow**: "Forgot?" on Login opens an email modal → `resetPasswordForEmail` with `redirectTo: everythingreimbursable://reset-password`; new `/reset-password` screen parses the recovery deep link, establishes the session (`setSessionFromTokens`), and lets the user set a new password (`updatePassword`); login errors now alert instead of crashing
+- **Auth state listener**: `onAuthStateChange` in supabaseAuth + AuthContext subscription — token refresh, revocation, and recovery sessions now propagate to app state (INITIAL_SESSION ignored; startup restore unchanged)
+- **Sync conflict handling**: receipts carry `updatedAt` (stamped on add/update, synced to a new `updated_at` column — schema doc updated); login merge is now last-write-wins by timestamp, and receipts with queued local edits are never overwritten by cloud copies
+- **Polish**: native splash background fixed `#208AEF` → `#FAF9F7` (design background); summary card totals display in the receipts' own currency when uniform, and show an "INCLUDES MIXED CURRENCIES" note when sums span currencies
+
+## What's Still Missing (Phase 4 - Remaining)
+
+| Feature            | Priority | Notes                                                    |
+| ------------------ | -------- | -------------------------------------------------------- |
+| Push notifications | Low      | `expo-notifications` — token registration, server needed |
 
 ---
 

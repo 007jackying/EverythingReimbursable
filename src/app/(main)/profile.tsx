@@ -3,9 +3,9 @@ import { useAuth } from '@/context/AuthContext'
 import { useGoogle } from '@/context/GoogleContext'
 import { useReceipts } from '@/context/ReceiptsContext'
 import { exportReceiptsCsv } from '@/utils/exportCsv'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useCurrency } from '@/context/CurrencyContext'
 import { router } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Alert,
   Modal,
@@ -17,11 +17,9 @@ import {
   View
 } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import Chip from '@/components/Chip'
 import AppButton from '@/components/AppButton'
+import { isCurrentMonth } from '@/utils/time'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
-const PREF_CURRENCY_KEY = 'pref_currency'
 
 const CURRENCIES = [
   { code: 'USD', symbol: '$', label: 'US Dollar' },
@@ -48,13 +46,7 @@ const ProfileScreen = () => {
 
   // Currency picker sheet
   const [currencySheetOpen, setCurrencySheetOpen] = useState(false)
-  const [currency, setCurrency] = useState('USD')
-
-  useEffect(() => {
-    AsyncStorage.getItem(PREF_CURRENCY_KEY).then((val) => {
-      if (val) setCurrency(val)
-    })
-  }, [])
+  const { currency, setCurrency } = useCurrency()
 
   const handleSaveName = async () => {
     const trimmed = draftName.trim()
@@ -64,14 +56,20 @@ const ProfileScreen = () => {
   }
 
   const handleSelectCurrency = async (code: string) => {
-    setCurrency(code)
-    await AsyncStorage.setItem(PREF_CURRENCY_KEY, code)
+    await setCurrency(code)
     setCurrencySheetOpen(false)
   }
 
-  const avgConfidence =
-    receipts.length > 0 ? receipts.reduce((sum, r) => sum + r.confidence, 0) / receipts.length : 0
-  const avgConfidenceLabel = `${(avgConfidence * 100).toFixed(1)}%`
+  const { avgConfidenceLabel, monthlyCount } = useMemo(() => {
+    const avgConfidence =
+      receipts.length > 0
+        ? receipts.reduce((sum, r) => sum + r.confidence, 0) / receipts.length
+        : null
+    return {
+      avgConfidenceLabel: avgConfidence !== null ? `${(avgConfidence * 100).toFixed(1)}%` : '—',
+      monthlyCount: receipts.filter((r) => isCurrentMonth(r.date)).length
+    }
+  }, [receipts])
 
   const handleLogout = async () => {
     await logout()
@@ -145,18 +143,13 @@ const ProfileScreen = () => {
             </Pressable>
 
             <Text style={styles.email}>{user?.email ?? ''}</Text>
-            <Chip
-              variant="bank-grade"
-              label="PREMIUM MEMBER"
-              icon={<MaterialIcons name="star" size={12} color={theme.colors.secondary} />}
-            />
           </View>
 
           <View style={styles.statsRow}>
             <View style={styles.statCard}>
               <Text style={styles.statLabel}>RECEIPTS SCANNED</Text>
               <Text style={styles.statValue}>{receipts.length}</Text>
-              <Text style={styles.statSub}>+12%</Text>
+              <Text style={styles.statSub}>{monthlyCount} this month</Text>
             </View>
             <View style={styles.statCardDark}>
               <Text style={styles.statLabelDark}>CONFIDENCE</Text>
@@ -241,10 +234,10 @@ const ProfileScreen = () => {
             </Pressable>
           </View>
 
-          <View style={styles.logoutRow} onTouchEnd={handleLogout}>
+          <Pressable style={styles.logoutRow} onPress={handleLogout} accessibilityRole="button">
             <MaterialIcons name="logout" size={24} color={theme.colors['on-surface-variant']} />
             <Text style={styles.logoutText}>Logout Account</Text>
-          </View>
+          </Pressable>
 
           <View style={styles.helpRow}>
             <View>

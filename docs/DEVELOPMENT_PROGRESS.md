@@ -16,6 +16,7 @@ EverythingReimbursable is a cross-platform receipt scanner and expense tracker b
 ### Core Application (100%)
 
 **Authentication & Onboarding:**
+
 - ✅ 3-slide onboarding carousel with gradient background
 - ✅ Email/password authentication with validation
 - ✅ Google OAuth integration
@@ -23,6 +24,7 @@ EverythingReimbursable is a cross-platform receipt scanner and expense tracker b
 - ✅ Auth-aware navigation flow
 
 **Home Dashboard:**
+
 - ✅ Summary card with total expenses and monthly stats
 - ✅ Quick action buttons (Scan Receipt, Upload Photo)
 - ✅ Recent receipts list (last 5 receipts)
@@ -30,6 +32,7 @@ EverythingReimbursable is a cross-platform receipt scanner and expense tracker b
 - ✅ AI accuracy indicator
 
 **Camera & AI Processing:**
+
 - ✅ Camera integration with expo-camera
 - ✅ Gallery picker for existing photos
 - ✅ AI extraction progress screen with animations
@@ -39,6 +42,7 @@ EverythingReimbursable is a cross-platform receipt scanner and expense tracker b
 - ✅ Google Drive backup integration
 
 **Receipt Management:**
+
 - ✅ Receipt detail view with all extracted fields
 - ✅ Inline editing of receipt data
 - ✅ Delete functionality (detail screen + history long-press)
@@ -46,6 +50,7 @@ EverythingReimbursable is a cross-platform receipt scanner and expense tracker b
 - ✅ Status indicators (verified/pending)
 
 **History & Search:**
+
 - ✅ Full receipt list with timeline grouping
 - ✅ Search functionality
 - ✅ Filter tabs (All, This Month, By Category)
@@ -54,6 +59,7 @@ EverythingReimbursable is a cross-platform receipt scanner and expense tracker b
 - ✅ Empty state handling
 
 **Profile:**
+
 - ✅ Edit display name (modal)
 - ✅ Currency preference (USD, MYR, EUR, GBP, SGD)
 - ✅ Google account connection status
@@ -70,16 +76,17 @@ EverythingReimbursable is a cross-platform receipt scanner and expense tracker b
 
 **Test Breakdown:**
 
-| Category | Tests | Status |
-|----------|-------|--------|
-| Simple Tests | 4 | ✅ Pass |
-| Categories Utility | 11 | ✅ Pass |
-| CSV Export Utility | 8 | ✅ Pass |
-| Secure Storage Utility | 7 | ✅ Pass |
-| Gemini AI Service | 7 | ✅ Pass |
-| **Total** | **48** | **✅ Pass** |
+| Category               | Tests  | Status      |
+| ---------------------- | ------ | ----------- |
+| Simple Tests           | 4      | ✅ Pass     |
+| Categories Utility     | 11     | ✅ Pass     |
+| CSV Export Utility     | 8      | ✅ Pass     |
+| Secure Storage Utility | 7      | ✅ Pass     |
+| Gemini AI Service      | 7      | ✅ Pass     |
+| **Total**              | **48** | **✅ Pass** |
 
 **Test Files:**
+
 ```
 test/
 ├── simple.test.ts                    ✅ 4 tests
@@ -93,6 +100,7 @@ test/
 ```
 
 **Running Tests:**
+
 ```bash
 npm test              # Run all tests
 npm run test:watch    # Watch mode
@@ -114,6 +122,7 @@ npm run test:coverage # Coverage report
 - ✅ No hardcoded hex values
 
 **Components Built:**
+
 1. AppButton (5 variants)
 2. AppInput (with validation)
 3. Chip (6 variants)
@@ -131,12 +140,14 @@ npm run test:coverage # Coverage report
 ### Linting & Formatting
 
 **Tools Configured:**
+
 - ✅ ESLint (Airbnb + TypeScript)
 - ✅ Prettier (custom config)
 - ✅ Husky (pre-commit hooks)
 - ✅ lint-staged (auto-fix on commit)
 
 **Scripts:**
+
 ```bash
 npm run lint          # Check linting
 npm run lint:fix      # Auto-fix errors
@@ -145,6 +156,7 @@ npm run format:check  # Check formatting
 ```
 
 **Pre-commit Hook:**
+
 - Runs ESLint on staged `.ts`, `.tsx`, `.js`, `.jsx` files
 - Runs Prettier on staged files
 - Auto-fixes issues
@@ -154,22 +166,22 @@ npm run format:check  # Check formatting
 
 ## 📦 Tech Stack
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| Framework | Expo | ~55.0.15 |
-| Runtime | React Native | 0.83.4 |
-| Language | TypeScript | ~5.9.2 (strict) |
-| Navigation | Expo Router | ~55.0.12 |
-| State | React Context | Built-in |
-| Persistence | expo-secure-store + AsyncStorage | Latest |
-| Camera | expo-camera | ~55.0.15 |
-| Animations | react-native-reanimated | 4.2.1 |
-| AI/OCR | Google Gemini | 3.1 Pro Preview |
-| Fonts | Plus Jakarta Sans + Space Grotesk | Latest |
-| Icons | @expo/vector-icons | MaterialIcons |
-| Export | expo-file-system + expo-sharing | v55 |
-| Testing | Jest + React Native Testing Library | Latest |
-| Linting | ESLint + Prettier + Husky | Latest |
+| Layer       | Technology                          | Version         |
+| ----------- | ----------------------------------- | --------------- |
+| Framework   | Expo                                | ~55.0.15        |
+| Runtime     | React Native                        | 0.83.4          |
+| Language    | TypeScript                          | ~5.9.2 (strict) |
+| Navigation  | Expo Router                         | ~55.0.12        |
+| State       | React Context                       | Built-in        |
+| Persistence | expo-secure-store + AsyncStorage    | Latest          |
+| Camera      | expo-camera                         | ~55.0.15        |
+| Animations  | react-native-reanimated             | 4.2.1           |
+| AI/OCR      | Google Gemini                       | 3.1 Pro Preview |
+| Fonts       | Plus Jakarta Sans + Space Grotesk   | Latest          |
+| Icons       | @expo/vector-icons                  | MaterialIcons   |
+| Export      | expo-file-system + expo-sharing     | v55             |
+| Testing     | Jest + React Native Testing Library | Latest          |
+| Linting     | ESLint + Prettier + Husky           | Latest          |
 
 ---
 
@@ -255,12 +267,12 @@ EXPO_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 
 ### Test Coverage
 
-| Category | Coverage |
-|----------|----------|
-| Utility Functions | 100% |
-| Services | 87.5% |
-| Components | Pending (infrastructure ready) |
-| **Overall** | **54%** |
+| Category          | Coverage                       |
+| ----------------- | ------------------------------ |
+| Utility Functions | 100%                           |
+| Services          | 87.5%                          |
+| Components        | Pending (infrastructure ready) |
+| **Overall**       | **54%**                        |
 
 ---
 
@@ -285,14 +297,14 @@ EXPO_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 
 ## 📝 Documentation
 
-| Document | Purpose |
-|----------|---------|
-| `README.md` | Project overview & setup |
-| `CLAUDE.md` | Design system specification |
-| `PROGRESS.md` | Development log |
-| `test/README.md` | Testing guide |
-| `docs/LINTING_SETUP.md` | Linting configuration |
-| `docs/TEST_IMPLEMENTATION_FINAL.md` | Test suite details |
+| Document                            | Purpose                     |
+| ----------------------------------- | --------------------------- |
+| `README.md`                         | Project overview & setup    |
+| `CLAUDE.md`                         | Design system specification |
+| `PROGRESS.md`                       | Development log             |
+| `test/README.md`                    | Testing guide               |
+| `docs/LINTING_SETUP.md`             | Linting configuration       |
+| `docs/TEST_IMPLEMENTATION_FINAL.md` | Test suite details          |
 
 ---
 
@@ -331,13 +343,14 @@ EXPO_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 ✅ **Code quality** - ESLint + Prettier + Husky  
 ✅ **Documentation** - Extensive guides and specs  
 ✅ **Design system** - Material Design 3 tokens  
-✅ **Cross-platform** - iOS, Android, Web  
+✅ **Cross-platform** - iOS, Android, Web
 
 ---
 
 ## 📞 Support
 
 For issues or questions:
+
 - Check `docs/` folder for detailed guides
 - Review `test/README.md` for testing help
 - See `CLAUDE.md` for design decisions

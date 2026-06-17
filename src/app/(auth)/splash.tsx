@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { STORAGE_KEYS } from '@/constants/app'
 import theme from '@/constants/theme'
 import { useAuth } from '@/context/AuthContext'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -20,7 +22,7 @@ const SLIDES = [
   {
     icon: 'auto-awesome' as const,
     title: 'AI-Powered Extraction',
-    subtitle: 'Merchant, total, date, tax — all captured with 99.2% accuracy.'
+    subtitle: 'Merchant, total, date, tax — all captured automatically in seconds.'
   },
   {
     icon: 'bar-chart' as const,
@@ -37,9 +39,16 @@ const SplashScreen = () => {
 
   const isLast = slide === SLIDES.length - 1
 
+  const finishOnboarding = () => {
+    AsyncStorage.setItem(STORAGE_KEYS.hasOnboarded, 'true').catch(() => {
+      // Non-fatal — onboarding will show again next launch
+    })
+    router.replace('/(auth)/login')
+  }
+
   const handleNext = () => {
     if (isLast) {
-      router.replace('/(auth)/login')
+      finishOnboarding()
     } else {
       setSlide((s) => s + 1)
     }
@@ -122,7 +131,7 @@ const SplashScreen = () => {
             />
             <View style={styles.signInRow}>
               <Text style={styles.signInText}>Already have an account? </Text>
-              <Text style={styles.signInLink} onPress={() => router.replace('/(auth)/login')}>
+              <Text style={styles.signInLink} onPress={finishOnboarding}>
                 Sign In
               </Text>
             </View>

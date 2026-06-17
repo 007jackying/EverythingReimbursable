@@ -1,17 +1,10 @@
 module.exports = {
-  testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/test/setup-minimal.ts'],
+  preset: 'jest-expo',
+  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    'react-native$': 'react-native-web'
+    '^@/(.*)$': '<rootDir>/src/$1'
   },
   testMatch: ['<rootDir>/test/**/*.test.{ts,tsx}'],
-  transform: {
-    '^.+\\.tsx?$': ['ts-jest', {
-      tsconfig: 'tsconfig.json',
-      jsx: 'react'
-    }]
-  },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',

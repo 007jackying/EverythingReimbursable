@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
+import { GEMINI_MODEL } from '@/constants/app'
 import { ReceiptCategory } from '@/types/receipt'
+import { compressImage } from '@/utils/imageCompression'
+import { copyImageToCache } from '@/utils/fileHandler'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import * as FileSystem from 'expo-file-system/legacy'
 
@@ -11,15 +14,10 @@ if (!GEMINI_API_KEY) {
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null
 
-const model = genAI?.getGenerativeModel({ model: 'gemini-3-pro-preview' })
+const model = genAI?.getGenerativeModel({ model: GEMINI_MODEL })
 
 const MAX_RETRIES = 5
 const INITIAL_DELAY = 1000
-
-const sleep = (ms: number) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
 
 export interface ExtractedReceiptData {
   companyName: string
@@ -110,7 +108,9 @@ const generateContentWithRetry = async (
     if (is503 && retryCount < MAX_RETRIES - 1) {
       const delay = INITIAL_DELAY * 2 ** retryCount
       console.log(`[Gemini] Got 503 error, retrying in ${delay}ms...`)
-      await sleep(delay)
+      await new Promise((r) => {
+        setTimeout(r, delay)
+      })
       return generateContentWithRetry(prompt, imageData, retryCount + 1)
     }
 
@@ -119,123 +119,7 @@ const generateContentWithRetry = async (
   }
 }
 
-export const extractReceiptData = async (imageUri: string): Promise<ExtractedReceiptData> => {
-  console.log('[Gemini] extractReceiptData called with imageUri:', imageUri)
-
-  if (!model) {
-    throw new Error('Gemini AI not initialized. Set EXPO_PUBLIC_GEMINI_API_KEY in .env')
-  }
-
-  // Try to read the file directly first
-  console.log('[Gemini] Attempting to read file directly...')
-  try {
-    const base64Data = await FileSystem.readAsStringAsync(imageUri, {
-      encoding: FileSystem.EncodingType.Base64
-    })
-    console.log('[Gemini] Successfully read file, base64 length:', base64Data.length)
-
-    // Detect mime type from URI or default to jpeg
-    const mimeType = imageUri.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg'
-    console.log('[Gemini] Mime type:', mimeType)
-
-    const responseText = await generateContentWithRetry(extractReceiptPrompt, {
-      mimeType,
-      data: base64Data
-    })
-    console.log('[Gemini] Response text:', responseText)
-
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) {
-      throw new Error('No JSON found in response')
-    }
-
-    const parsed = JSON.parse(jsonMatch[0])
-    console.log('[Gemini] Parsed data:', parsed)
-
-    const extractedData: ExtractedReceiptData = {
-      companyName: parsed.companyName || 'Unknown Merchant',
-      address: parsed.address || null,
-      date: parsed.date || new Date().toISOString().split('T')[0],
-      totalAmount: typeof parsed.totalAmount === 'number' ? parsed.totalAmount : 0,
-      taxAmount: typeof parsed.taxAmount === 'number' ? parsed.taxAmount : null,
-      currency: parsed.currency || 'USD',
-      paymentMethod: parsed.paymentMethod || null,
-      paymentLast4: parsed.paymentLast4 || null,
-      category: inferCategory(parsed.companyName || ''),
-      confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.85,
-      eInvoiceId: parsed.eInvoiceId || null
-    }
-
-    return extractedData
-  } catch (directReadError) {
-    console.log('[Gemini] Direct read failed:', directReadError)
-    console.log('[Gemini] Trying to copy file to accessible location...')
-  }
-
-  // If direct read fails, try copying to cache
-  let fileUri = imageUri
-
-  // For content:// URIs (Android) or assets-library:// (iOS), copy to cache first
-  if (imageUri.startsWith('content://') || imageUri.startsWith('assets-library://')) {
-    console.log('[Gemini] Content/asset URI detected, copying to cache...')
-    const fileName = `receipt-${Date.now()}.jpg`
-    const cacheDir = FileSystem.cacheDirectory
-    if (!cacheDir) {
-      throw new Error('Cache directory not available')
-    }
-    const destUri = `${cacheDir}${fileName}`
-    await FileSystem.copyAsync({ from: imageUri, to: destUri })
-    fileUri = destUri
-    console.log('[Gemini] Copied to:', fileUri)
-  } else if (imageUri.includes('ImagePicker')) {
-    // ImagePicker URIs might need special handling
-    console.log('[Gemini] ImagePicker URI detected, copying to cache...')
-    const fileName = `receipt-${Date.now()}.jpg`
-    const cacheDir = FileSystem.cacheDirectory
-    if (!cacheDir) {
-      throw new Error('Cache directory not available')
-    }
-    const destUri = `${cacheDir}${fileName}`
-    try {
-      await FileSystem.copyAsync({ from: imageUri, to: destUri })
-      fileUri = destUri
-      console.log('[Gemini] Copied to:', fileUri)
-    } catch (copyError) {
-      console.error('[Gemini] Copy failed:', copyError)
-      throw new Error(`Failed to access image file: ${copyError}`)
-    }
-  }
-
-  // Check if file exists
-  console.log('[Gemini] Checking if file exists at:', fileUri)
-  try {
-    const fileInfo = await FileSystem.getInfoAsync(fileUri)
-    console.log('[Gemini] File info:', JSON.stringify(fileInfo))
-    if (!fileInfo.exists) {
-      console.error('[Gemini] File does not exist')
-      throw new Error(`Image file not found: ${fileUri}`)
-    }
-    console.log('[Gemini] File exists, size:', (fileInfo as any).size || 'unknown')
-  } catch (error) {
-    console.error('[Gemini] Error checking file:', error)
-    throw error
-  }
-
-  // Read as base64
-  console.log('[Gemini] Reading file as base64...')
-  const base64Data = await FileSystem.readAsStringAsync(fileUri, {
-    encoding: FileSystem.EncodingType.Base64
-  })
-  console.log('[Gemini] Base64 data length:', base64Data.length)
-
-  // Detect mime type from URI or default to jpeg
-  const mimeType = fileUri.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg'
-
-  const responseText = await generateContentWithRetry(extractReceiptPrompt, {
-    mimeType,
-    data: base64Data
-  })
-
+const parseExtractionResponse = (responseText: string): ExtractedReceiptData => {
   const jsonMatch = responseText.match(/\{[\s\S]*\}/)
   if (!jsonMatch) {
     throw new Error('No JSON found in response')
@@ -243,7 +127,7 @@ export const extractReceiptData = async (imageUri: string): Promise<ExtractedRec
 
   const parsed = JSON.parse(jsonMatch[0])
 
-  const extractedData: ExtractedReceiptData = {
+  return {
     companyName: parsed.companyName || 'Unknown Merchant',
     address: parsed.address || null,
     date: parsed.date || new Date().toISOString().split('T')[0],
@@ -256,6 +140,44 @@ export const extractReceiptData = async (imageUri: string): Promise<ExtractedRec
     confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.85,
     eInvoiceId: parsed.eInvoiceId || null
   }
+}
 
-  return extractedData
+// content:// (Android) and assets-library:// (iOS) URIs can't be read directly —
+// copy them into the app cache first
+// ponytail: Delegate local URI caching to unified fileHandler helper (shrink/ultra)
+const resolveReadableUri = (imageUri: string): Promise<string> => {
+  if (!imageUri.startsWith('content://') && !imageUri.startsWith('assets-library://')) {
+    return Promise.resolve(imageUri)
+  }
+  return copyImageToCache(imageUri)
+}
+
+export const extractReceiptData = async (imageUri: string): Promise<ExtractedReceiptData> => {
+  if (!model) {
+    throw new Error('Gemini AI not initialized. Set EXPO_PUBLIC_GEMINI_API_KEY in .env')
+  }
+
+  const readableUri = await resolveReadableUri(imageUri)
+
+  // Downscale before base64-encoding — full-resolution photos are slow and
+  // costly to send, and OCR doesn't need more than ~1280px
+  let uploadUri = readableUri
+  let mimeType = readableUri.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg'
+  try {
+    uploadUri = await compressImage(readableUri, { maxWidth: 1280, quality: 0.8 })
+    mimeType = 'image/jpeg'
+  } catch {
+    // Compression unavailable — send the original image
+  }
+
+  const base64Data = await FileSystem.readAsStringAsync(uploadUri, {
+    encoding: FileSystem.EncodingType.Base64
+  })
+
+  const responseText = await generateContentWithRetry(extractReceiptPrompt, {
+    mimeType,
+    data: base64Data
+  })
+
+  return parseExtractionResponse(responseText)
 }

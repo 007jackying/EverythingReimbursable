@@ -98,7 +98,7 @@ export const GoogleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       console.log('[Google] Getting access token...')
       const tokens = await GoogleSignin.getTokens()
       const token = tokens.accessToken
-      console.log('[Google] Access token received:', `${token?.substring(0, 20)}...`)
+      console.log('[Google] Access token received')
 
       const googleUser: GoogleUser = {
         email: userInfo.email,
@@ -167,7 +167,7 @@ export const GoogleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const { GoogleSignin } = await import('@react-native-google-signin/google-signin')
       const tokens = await GoogleSignin.getTokens()
       const newToken = tokens.accessToken
-      console.log('[Google] New access token:', `${newToken?.substring(0, 20)}...`)
+      console.log('[Google] New access token received')
 
       setAccessToken(newToken)
       await secureSet(TOKEN_KEY, newToken)

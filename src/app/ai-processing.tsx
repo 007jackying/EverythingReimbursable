@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import theme from '@/constants/theme'
-import { AI_CONFIDENCE_DISPLAY } from '@/constants/app'
 import Chip from '@/components/Chip'
 import ScreenHeader from '@/components/ScreenHeader'
 import { useGoogle } from '@/context/GoogleContext'
 import { uploadImage } from '@/services/googleDrive'
 import { extractReceiptData } from '@/services/gemini'
+import { formatAmount } from '@/utils/formatters'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
@@ -24,6 +24,7 @@ const AIProcessingScreen = () => {
   const { accessToken, isAuthenticated: isGoogleConnected, refreshTokens } = useGoogle()
   const [merchantName, setMerchantName] = useState('Analyzing...')
   const [detectedAmount, setDetectedAmount] = useState<string | null>(null)
+  const [confidenceLabel, setConfidenceLabel] = useState('—')
   const [driveUploadStatus, setDriveUploadStatus] = useState<string | null>(null)
   const hasNavigated = useRef(false)
 
@@ -41,11 +42,13 @@ const AIProcessingScreen = () => {
     dot3Y.value = withDelay(400, withRepeat(withTiming(-6, { duration: 500 }), -1, true))
 
     // Run AI extraction
-    extractReceiptData(imageUri ?? '').then(async (result) => {
+    const runExtraction = async () => {
+      const result = await extractReceiptData(imageUri ?? '')
       if (hasNavigated.current) return
 
       setMerchantName(result.companyName)
-      setDetectedAmount(`$${result.totalAmount.toFixed(2)}`)
+      setDetectedAmount(formatAmount(result.totalAmount, result.currency))
+      setConfidenceLabel(`${(result.confidence * 100).toFixed(1)}%`)
       progressAnim.value = withTiming(100, { duration: 400 })
 
       // Upload to Google Drive if connected
@@ -104,7 +107,7 @@ const AIProcessingScreen = () => {
 
       hasNavigated.current = true
 
-      const newId = `receipt-${Date.now()}`
+      const newId = globalThis.crypto?.randomUUID?.() ?? `receipt-${Date.now()}`
       setTimeout(() => {
         router.replace({
           pathname: '/receipt-detail',
@@ -124,6 +127,20 @@ const AIProcessingScreen = () => {
           }
         })
       }, 400)
+    }
+
+    runExtraction().catch((error) => {
+      if (hasNavigated.current) return
+      hasNavigated.current = true
+      console.error('AI extraction failed:', error)
+      Alert.alert(
+        'Extraction Failed',
+        'We could not read this receipt. Check your connection and try again.',
+        [
+          { text: 'Re-scan', onPress: () => router.replace('/(main)/scan') },
+          { text: 'Go Back', style: 'cancel', onPress: () => router.back() }
+        ]
+      )
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -159,12 +176,12 @@ const AIProcessingScreen = () => {
           <View style={styles.metaBento}>
             <View style={styles.metaItem}>
               <Text style={styles.metaLabel}>CONFIDENCE</Text>
-              <Text style={styles.confidenceValue}>{AI_CONFIDENCE_DISPLAY}</Text>
+              <Text style={styles.confidenceValue}>{confidenceLabel}</Text>
             </View>
             <View style={styles.metaDivider} />
             <View style={styles.metaItem}>
               <Text style={styles.metaLabel}>PROCESSING</Text>
-              <Text style={styles.processingValue}>OCR_v4</Text>
+              <Text style={styles.processingValue}>Gemini</Text>
             </View>
           </View>
 
@@ -401,10 +418,6 @@ const styles = StyleSheet.create({
   categorizingText: {
     fontFamily: theme.fontFamily.mono,
     fontSize: 12,
-    color: theme.colors['on-primary-container']
-  },
-  dot: {
-    fontSize: 10,
     color: theme.colors['on-primary-container']
   }
 })

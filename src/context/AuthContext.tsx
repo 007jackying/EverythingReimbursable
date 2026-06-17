@@ -1,6 +1,14 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { secureDelete, secureGet, secureSet } from '@/utils/secureStorage'
 import { STORAGE_KEYS } from '@/constants/app'
+import {
+  signUpWithEmail,
+  signInWithEmail,
+  signOut,
+  getCurrentSession,
+  onAuthStateChange,
+  updateUserProfile
+} from '@/services/supabaseAuth'
 
 const USER_KEY = STORAGE_KEYS.authUser
 
@@ -18,6 +26,7 @@ interface AuthContextValue {
   signUp: (name: string, email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   updateName: (name: string) => Promise<void>
+  resetPassword: (email: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -29,9 +38,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const restore = async () => {
       try {
-        const stored = await secureGet(USER_KEY)
-        if (stored) {
-          setUser(JSON.parse(stored) as User)
+        const sessionResult = await getCurrentSession()
+        if (sessionResult.user) {
+          setUser(sessionResult.user)
+          await secureSet(USER_KEY, JSON.stringify(sessionResult.user))
+        } else {
+          const stored = await secureGet(USER_KEY)
+          if (stored) {
+            setUser(JSON.parse(stored) as User)
+          }
         }
       } catch {
         await secureDelete(USER_KEY)
@@ -47,26 +62,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(u)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const login = useCallback(async (email: string, _password: string) => {
-    // Extract name from email: john.doe+alias@gmail.com -> John Doe
-    const localPart = email.split('@')[0]
-    // Remove everything after + and replace dots/underscores with spaces
-    const cleanName = localPart.split('+')[0].replace(/[._]/g, ' ')
-    // Capitalize each word
-    const name = cleanName
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ')
-    await persist({ id: 'user-1', name, email })
+  // Track Supabase session changes (token refresh, revocation, recovery links)
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange((event, sessionUser) => {
+      if (event === 'SIGNED_OUT') {
+        secureDelete(USER_KEY)
+        setUser(null)
+      } else if (sessionUser) {
+        persist(sessionUser)
+      }
+    })
+    return unsubscribe
   }, [])
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const signUp = useCallback(async (name: string, email: string, _password: string) => {
-    await persist({ id: 'user-1', name, email })
+  const login = useCallback(async (email: string, password: string) => {
+    const result = await signInWithEmail(email, password)
+    if (result.error && !result.user) {
+      throw new Error(result.error)
+    }
+    if (result.user) {
+      await persist(result.user)
+    }
+  }, [])
+
+  const signUp = useCallback(async (name: string, email: string, password: string) => {
+    const result = await signUpWithEmail(name, email, password)
+    if (result.error && !result.user) {
+      throw new Error(result.error)
+    }
+    if (result.user) {
+      await persist(result.user)
+    }
   }, [])
 
   const logout = useCallback(async () => {
+    await signOut()
     await secureDelete(USER_KEY)
     setUser(null)
   }, [])
@@ -74,14 +104,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const updateName = useCallback(
     async (name: string) => {
       if (!user) return
+      const result = await updateUserProfile(user.id, name)
+      if (result.error) {
+        console.warn('Profile update warning:', result.error)
+      }
       await persist({ ...user, name })
     },
     [user]
   )
 
+  const resetPassword = useCallback(async (email: string) => {
+    const { resetPassword: resetPwd } = await import('@/services/supabaseAuth')
+    const result = await resetPwd(email)
+    if (result.error) {
+      throw new Error(result.error)
+    }
+  }, [])
+
   const value = useMemo(
-    () => ({ user, isAuthenticated: user !== null, isLoading, login, signUp, logout, updateName }),
-    [user, isLoading, login, signUp, logout, updateName]
+    () => ({
+      user,
+      isAuthenticated: user !== null,
+      isLoading,
+      login,
+      signUp,
+      logout,
+      updateName,
+      resetPassword
+    }),
+    [user, isLoading, login, signUp, logout, updateName, resetPassword]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

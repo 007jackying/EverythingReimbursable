@@ -11,9 +11,9 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
   INR: '₹'
 }
 
-export const formatAmount = (value: number, currency = 'USD') => {
-  const symbol = CURRENCY_SYMBOLS[currency] || currency
-  return `${symbol}${value.toFixed(2)}`
-}
+export const getCurrencySymbol = (currency = 'USD') => CURRENCY_SYMBOLS[currency] || currency
+
+export const formatAmount = (value: number, currency = 'USD') =>
+  `${getCurrencySymbol(currency)}${value.toFixed(2)}`
 
 export { formatDate, getMonthYear } from './time'

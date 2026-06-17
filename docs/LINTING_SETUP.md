@@ -15,15 +15,15 @@ This project uses a comprehensive linting and formatting setup to maintain code 
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `.eslintrc.js` | ESLint rules and configuration |
-| `.prettierrc` | Prettier formatting options |
-| `.eslintignore` | Files to exclude from ESLint |
-| `.prettierignore` | Files to exclude from Prettier |
-| `.editorconfig` | Editor settings for consistency |
-| `.husky/pre-commit` | Pre-commit hook script |
-| `.vscode/settings.json` | VS Code workspace settings |
+| File                    | Purpose                         |
+| ----------------------- | ------------------------------- |
+| `.eslintrc.js`          | ESLint rules and configuration  |
+| `.prettierrc`           | Prettier formatting options     |
+| `.eslintignore`         | Files to exclude from ESLint    |
+| `.prettierignore`       | Files to exclude from Prettier  |
+| `.editorconfig`         | Editor settings for consistency |
+| `.husky/pre-commit`     | Pre-commit hook script          |
+| `.vscode/settings.json` | VS Code workspace settings      |
 
 ---
 
@@ -98,14 +98,14 @@ Every time you commit code, the pre-commit hook automatically:
 
 ```json
 {
-  "semi": false,              // No semicolons
-  "trailingComma": "none",    // No trailing commas
-  "singleQuote": true,        // Single quotes for strings
-  "printWidth": 100,          // Max line width 100 chars
-  "tabWidth": 2,              // 2-space indentation
-  "bracketSpacing": true,     // Spaces in object literals
-  "jsxSingleQuote": false,    // Double quotes in JSX
-  "arrowParens": "always"     // Always parenthesize arrow params
+  "semi": false, // No semicolons
+  "trailingComma": "none", // No trailing commas
+  "singleQuote": true, // Single quotes for strings
+  "printWidth": 100, // Max line width 100 chars
+  "tabWidth": 2, // 2-space indentation
+  "bracketSpacing": true, // Spaces in object literals
+  "jsxSingleQuote": false, // Double quotes in JSX
+  "arrowParens": "always" // Always parenthesize arrow params
 }
 ```
 
@@ -172,7 +172,8 @@ git commit --no-verify
 
 ### 4. Pre-commit hook fails
 
-**Fix**: 
+**Fix**:
+
 1. Check error message
 2. Run `npm run lint:fix`
 3. Commit again

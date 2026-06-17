@@ -2,7 +2,8 @@
 
 ## Overview
 
-This test suite uses **Jest** and **React Native Testing Library** to provide comprehensive unit testing for the EverythingReimbursable app.
+This test suite uses **Jest 29** with the **jest-expo** preset and **React Native Testing
+Library**. A single config (`jest.config.js`) runs all suites — 101 tests across 10 suites.
 
 ---
 
@@ -10,13 +11,18 @@ This test suite uses **Jest** and **React Native Testing Library** to provide co
 
 ```
 test/
-├── setup.ts                    # Global test setup and mocks
+├── setup.ts                    # Global mocks (Reanimated 4, worklets, localStorage, fetch)
 ├── test-utils.tsx              # Custom render functions and helpers
+├── simple.test.ts              # Smoke test
 ├── utils/                      # Utility function tests
 │   ├── categories.test.ts
+│   ├── categories-simple.test.ts
 │   ├── exportCsv.test.ts
+│   ├── offlineQueue.test.ts    # Sync queue: upserts, delete tombstones, legacy items
 │   └── secureStorage.test.ts
-└── components/                 # Component tests
+├── services/
+│   └── gemini.test.ts          # AI extraction: parsing, defaults, categories, errors
+└── components/                 # Component tests (jest-expo / react-test-renderer)
     ├── AppButton.test.tsx
     ├── AppInput.test.tsx
     └── Chip.test.tsx
@@ -95,7 +101,7 @@ Creates a mock receipt object for testing.
 ```typescript
 const receipt = createMockReceipt({
   companyName: 'Custom Merchant',
-  totalAmount: 50.00
+  totalAmount: 50.0
 })
 ```
 
@@ -188,12 +194,12 @@ describe('Component Name', () => {
 
 ## Coverage Goals
 
-| Category | Current | Target |
-|----------|---------|--------|
-| Utilities | 100% | 90% |
-| Components | 80% | 70% |
-| Contexts | 0% | 80% |
-| Services | 0% | 60% |
+| Category    | Current | Target  |
+| ----------- | ------- | ------- |
+| Utilities   | 100%    | 90%     |
+| Components  | 80%     | 70%     |
+| Contexts    | 0%      | 80%     |
+| Services    | 0%      | 60%     |
 | **Overall** | **40%** | **50%** |
 
 ---

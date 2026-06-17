@@ -1,5 +1,7 @@
+import ErrorBoundary from '@/components/ErrorBoundary'
 import theme from '@/constants/theme'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
+import { CurrencyProvider } from '@/context/CurrencyContext'
 import { GoogleProvider } from '@/context/GoogleContext'
 import { ReceiptsProvider, useReceipts } from '@/context/ReceiptsContext'
 import {
@@ -56,13 +58,17 @@ const RootLayout = () => {
   })
 
   return (
-    <AuthProvider>
-      <ReceiptsProvider>
-        <GoogleProvider>
-          <AppContent fontsLoaded={fontsLoaded ?? false} />
-        </GoogleProvider>
-      </ReceiptsProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ReceiptsProvider>
+          <GoogleProvider>
+            <CurrencyProvider>
+              <AppContent fontsLoaded={fontsLoaded ?? false} />
+            </CurrencyProvider>
+          </GoogleProvider>
+        </ReceiptsProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
 

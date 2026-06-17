@@ -4,9 +4,10 @@ import { getGreeting, isCurrentMonth } from '@/utils/time'
 import { copyImageToCache } from '@/utils/fileHandler'
 import { useReceipts } from '@/context/ReceiptsContext'
 import { useAuth } from '@/context/AuthContext'
+import { useCurrency } from '@/context/CurrencyContext'
 import * as ImagePicker from 'expo-image-picker'
 import { router } from 'expo-router'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
 import SummaryCard from '@/components/SummaryCard'
 import ReceiptCard from '@/components/ReceiptCard'
@@ -17,20 +18,47 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { RECENT_RECEIPTS_LIMIT } from '@/constants/app'
 
 const HomeScreen = () => {
-  const { receipts } = useReceipts()
+  const { receipts, syncWithCloud } = useReceipts()
   const { user } = useAuth()
+  const { currency } = useCurrency()
   const [refreshing, setRefreshing] = useState(false)
 
-  const monthlyReceipts = receipts.filter((r) => isCurrentMonth(r.date))
-  const monthlyTotal = monthlyReceipts.reduce((sum, r) => sum + r.totalAmount, 0)
-  const totalExpenses = receipts.reduce((sum, r) => sum + r.totalAmount, 0)
+  const {
+    monthlyTotal,
+    monthlyCount,
+    totalExpenses,
+    avgConfidence,
+    hasMixedCurrencies,
+    displayCurrency
+  } = useMemo(() => {
+    const monthlyReceipts = receipts.filter((r) => isCurrentMonth(r.date))
+    // Sums are nominal — no FX conversion. With a single receipt currency, totals
+    // display in it; with mixed currencies, the preferred currency + a note.
+    const distinctCurrencies = [...new Set(receipts.map((r) => r.currency))]
+    return {
+      monthlyTotal: monthlyReceipts.reduce((sum, r) => sum + r.totalAmount, 0),
+      monthlyCount: monthlyReceipts.length,
+      totalExpenses: receipts.reduce((sum, r) => sum + r.totalAmount, 0),
+      avgConfidence:
+        receipts.length > 0
+          ? receipts.reduce((sum, r) => sum + r.confidence, 0) / receipts.length
+          : null,
+      hasMixedCurrencies: distinctCurrencies.length > 1,
+      displayCurrency: distinctCurrencies.length === 1 ? distinctCurrencies[0] : currency
+    }
+  }, [receipts, currency])
+
   const recentReceipts = receipts.slice(0, RECENT_RECEIPTS_LIMIT)
   const hasMore = receipts.length > RECENT_RECEIPTS_LIMIT
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true)
-    setTimeout(() => setRefreshing(false), 600)
-  }, [])
+    try {
+      await syncWithCloud()
+    } finally {
+      setRefreshing(false)
+    }
+  }, [syncWithCloud])
 
   const handleUploadPhoto = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -72,11 +100,13 @@ const HomeScreen = () => {
           </View>
 
           <SummaryCard
-            totalAmount={formatAmount(totalExpenses)}
+            totalAmount={formatAmount(totalExpenses, displayCurrency)}
             receiptCount={receipts.length}
-            monthlyAmount={formatAmount(monthlyTotal)}
-            monthlyCount={monthlyReceipts.length}
-            aiAccuracy="99.2%"
+            monthlyAmount={formatAmount(monthlyTotal, displayCurrency)}
+            monthlyCount={monthlyCount}
+            aiAccuracy={avgConfidence !== null ? `${(avgConfidence * 100).toFixed(1)}%` : undefined}
+            mixedCurrencies={hasMixedCurrencies}
+            onInsightsPress={() => router.push('/(main)/history')}
           />
 
           <View style={styles.quickActions}>
@@ -122,7 +152,7 @@ const HomeScreen = () => {
                   key={receipt.id}
                   merchantName={receipt.companyName}
                   date={formatDate(receipt.date)}
-                  amount={formatAmount(receipt.totalAmount)}
+                  amount={formatAmount(receipt.totalAmount, receipt.currency)}
                   category={receipt.category}
                   status={receipt.status}
                   onPress={() =>

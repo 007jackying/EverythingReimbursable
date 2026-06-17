@@ -1,4 +1,5 @@
 import theme from '@/constants/theme'
+import { memo } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import Chip from './Chip'
@@ -105,4 +106,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HistoryListItem
+export default memo(HistoryListItem)

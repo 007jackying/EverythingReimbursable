@@ -7,9 +7,6 @@ export const GOOGLE_CONFIG = {
   // Required for native iOS Sign-In
   iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || '',
 
-  androidPackage: 'com.everythingreimbursable.app',
-  iosBundleId: 'com.everythingreimbursable.app',
-
   // Scopes for Google Drive access
   scopes: [
     'https://www.googleapis.com/auth/drive.file',

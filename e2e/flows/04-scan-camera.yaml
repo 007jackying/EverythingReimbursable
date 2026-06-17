@@ -1,0 +1,106 @@
+# J4 — Scan Camera & Gallery (EXPANDED)
+# Tests: Camera opens via quick action, camera opens via FAB,
+#        permission dialog, mode tabs (SINGLE/MULTI-PAGE/IMPORT),
+#        flash toggle, gallery picker, "Upload Photo" flow,
+#        back navigation from camera
+
+appId: com.everythingreimbursable.app
+env:
+  TEST_EMAIL: e2e-test@example.com
+  TEST_PASSWORD: Test1234!
+---
+- launchApp:
+    clearState: false
+
+# Login
+- assertVisible: 'Welcome back.'
+- tapOn: 'EMAIL ADDRESS'
+- inputText: ${TEST_EMAIL}
+- tapOn: 'PASSWORD'
+- inputText: ${TEST_PASSWORD}
+- pressKey: Enter
+- assertVisible: 'TOTAL EXPENSES'
+
+# ============================================================
+# OPEN SCAN via "Scan Receipt" quick action button
+# ============================================================
+- tapOn: 'Scan Receipt'
+
+# Handle camera permission if needed
+- runFlow:
+    when:
+      visible: 'Allow'
+    file: subflows/handle-permission.yaml
+    optional: true
+
+# ============================================================
+# CAMERA SCREEN: verify mode tabs
+# ============================================================
+- assertVisible: 'SINGLE'
+- assertVisible: 'MULTI-PAGE'
+- assertVisible: 'IMPORT'
+
+# ============================================================
+# MODE SWITCHING: tap MULTI-PAGE
+# ============================================================
+- tapOn: 'MULTI-PAGE'
+# Tab should visually change (underline animation)
+# Switch back to SINGLE
+- tapOn: 'SINGLE'
+
+# ============================================================
+# MODE SWITCHING: tap IMPORT
+# ============================================================
+- tapOn: 'IMPORT'
+# Switch back to SINGLE
+- tapOn: 'SINGLE'
+
+# ============================================================
+# FLASH TOGGLE
+# ============================================================
+# Flash toggle is in the top bar area (icon only, no text label)
+# Tap the flash icon (MaterialIcons: "flash-on" / "flash-off")
+- tapOn:
+    text: 'flash-off'
+    optional: true
+- tapOn:
+    text: 'flash-on'
+    optional: true
+
+# ============================================================
+# GALLERY PICKER: tap gallery icon
+# ============================================================
+# Gallery button is on the bottom control strip
+- tapOn:
+    text: 'photo-library'
+    optional: true
+# If gallery opens (may need permission), dismiss it
+- tapOn:
+    text: 'Cancel'
+    optional: true
+
+# ============================================================
+# BACK: return to Home
+# ============================================================
+# Swipe from left edge to go back
+- swipe:
+    start: '5%,50%'
+    end: '80%,50%'
+    duration: 300
+- assertVisible: 'TOTAL EXPENSES'
+
+# ============================================================
+# UPLOAD PHOTO: from Home via quick action
+# ============================================================
+- tapOn: 'Upload Photo'
+# Image picker opens; dismiss without selecting
+- tapOn:
+    text: 'Cancel'
+    optional: true
+# ============================================================
+# PERMISSION DENIED: verify grant permission UI
+# ============================================================
+# NOTE: cannot test this on a simulator without first denying.
+# The scan.tsx renders a "Camera Access Required" screen with
+# "Grant Permission" button when permission is not granted.
+# We skip this in automated runs since simulators auto-grant.

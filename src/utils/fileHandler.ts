@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as FileSystem from 'expo-file-system/legacy'
 
 export const copyImageToCache = async (sourceUri: string): Promise<string> => {
@@ -14,29 +13,3 @@ export const copyImageToCache = async (sourceUri: string): Promise<string> => {
 
   return destUri
 }
-
-export const fileExists = async (uri: string): Promise<boolean> => {
-  try {
-    const info = await FileSystem.getInfoAsync(uri)
-    return info.exists
-  } catch {
-    return false
-  }
-}
-
-export const getFileSize = async (uri: string): Promise<number | null> => {
-  try {
-    const info = await FileSystem.getInfoAsync(uri)
-    if (info.exists && 'size' in info) {
-      return info.size
-    }
-    return null
-  } catch {
-    return null
-  }
-}
-
-export const readAsBase64 = (uri: string): Promise<string> =>
-  FileSystem.readAsStringAsync(uri, {
-    encoding: FileSystem.EncodingType.Base64
-  })

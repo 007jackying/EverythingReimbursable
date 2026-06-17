@@ -1,0 +1,14 @@
+# Subflow: Confirm delete alert
+appId: com.everythingreimbursable.app
+---
+- assertVisible: 'Delete Receipt'
+- assertVisible:
+    text: 'Cancel'
+    optional: true
+
+# Cancel the delete (don't actually delete)
+- tapOn: 'Cancel'
+# Or dismiss by tapping outside
+- tapOn:
+    point: '50%,50%'
+    optional: true

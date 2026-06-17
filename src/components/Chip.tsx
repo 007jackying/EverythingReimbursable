@@ -1,4 +1,5 @@
 import theme from '@/constants/theme'
+import { memo } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 type ChipVariant =
@@ -135,4 +136,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Chip
+export default memo(Chip)

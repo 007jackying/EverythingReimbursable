@@ -1,0 +1,23 @@
+# Maestro E2E Configuration
+# EverythingReimbursable
+#
+# 10 flows | 6 subflows | 100+ test scenarios
+
+appId: com.everythingreimbursable.app
+# For Expo Go, use: host.exp.Exponent
+
+# Timeouts (milliseconds)
+timeout:
+  total: 300000 # Max time for whole flow (5 min)
+  command: 30000 # Max time per command (30s)
+  find: 10000 # Max time to find element (10s)
+
+# Take screenshots automatically on failure
+onFailure:
+  takeScreenshot: true
+  # Screenshots saved to: ~/.maestro/tests/<timestamp>/
+
+# Environment variables (pass via --env KEY=VALUE)
+# --env TEST_EMAIL=e2e@example.com
+# --env TEST_PASSWORD=Passw0rd!
+# --env TEST_NAME="E2E User"

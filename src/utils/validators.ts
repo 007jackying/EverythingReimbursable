@@ -26,10 +26,3 @@ export const validateName = (name: string): string | null => {
   }
   return null
 }
-
-export const validateRequired = (value: string, fieldName: string): string | null => {
-  if (!value.trim()) {
-    return `${fieldName} is required`
-  }
-  return null
-}

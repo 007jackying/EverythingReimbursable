@@ -600,29 +600,35 @@ _This file is the single source of truth for EverythingReimbursable UI. When in 
 
 > Full log: [`PROGRESS.md`](./PROGRESS.md) — phases, decisions, backlog.
 
-### Current Status (2026-05-04)
+### Current Status (2026-06-12)
 
-All Phases 1–3 are complete. The app runs end-to-end with local/mock data.
+All Phases 1–4 are complete. The app runs end-to-end with real AI extraction (Gemini),
+Supabase auth + cloud sync (graceful local-only fallback when unconfigured), and an
+offline-first sync queue.
 
-| Phase                | Scope                                                               | Status     |
-| -------------------- | ------------------------------------------------------------------- | ---------- |
-| 1 — Foundation       | Auth context, data context, persistence, splash gate                | ✅ Done    |
-| 2 — Core Camera Flow | Scan screen, AI processing, receipt detail                          | ✅ Done    |
-| 3 — Polish           | History filters, inline edit, delete, CSV export, empty states      | ✅ Done    |
-| 4 — Production       | Real auth API, real OCR/AI, cloud image storage, push notifications | 🔜 Pending |
+| Phase                | Scope                                                                 | Status  |
+| -------------------- | --------------------------------------------------------------------- | ------- |
+| 1 — Foundation       | Auth context, data context, persistence, splash gate                  | ✅ Done |
+| 2 — Core Camera Flow | Scan screen, AI processing, receipt detail                            | ✅ Done |
+| 3 — Polish           | History filters, inline edit, delete, CSV export, empty states        | ✅ Done |
+| 4 — Production       | Supabase auth, cloud image + data sync, offline queue, error boundary | ✅ Done |
 
 ### Key Files Quick Reference
 
-| File                              | Purpose                                                                        |
-| --------------------------------- | ------------------------------------------------------------------------------ |
-| `src/constants/theme.ts`          | Single source for all color tokens, spacing, radius, shadows, font families    |
-| `src/context/AuthContext.tsx`     | `login` / `signUp` / `logout` / `updateName` — persists to `expo-secure-store` |
-| `src/context/ReceiptsContext.tsx` | CRUD receipts — persists to `AsyncStorage` key `receipts_v1`                   |
-| `src/app/ai-processing.tsx`       | Replace `mockExtract()` with real OCR API when backend is ready                |
-| `src/utils/exportCsv.ts`          | Uses `expo-file-system` v55 OOP API (`File`, `Paths`) — not the legacy API     |
+| File                               | Purpose                                                                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `src/constants/theme.ts`           | Single source for all color tokens, spacing, radius, shadows, font families                                                    |
+| `src/context/AuthContext.tsx`      | Supabase email auth (`login` / `signUp` / `logout` / `resetPassword`) — falls back to local auth when Supabase is unconfigured |
+| `src/context/ReceiptsContext.tsx`  | CRUD receipts — `AsyncStorage` key `receipts_v1`, cloud sync + offline queue worker                                            |
+| `src/services/gemini.ts`           | Real receipt OCR via Gemini (`GEMINI_MODEL` constant in `constants/app.ts`)                                                    |
+| `src/services/cloudReceipts.ts`    | Supabase `receipts` table upsert/delete/fetch (no-op when unconfigured)                                                        |
+| `src/services/cloudStorage.ts`     | Receipt image upload/delete to Supabase Storage (compressed via `expo-image-manipulator`)                                      |
+| `src/utils/offlineQueue.ts`        | Typed upsert/delete sync queue + NetInfo connectivity helpers                                                                  |
+| `src/components/ErrorBoundary.tsx` | Root error boundary with design-system fallback UI                                                                             |
+| `src/utils/exportCsv.ts`           | Uses `expo-file-system` v55 OOP API (`File`, `Paths`) — not the legacy API                                                     |
 
-### Known Stubs (replace for production)
+### Production Notes
 
-- `AuthContext.login()` / `signUp()` — derive user from email string, no network call
-- `mockExtract()` in `ai-processing.tsx` — returns hardcoded Blue Bottle Coffee data after 3.5s
+- Supabase setup (bucket, `receipts` table, RLS policies): see [`docs/SUPABASE_SETUP.md`](./docs/SUPABASE_SETUP.md). Without `.env` credentials the app runs local-only.
 - Currency preference is stored locally only — not synced to any backend
+- Push notifications are not implemented (requires a server)

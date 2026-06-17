@@ -1,5 +1,9 @@
 node_modules/
 .expo/
+# Root JS config files are outside the tsconfig project required by typed linting
+.eslintrc.js
+babel.config.js
+jest.config.js
 dist/
 web-build/
 coverage/

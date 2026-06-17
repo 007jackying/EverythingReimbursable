@@ -1,5 +1,5 @@
 import theme from '@/constants/theme'
-import { formatAmount, formatDate } from '@/utils/formatters'
+import { formatAmount, formatDate, getCurrencySymbol } from '@/utils/formatters'
 import { useReceipts } from '@/context/ReceiptsContext'
 import type { Receipt } from '@/types/receipt'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -18,13 +18,20 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import Chip from '@/components/Chip'
 import AppButton from '@/components/AppButton'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 const ReceiptDetailScreen = () => {
   const { id, extracted } = useLocalSearchParams<{ id: string; extracted?: string }>()
   const { receipts, addReceipt, updateReceipt, deleteReceipt } = useReceipts()
 
-  const extractedReceipt = extracted ? (JSON.parse(extracted) as Receipt) : null
+  const extractedReceipt = useMemo(() => {
+    if (!extracted) return null
+    try {
+      return JSON.parse(extracted) as Receipt
+    } catch {
+      return null
+    }
+  }, [extracted])
   const storedReceipt = receipts.find((r) => r.id === id)
   const baseReceipt = extractedReceipt ?? storedReceipt
 
@@ -152,7 +159,7 @@ const ReceiptDetailScreen = () => {
               <Text style={styles.totalLabel}>GRAND TOTAL</Text>
               {isEditing ? (
                 <View style={styles.amountEditRow}>
-                  <Text style={styles.totalDollar}>$</Text>
+                  <Text style={styles.totalDollar}>{getCurrencySymbol(receipt.currency)}</Text>
                   <TextInput
                     style={styles.amountInput}
                     value={editedAmount}
@@ -163,7 +170,7 @@ const ReceiptDetailScreen = () => {
                 </View>
               ) : (
                 <View style={styles.totalRow}>
-                  <Text style={styles.totalDollar}>$</Text>
+                  <Text style={styles.totalDollar}>{getCurrencySymbol(receipt.currency)}</Text>
                   <Text style={styles.totalAmount}>{receipt.totalAmount.toFixed(2)}</Text>
                 </View>
               )}
@@ -189,7 +196,7 @@ const ReceiptDetailScreen = () => {
               <View style={styles.metaItem}>
                 <Text style={styles.metaLabel}>TAX</Text>
                 <Text style={styles.metaValue}>
-                  {receipt.taxAmount ? formatAmount(receipt.taxAmount) : 'N/A'}
+                  {receipt.taxAmount ? formatAmount(receipt.taxAmount, receipt.currency) : 'N/A'}
                 </Text>
               </View>
             </View>

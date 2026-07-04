@@ -15,6 +15,19 @@ receipts come from the user's own uploads.
 
 ---
 
+## Features
+
+- 📸 **Capture** — take a photo (native camera on mobile browsers), pick a file, or drag-and-drop
+- 🤖 **AI extraction** — Gemini reads merchant, total, tax, date, payment method, and e-invoice ID
+- ✅ **Review & edit** — verify the extracted fields, edit inline, then save
+- 🗂️ **History** — search, filter by month/category/status, grouped timeline view
+- 📊 **Dashboard** — total spend, monthly stats, and recent receipts at a glance
+- 📤 **Export** — download all receipts as CSV
+- ☁️ **Sync** — optional Supabase auth + cloud storage; falls back to fully local when unconfigured
+- 📱 **Responsive** — mobile-first, full-bleed on phones, centered app frame on desktop
+
+---
+
 ## Tech Stack
 
 | Layer       | Technology                                                     |
@@ -52,6 +65,14 @@ npm run dev                  # http://localhost:3000
 Without Supabase credentials the app runs fully local: local auth, localStorage
 persistence, no image uploads.
 
+### Environment variables
+
+| Variable                        | Required | Purpose                                            |
+| ------------------------------- | -------- | -------------------------------------------------- |
+| `GEMINI_API_KEY`                | yes      | Server-side receipt OCR — never exposed to browser |
+| `NEXT_PUBLIC_SUPABASE_URL`      | no       | Enables cloud auth + sync when set                 |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | no       | Enables cloud auth + sync when set                 |
+
 ### Scripts
 
 | Command          | Purpose                       |
@@ -61,6 +82,38 @@ persistence, no image uploads.
 | `npm run start`  | Serve the production build    |
 | `npm run lint`   | ESLint                        |
 | `npm run format` | Prettier                      |
+
+---
+
+## Routes & Flow
+
+| Route             | Screen                                                    |
+| ----------------- | -------------------------------------------------------- |
+| `/`               | Splash / onboarding (redirects to `/home` when signed in) |
+| `/login` `/signup` `/reset-password` | Auth                                 |
+| `/home`           | Dashboard — totals, monthly stats, recent receipts       |
+| `/history`        | Searchable, filterable receipt archive                   |
+| `/profile`        | Account, currency preference, CSV export, logout         |
+| `/scan`           | Upload / capture a receipt image                         |
+| `/processing`     | AI extraction progress                                   |
+| `/review`         | Review new extraction or view/edit an existing receipt   |
+| `/api/extract`    | Server route — Gemini OCR                                |
+
+The capture flow (`/scan → /processing → /review`) hands the image and extraction result
+through in-memory state (`lib/pending.ts`); a hard refresh mid-flow returns to `/scan`.
+
+---
+
+## Architecture Highlights
+
+- **Server-side AI key** — the image is compressed in the browser (canvas) and posted to
+  `/api/extract`; the Gemini key lives only on the server.
+- **Local-first, cloud-optional** — receipts persist to `localStorage`; when Supabase is
+  configured, writes upsert to the cloud and reads merge on login/refresh (last-write-wins by
+  `updatedAt`). Image files upload to Supabase Storage; in local-only mode they're inlined as
+  compressed data URLs.
+- **Design tokens** — the full Material 3 palette, type scale, and shadows live once in
+  `app/globals.css` `@theme`; components reference tokens, never raw hex.
 
 ---
 
@@ -80,3 +133,17 @@ components/                 → Icon, Button, Input, TabBar
 lib/                        → contexts, Supabase client, cloud sync, helpers
 designMockups/              → per-screen visual source of truth (png + html)
 ```
+
+---
+
+## Deployment
+
+Deploys to any Node host or Vercel:
+
+```bash
+npm run build && npm run start
+```
+
+Set `GEMINI_API_KEY` (and the Supabase vars, if used) in the host's environment. When Supabase
+is enabled, add `{origin}/reset-password` to the project's redirect allowlist so password-reset
+links resolve.

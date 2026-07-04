@@ -85,11 +85,11 @@ The palette is a Material Design 3–derived system. Use only these tokens. Neve
 
 ### Font Families
 
-| Role       | Font              | Package                                |
-| ---------- | ----------------- | -------------------------------------- |
-| Headline   | Plus Jakarta Sans | `@expo-google-fonts/plus-jakarta-sans` |
-| Body       | Plus Jakarta Sans | `@expo-google-fonts/plus-jakarta-sans` |
-| Label/Mono | Space Grotesk     | `@expo-google-fonts/space-grotesk`     |
+| Role       | Font              | Loaded via                                   |
+| ---------- | ----------------- | -------------------------------------------- |
+| Headline   | Plus Jakarta Sans | `next/font/google` (`--font-jakarta`)        |
+| Body       | Plus Jakarta Sans | `next/font/google` (`--font-jakarta`)        |
+| Label/Mono | Space Grotesk     | `next/font/google` (`--font-grotesk`)        |
 
 > Use `Space Grotesk` for: transaction amounts, e-invoice IDs, reference codes, category chips, uppercase meta labels, status badges, confidence percentages, and all `font-label` contexts.
 
@@ -173,7 +173,7 @@ Base unit: **4px**. All spacing is a multiple of 4.
 
 ## 7. Iconography
 
-- **Library:** `@expo/vector-icons` using **Material Icons** / **Material Community Icons** (matching Material Symbols Outlined from mockups)
+- **Library:** Material Symbols Outlined web font, wrapped by `components/Icon.tsx` (snake_case glyph names)
 - **Style:** Outlined/regular by default. Filled variant only for the **active bottom tab badge icon**.
 - **Icon sizes:**
 

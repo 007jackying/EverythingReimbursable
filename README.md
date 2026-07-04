@@ -4,9 +4,9 @@ A mobile-responsive receipt scanner and expense tracker webapp built with Next.j
 
 **Snap or upload a receipt → AI extracts the data → review and save → browse your history.**
 
-Real AI extraction (Google Gemini via a server-side API route), Supabase auth + cloud sync,
-and a graceful local-only mode when Supabase is not configured. The app starts empty — all
-receipts come from the user's own uploads.
+Real AI extraction (Google Gemini or any OpenRouter model, via a server-side API route),
+Supabase auth + cloud sync, and a graceful local-only mode when Supabase is not configured.
+The app starts empty — all receipts come from the user's own uploads.
 
 > **Web conversion notes:** see [`docs/WEB_CONVERSION.md`](./docs/WEB_CONVERSION.md)
 > **Dev progress log:** see [`PROGRESS.md`](./PROGRESS.md)
@@ -18,7 +18,8 @@ receipts come from the user's own uploads.
 ## Features
 
 - 📸 **Capture** — take a photo (native camera on mobile browsers), pick a file, or drag-and-drop
-- 🤖 **AI extraction** — Gemini reads merchant, total, tax, date, payment method, and e-invoice ID
+- 🤖 **AI extraction** — reads merchant, total, tax, date, payment method, and e-invoice ID
+- 🧾 **Receipt check** — non-receipt images are rejected with a closable notice, never saved
 - ✅ **Review & edit** — verify the extracted fields, edit inline, then save
 - 🗂️ **History** — search, filter by month/category/status, grouped timeline view
 - 📊 **Dashboard** — total spend, monthly stats, and recent receipts at a glance
@@ -38,7 +39,7 @@ receipts come from the user's own uploads.
 | State       | React Context — `lib/auth.tsx`, `lib/receipts.tsx`             |
 | Persistence | `localStorage` (receipts, auth cache, prefs)                   |
 | Backend     | Supabase (auth + storage + receipts table) — optional          |
-| AI/OCR      | Google Gemini via `/api/extract` (key stays server-side)       |
+| AI/OCR      | Google Gemini or OpenRouter via `/api/extract` (key stays server-side) |
 | Capture     | `<input type="file" capture>` — native camera on mobile web    |
 | Fonts       | Plus Jakarta Sans + Space Grotesk (`next/font/google`)         |
 | Icons       | Material Symbols web font                                      |
@@ -51,13 +52,13 @@ receipts come from the user's own uploads.
 ### Prerequisites
 
 - Node.js 20+
-- Google Gemini API key (for AI receipt extraction)
+- An AI provider key — either Google Gemini or OpenRouter (for AI receipt extraction)
 - Optional: a Supabase project (cloud auth + sync) — see [`docs/SUPABASE_SETUP.md`](./docs/SUPABASE_SETUP.md)
 
 ### Setup
 
 ```bash
-cp .env.example .env.local   # fill in GEMINI_API_KEY (+ Supabase vars if used)
+cp .env.example .env.local   # fill in an AI provider (Gemini or OpenRouter) + Supabase vars if used
 npm install
 npm run dev                  # http://localhost:3000
 ```
@@ -67,11 +68,17 @@ persistence, no image uploads.
 
 ### Environment variables
 
-| Variable                        | Required | Purpose                                            |
-| ------------------------------- | -------- | -------------------------------------------------- |
-| `GEMINI_API_KEY`                | yes      | Server-side receipt OCR — never exposed to browser |
-| `NEXT_PUBLIC_SUPABASE_URL`      | no       | Enables cloud auth + sync when set                 |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | no       | Enables cloud auth + sync when set                 |
+Configure **one** AI provider. If `GEMINI_MODEL_NAME` is set, Gemini is used; otherwise the
+app falls back to OpenRouter when both `OPEN_ROUTER_*` vars are set.
+
+| Variable                        | Required   | Purpose                                                        |
+| ------------------------------- | ---------- | -------------------------------------------------------------- |
+| `GEMINI_API_KEY`                | Gemini     | Google Gemini key — server-side only, never exposed to browser |
+| `GEMINI_MODEL_NAME`             | Gemini     | Gemini model id (e.g. `gemini-3.1-pro-preview`); presence selects Gemini |
+| `OPEN_ROUTER_API_KEY`           | OpenRouter | OpenRouter key — used when Gemini is not configured            |
+| `OPEN_ROUTER_MODEL_NAME`        | OpenRouter | OpenRouter model id (e.g. `openai/gpt-latest`)                 |
+| `NEXT_PUBLIC_SUPABASE_URL`      | no         | Enables cloud auth + sync when set                             |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | no         | Enables cloud auth + sync when set                             |
 
 ### Scripts
 
@@ -97,7 +104,7 @@ persistence, no image uploads.
 | `/scan`           | Upload / capture a receipt image                         |
 | `/processing`     | AI extraction progress                                   |
 | `/review`         | Review new extraction or view/edit an existing receipt   |
-| `/api/extract`    | Server route — Gemini OCR                                |
+| `/api/extract`    | Server route — Gemini/OpenRouter OCR + receipt check     |
 
 The capture flow (`/scan → /processing → /review`) hands the image and extraction result
 through in-memory state (`lib/pending.ts`); a hard refresh mid-flow returns to `/scan`.
@@ -107,7 +114,8 @@ through in-memory state (`lib/pending.ts`); a hard refresh mid-flow returns to `
 ## Architecture Highlights
 
 - **Server-side AI key** — the image is compressed in the browser (canvas) and posted to
-  `/api/extract`; the Gemini key lives only on the server.
+  `/api/extract`; the provider key (Gemini or OpenRouter) lives only on the server. The route
+  also flags non-receipt images (`isReceipt: false` → 422), so they never reach `/review` or get saved.
 - **Local-first, cloud-optional** — receipts persist to `localStorage`; when Supabase is
   configured, writes upsert to the cloud and reads merge on login/refresh (last-write-wins by
   `updatedAt`). Image files upload to Supabase Storage; in local-only mode they're inlined as
@@ -128,7 +136,7 @@ app/
 ├── (main)/                 → auth-guarded, bottom tab bar
 │   ├── home/ history/ profile/
 ├── scan/ processing/ review/  → receipt capture flow (full-screen)
-└── api/extract/route.ts    → server-side Gemini OCR
+└── api/extract/route.ts    → server-side Gemini/OpenRouter OCR + receipt check
 components/                 → Icon, Button, Input, TabBar
 lib/                        → contexts, Supabase client, cloud sync, helpers
 designMockups/              → per-screen visual source of truth (png + html)
@@ -144,6 +152,6 @@ Deploys to any Node host or Vercel:
 npm run build && npm run start
 ```
 
-Set `GEMINI_API_KEY` (and the Supabase vars, if used) in the host's environment. When Supabase
+Set an AI provider (Gemini or OpenRouter) and the Supabase vars, if used, in the host's environment. When Supabase
 is enabled, add `{origin}/reset-password` to the project's redirect allowlist so password-reset
 links resolve.

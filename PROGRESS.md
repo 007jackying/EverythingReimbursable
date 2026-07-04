@@ -32,7 +32,7 @@ route map, removals, and known simplifications.
 | Home / Dashboard    | `/home`           | Summary card, monthly stats, quick actions, recent receipts      |
 | History             | `/history`        | Timeline, category grouping, status filters, search, CSV export  |
 | Upload              | `/scan`           | File input (`capture` opens mobile camera) + drag-and-drop       |
-| AI Processing       | `/processing`     | Progress animation, calls `/api/extract`, error state            |
+| AI Processing       | `/processing`     | Progress animation, calls `/api/extract`, error + not-a-receipt states |
 | Review / Detail     | `/review`         | New-receipt review + existing receipt view/edit/delete           |
 | Profile             | `/profile`        | Edit name, currency preference, export data, logout              |
 
@@ -42,8 +42,9 @@ route map, removals, and known simplifications.
   (last-write-wins by `updatedAt`), local-only fallback without credentials.
 - **Auth:** `lib/auth.tsx` — Supabase email auth or local fallback; session cached
   in localStorage.
-- **AI:** `app/api/extract/route.ts` — Gemini OCR server-side; browser sends a
-  canvas-compressed JPEG, key never leaves the server.
+- **AI:** `app/api/extract/route.ts` — server-side OCR via Gemini (`GEMINI_MODEL_NAME`)
+  or OpenRouter (`OPEN_ROUTER_*`) as fallback; browser sends a canvas-compressed JPEG,
+  key never leaves the server. Non-receipt images return 422 and are never saved.
 - **Design system:** unchanged Material 3 token palette, now as Tailwind `@theme`
   variables in `app/globals.css`. `designMockups/` remains visual truth.
 

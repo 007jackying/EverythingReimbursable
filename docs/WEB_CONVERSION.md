@@ -75,6 +75,8 @@ The scan → processing → review flow passes the picked image and extraction r
 
 The Supabase password-reset redirect changed from the `everythingreimbursable://` deep link to `{origin}/reset-password` — update the redirect URL allowlist in the Supabase dashboard.
 
+> Since the conversion, the extract route also accepts an OpenRouter provider (`OPEN_ROUTER_API_KEY` + `OPEN_ROUTER_MODEL_NAME`) as a fallback when `GEMINI_MODEL_NAME` is unset. See the README for the current env matrix.
+
 ## 5. New Project Layout
 
 ```
@@ -87,7 +89,7 @@ app/
 │   ├── layout.tsx        → auth guard + bottom tab bar
 │   ├── home/ history/ profile/
 ├── scan/ processing/ review/   → standalone full-screen flow
-└── api/extract/route.ts  → server-side Gemini OCR
+└── api/extract/route.ts  → server-side Gemini/OpenRouter OCR
 components/               → Icon, Button, Input, TabBar
 lib/                      → types, supabase, auth, receipts, cloud,
                             currency, csv, extract, pending, image,

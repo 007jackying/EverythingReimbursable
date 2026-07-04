@@ -502,7 +502,7 @@ app/ (Next.js App Router)
 ├── /scan             → Upload screen (file input + drag-drop; `capture` opens mobile camera)
 ├── /processing       → AI extraction       ← designMockups/ai_extraction_progress/
 ├── /review           → Receipt review/detail (`?id=` for existing) ← designMockups/receipt_detail_review/
-└── /api/extract      → server route: Gemini OCR (key stays server-side)
+└── /api/extract      → server route: Gemini/OpenRouter OCR + receipt check (key stays server-side)
 ```
 
 The scan → processing → review flow hands the image/extraction through `lib/pending.ts`
@@ -605,7 +605,7 @@ _This file is the single source of truth for EverythingReimbursable UI. When in 
 
 Phase 5 complete: the app was fully converted from Expo React Native to a
 mobile-responsive **Next.js webapp** (see [`docs/WEB_CONVERSION.md`](./docs/WEB_CONVERSION.md)).
-It runs end-to-end with real AI extraction (Gemini via a server route), Supabase auth +
+It runs end-to-end with real AI extraction (Gemini or OpenRouter via a server route), Supabase auth +
 cloud sync, and a graceful local-only fallback when Supabase is unconfigured.
 
 | Phase                | Scope                                                                    | Status  |
@@ -621,7 +621,7 @@ cloud sync, and a graceful local-only fallback when Supabase is unconfigured.
 | `app/layout.tsx`           | Fonts (next/font), providers, mobile-first 640px app frame                                                                 |
 | `lib/auth.tsx`             | Supabase email auth (`login` / `signUp` / `logout` / `resetPassword`) — local-auth fallback when Supabase is unconfigured  |
 | `lib/receipts.tsx`         | CRUD receipts — localStorage key `receipts_v1`, online-first cloud sync (last-write-wins)                                  |
-| `app/api/extract/route.ts` | Server-side receipt OCR via Gemini — API key never reaches the browser                                                     |
+| `app/api/extract/route.ts` | Server-side receipt OCR via Gemini or OpenRouter (provider picked by env) + non-receipt rejection — API key never reaches the browser |
 | `lib/cloud.ts`             | Supabase `receipts` table upsert/delete/fetch + Storage image upload (no-op when unconfigured)                             |
 | `lib/pending.ts`           | In-memory carrier for the scan → processing → review flow                                                                  |
 | `lib/csv.ts`               | CSV export via Blob download                                                                                               |
@@ -629,6 +629,7 @@ cloud sync, and a graceful local-only fallback when Supabase is unconfigured.
 
 ### Production Notes
 
+- AI provider: set `GEMINI_MODEL_NAME` + `GEMINI_API_KEY` to use Gemini, or `OPEN_ROUTER_API_KEY` + `OPEN_ROUTER_MODEL_NAME` to use any OpenRouter model. Gemini wins when both are set. Non-receipt images return 422 (`notReceipt: true`) and are never saved.
 - Supabase setup (bucket, `receipts` table, RLS policies): see [`docs/SUPABASE_SETUP.md`](./docs/SUPABASE_SETUP.md). Without `.env.local` credentials the app runs local-only.
 - The Supabase password-reset redirect URL must allowlist `{origin}/reset-password`.
 - Currency preference is stored locally only — not synced to any backend.

@@ -1,6 +1,6 @@
 # CLAUDE.md — EverythingReimbursable Design System
 
-This file defines the canonical design language for **EverythingReimbursable**, a cross-platform receipt scanner and expense tracking app built with Expo React Native (iOS, Android, Web). Every screen, component, and interaction must strictly follow this system. Reference the `designMockups/` folder at the project root for screen-level visual truth — each subfolder contains a `screen.png` (visual) and `code.html` (implementation reference).
+This file defines the canonical design language for **EverythingReimbursable**, a mobile-responsive receipt scanner and expense tracking webapp built with Next.js (App Router) + Tailwind CSS v4. Every screen, component, and interaction must strictly follow this system. Reference the `designMockups/` folder at the project root for screen-level visual truth — each subfolder contains a `screen.png` (visual) and `code.html` (implementation reference).
 
 ---
 
@@ -26,7 +26,7 @@ This file defines the canonical design language for **EverythingReimbursable**, 
 | Property    | Value                                                                      |
 | ----------- | -------------------------------------------------------------------------- |
 | App Name    | EverythingReimbursable                                                     |
-| Platform    | Expo React Native — iOS, Android, Web                                      |
+| Platform    | Next.js webapp — mobile-first responsive (phone browsers + desktop)        |
 | Design Tone | Editorial bento-style, fintech-grade, purposeful whitespace                |
 | Inspiration | High-end financial apps — editorial layouts, asymmetric composition, depth |
 
@@ -85,11 +85,11 @@ The palette is a Material Design 3–derived system. Use only these tokens. Neve
 
 ### Font Families
 
-| Role       | Font              | Package                                |
-| ---------- | ----------------- | -------------------------------------- |
-| Headline   | Plus Jakarta Sans | `@expo-google-fonts/plus-jakarta-sans` |
-| Body       | Plus Jakarta Sans | `@expo-google-fonts/plus-jakarta-sans` |
-| Label/Mono | Space Grotesk     | `@expo-google-fonts/space-grotesk`     |
+| Role       | Font              | Loaded via                                   |
+| ---------- | ----------------- | -------------------------------------------- |
+| Headline   | Plus Jakarta Sans | `next/font/google` (`--font-jakarta`)        |
+| Body       | Plus Jakarta Sans | `next/font/google` (`--font-jakarta`)        |
+| Label/Mono | Space Grotesk     | `next/font/google` (`--font-grotesk`)        |
 
 > Use `Space Grotesk` for: transaction amounts, e-invoice IDs, reference codes, category chips, uppercase meta labels, status badges, confidence percentages, and all `font-label` contexts.
 
@@ -173,7 +173,7 @@ Base unit: **4px**. All spacing is a multiple of 4.
 
 ## 7. Iconography
 
-- **Library:** `@expo/vector-icons` using **Material Icons** / **Material Community Icons** (matching Material Symbols Outlined from mockups)
+- **Library:** Material Symbols Outlined web font, wrapped by `components/Icon.tsx` (snake_case glyph names)
 - **Style:** Outlined/regular by default. Filled variant only for the **active bottom tab badge icon**.
 - **Icon sizes:**
 
@@ -483,29 +483,30 @@ All chips use `rounded-full` pill shape.
 - **List entry:** fade-in + translateY (8px → 0), staggered 60ms per item
 - **Bottom sheet:** slide up from bottom, 280ms, ease-out
 - **No spring physics on navigation transitions.** No bounce.
-- Use `react-native-reanimated` for all animations. Use `Animated` API only for simple opacity/scale.
+- Use CSS transitions and `@keyframes` for all animations — no animation libraries.
 
 ---
 
 ## 11. Navigation Structure
 
 ```
-Stack Navigator (Root)
-├── AuthStack (unauthenticated)
-│   ├── SplashScreen          ← designMockups/splash_onboarding/
-│   ├── LoginScreen           ← designMockups/login/
-│   └── SignUpScreen          ← designMockups/sign_up/
-└── MainTabs (authenticated)  ← Bottom tab bar
-    ├── HomeScreen            ← designMockups/home_dashboard_1/
-    ├── HistoryScreen         ← designMockups/history_all_receipts_1/
-    ├── ScanTab               ← FAB, opens ScanCameraScreen as modal
-    └── ProfileScreen         ← designMockups/profile/
-
-Modal Stack (over MainTabs)
-├── ScanCameraScreen          ← designMockups/scan_receipt_camera/
-├── AIProcessingScreen        ← designMockups/ai_extraction_progress/
-└── ReceiptDetailScreen       ← designMockups/receipt_detail_review/
+app/ (Next.js App Router)
+├── /                 → Splash/Onboarding   ← designMockups/splash_onboarding/
+├── /login            → Login               ← designMockups/login/
+├── /signup           → Sign Up             ← designMockups/sign_up/
+├── /reset-password   → Password reset (request + recovery modes)
+├── (main)/           → authenticated, fixed bottom tab bar (Home | History | Scan FAB | Profile)
+│   ├── /home         → Dashboard           ← designMockups/home_dashboard_1/
+│   ├── /history      → History             ← designMockups/history_all_receipts_1/
+│   └── /profile      → Profile             ← designMockups/profile/
+├── /scan             → Upload screen (file input + drag-drop; `capture` opens mobile camera)
+├── /processing       → AI extraction       ← designMockups/ai_extraction_progress/
+├── /review           → Receipt review/detail (`?id=` for existing) ← designMockups/receipt_detail_review/
+└── /api/extract      → server route: Gemini OCR (key stays server-side)
 ```
+
+The scan → processing → review flow hands the image/extraction through `lib/pending.ts`
+(module memory); a hard refresh mid-flow returns to `/scan`.
 
 ---
 
@@ -547,11 +548,11 @@ type ReceiptCategory =
 ## 13. Accessibility
 
 - All interactive elements: minimum touch target **48 × 48px**.
-- All images require `accessibilityLabel`.
+- All images require `alt` text.
 - Color is **never** the sole indicator of meaning — always pair with text or icon.
 - Focus order must follow visual reading order (top-to-bottom, left-to-right).
-- Use `accessibilityRole` and `accessibilityState` on all interactive components.
-- Dynamic text size: support system font scaling up to 1.3× without layout breaking.
+- Use semantic HTML (`<button>`, `<a>`, `<label>`) and ARIA attributes (`aria-current`, `role="dialog"`) on interactive components.
+- Dynamic text size: support browser font scaling up to 1.3× without layout breaking.
 
 ---
 
@@ -570,9 +571,9 @@ function MyComponent() { ... }
 function handlePress() { ... }
 ```
 
-- Exception: `export default` function syntax is allowed for Expo Router file-based route screens only.
-- Use `StyleSheet.create()` for all styles — no inline style objects.
-- Color tokens must be imported from a central `theme.ts` constants file — never hardcode hex values.
+- Every page/component that uses hooks is a client component (`'use client'` first line). The only server code is `app/api/extract/route.ts`.
+- Style with Tailwind utility classes referencing the tokens defined in `app/globals.css` `@theme` — never hardcode hex values in components.
+- `useSearchParams` consumers must be wrapped in `<Suspense>` (Next.js requirement).
 
 ---
 
@@ -587,8 +588,8 @@ function handlePress() { ... }
 - ❌ No animations above 300ms for UI transitions
 - ❌ No uppercase on body text or headings — only on Space Grotesk labels and chips
 - ❌ No placeholder screens — every screen must have an empty state
-- ❌ No inline styles in components — use `StyleSheet.create()` with token references
-- ❌ No `phosphor-react-native` — use Material Icons to match the mockup icon set
+- ❌ No inline `style={}` objects where a Tailwind token utility exists
+- ❌ No icon libraries — use the Material Symbols web font (`components/Icon.tsx`) to match the mockup icon set
 
 ---
 
@@ -600,35 +601,35 @@ _This file is the single source of truth for EverythingReimbursable UI. When in 
 
 > Full log: [`PROGRESS.md`](./PROGRESS.md) — phases, decisions, backlog.
 
-### Current Status (2026-06-12)
+### Current Status (2026-07-04)
 
-All Phases 1–4 are complete. The app runs end-to-end with real AI extraction (Gemini),
-Supabase auth + cloud sync (graceful local-only fallback when unconfigured), and an
-offline-first sync queue.
+Phase 5 complete: the app was fully converted from Expo React Native to a
+mobile-responsive **Next.js webapp** (see [`docs/WEB_CONVERSION.md`](./docs/WEB_CONVERSION.md)).
+It runs end-to-end with real AI extraction (Gemini via a server route), Supabase auth +
+cloud sync, and a graceful local-only fallback when Supabase is unconfigured.
 
-| Phase                | Scope                                                                 | Status  |
-| -------------------- | --------------------------------------------------------------------- | ------- |
-| 1 — Foundation       | Auth context, data context, persistence, splash gate                  | ✅ Done |
-| 2 — Core Camera Flow | Scan screen, AI processing, receipt detail                            | ✅ Done |
-| 3 — Polish           | History filters, inline edit, delete, CSV export, empty states        | ✅ Done |
-| 4 — Production       | Supabase auth, cloud image + data sync, offline queue, error boundary | ✅ Done |
+| Phase                | Scope                                                                    | Status  |
+| -------------------- | ------------------------------------------------------------------------ | ------- |
+| 1–4 (Expo RN era)    | Foundation, camera flow, polish, production backend                      | ✅ Done |
+| 5 — Web Conversion   | Next.js 16 + Tailwind v4 port; native code, tests, dead integrations cut | ✅ Done |
 
 ### Key Files Quick Reference
 
-| File                               | Purpose                                                                                                                        |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `src/constants/theme.ts`           | Single source for all color tokens, spacing, radius, shadows, font families                                                    |
-| `src/context/AuthContext.tsx`      | Supabase email auth (`login` / `signUp` / `logout` / `resetPassword`) — falls back to local auth when Supabase is unconfigured |
-| `src/context/ReceiptsContext.tsx`  | CRUD receipts — `AsyncStorage` key `receipts_v1`, cloud sync + offline queue worker                                            |
-| `src/services/gemini.ts`           | Real receipt OCR via Gemini (`GEMINI_MODEL` constant in `constants/app.ts`)                                                    |
-| `src/services/cloudReceipts.ts`    | Supabase `receipts` table upsert/delete/fetch (no-op when unconfigured)                                                        |
-| `src/services/cloudStorage.ts`     | Receipt image upload/delete to Supabase Storage (compressed via `expo-image-manipulator`)                                      |
-| `src/utils/offlineQueue.ts`        | Typed upsert/delete sync queue + NetInfo connectivity helpers                                                                  |
-| `src/components/ErrorBoundary.tsx` | Root error boundary with design-system fallback UI                                                                             |
-| `src/utils/exportCsv.ts`           | Uses `expo-file-system` v55 OOP API (`File`, `Paths`) — not the legacy API                                                     |
+| File                       | Purpose                                                                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------|
+| `app/globals.css`          | Single source for all color tokens, fonts, shadows (Tailwind v4 `@theme`)                                                 |
+| `app/layout.tsx`           | Fonts (next/font), providers, mobile-first 640px app frame                                                                 |
+| `lib/auth.tsx`             | Supabase email auth (`login` / `signUp` / `logout` / `resetPassword`) — local-auth fallback when Supabase is unconfigured  |
+| `lib/receipts.tsx`         | CRUD receipts — localStorage key `receipts_v1`, online-first cloud sync (last-write-wins)                                  |
+| `app/api/extract/route.ts` | Server-side receipt OCR via Gemini — API key never reaches the browser                                                     |
+| `lib/cloud.ts`             | Supabase `receipts` table upsert/delete/fetch + Storage image upload (no-op when unconfigured)                             |
+| `lib/pending.ts`           | In-memory carrier for the scan → processing → review flow                                                                  |
+| `lib/csv.ts`               | CSV export via Blob download                                                                                               |
+| `components/`              | Icon (Material Symbols), Button, Input, TabBar                                                                             |
 
 ### Production Notes
 
-- Supabase setup (bucket, `receipts` table, RLS policies): see [`docs/SUPABASE_SETUP.md`](./docs/SUPABASE_SETUP.md). Without `.env` credentials the app runs local-only.
-- Currency preference is stored locally only — not synced to any backend
-- Push notifications are not implemented (requires a server)
+- Supabase setup (bucket, `receipts` table, RLS policies): see [`docs/SUPABASE_SETUP.md`](./docs/SUPABASE_SETUP.md). Without `.env.local` credentials the app runs local-only.
+- The Supabase password-reset redirect URL must allowlist `{origin}/reset-password`.
+- Currency preference is stored locally only — not synced to any backend.
+- No offline queue on web (online-first); failed cloud writes keep the local copy.

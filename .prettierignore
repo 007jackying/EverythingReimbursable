@@ -1,22 +1,17 @@
 # Prettier ignore file
 node_modules/
-.expo/
-dist/
-web-build/
-*.lock
+.next/
+out/
 package-lock.json
-yarn.lock
-pnpm-lock.yaml
 
 # Build outputs
-build/
 *.tsbuildinfo
 
 # Generated files
-expo-env.d.ts
+next-env.d.ts
 
-# Test coverage
-coverage/
+# Design mockups (external HTML)
+designMockups/
 
 # OS files
 .DS_Store

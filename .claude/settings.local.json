@@ -1,7 +1,6 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx expo:*)",
       "Bash(npx tsc *)",
       "Bash(node *)",
       "Bash(git *)",
@@ -24,7 +23,13 @@
       "Bash([ -f \"$SKILL_DIR/languages/$lang.md\" ])",
       "Bash(echo \"Exit code: $?\")",
       "Bash(GRAPH_DIR=/Users/dreamyx/Documents/repos/mobile/Claimable npx vite --host 127.0.0.1)",
-      "Bash(echo \"Server PID: $!\")"
+      "Bash(echo \"Server PID: $!\")",
+      "Bash(npm rm *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(npx jest *)",
+      "Bash(grep -E '\\\\.\\(ts|tsx|js|jsx\\)$')",
+      "Bash(curl -s -o /dev/null -w \"server: %{http_code}\\\\n\" http://localhost:3100/)",
+      "Bash(grep -rniE \"\\\\\\\\\\\\$[0-9]+\\\\.[0-9]|42\\\\.50|98\\\\.4|99\\\\.2|\\\\+12%|oct 24|2024-|2023-|INV-|blue bottle|coffee|whole foods|starbucks|amazon|walmart|receipt.*=.*\\\\[|const.*receipts.*=|MYR|4242\" app lib components --include=\"*.ts\" --include=\"*.tsx\")"
     ]
   }
 }

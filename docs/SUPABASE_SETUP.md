@@ -18,16 +18,19 @@ This guide walks you through setting up Supabase for cloud storage and authentic
 ## 2. Get Your Credentials
 
 1. In your project dashboard, go to **Settings** → **API**
-2. Copy the following values to your `.env` file:
-   - **Project URL** → `EXPO_PUBLIC_SUPABASE_URL`
-   - **anon public key** → `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+2. Copy the following values to your `.env.local` file:
+   - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
+   - **anon public key** → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-Your `.env` should look like:
+Your `.env.local` should look like:
 
 ```bash
-EXPO_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 ```
+
+3. For password reset emails: go to **Authentication** → **URL Configuration** and add
+   `http://localhost:3000/reset-password` (and your production origin) to the redirect allowlist.
 
 ---
 
@@ -133,23 +136,19 @@ USING (auth.uid() = user_id);
 
 ---
 
-## 5. Configure Authentication (Phase 4.2)
+## 5. Configure Authentication
 
 1. Go to **Authentication** → **Providers**
-2. Enable **Email** provider (enabled by default)
-3. Optionally enable **Google** provider:
-   - Get OAuth credentials from [Google Cloud Console](https://console.cloud.google.com)
-   - Add authorized redirect URL: `https://your-project-id.supabase.co/auth/v1/callback`
-   - Copy Client ID and Client Secret to Supabase
+2. Enable **Email** provider (enabled by default) — the app uses email/password auth only
 
 ---
 
 ## 6. Test Your Setup
 
-After configuring, restart your Expo dev server:
+After configuring, restart your dev server:
 
 ```bash
-npx expo start -c
+npm run dev
 ```
 
 The app will automatically:
@@ -164,8 +163,8 @@ The app will automatically:
 
 ### "Supabase credentials not configured"
 
-- Check that `.env` file exists and has correct values
-- Restart Expo server with `-c` flag to clear cache
+- Check that `.env.local` exists and has correct values
+- Restart the dev server (env vars are read at startup)
 
 ### "Storage policy violation"
 

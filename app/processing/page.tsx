@@ -18,6 +18,7 @@ const ProcessingPage = () => {
   const [progress, setProgress] = useState(0)
   const [result, setResult] = useState<ExtractedReceiptData | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [notReceipt, setNotReceipt] = useState(false)
 
   useEffect(() => {
     if (startedRef.current) return
@@ -41,6 +42,7 @@ const ProcessingPage = () => {
       })
       .catch((err: unknown) => {
         setError(err instanceof Error ? err.message : 'We could not read this receipt.')
+        if ((err as { notReceipt?: boolean })?.notReceipt) setNotReceipt(true)
       })
   }, [router])
 
@@ -95,12 +97,12 @@ const ProcessingPage = () => {
           /* Error state */
           <div className="flex w-full max-w-sm flex-col items-center text-center">
             <h2 className="mb-2 font-headline text-2xl font-bold tracking-tight text-primary">
-              Extraction Failed
+              {notReceipt ? 'Not a Receipt' : 'Extraction Failed'}
             </h2>
             <p className="mb-8 font-body text-sm font-medium text-on-surface-variant">{error}</p>
             <div className="flex w-full flex-col gap-3">
               <Button onClick={() => router.replace('/scan')} arrow>
-                Try Again
+                {notReceipt ? 'Scan Another' : 'Try Again'}
               </Button>
               <Button variant="ghost" onClick={() => router.replace('/home')}>
                 Cancel

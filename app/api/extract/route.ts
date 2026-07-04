@@ -1,6 +1,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import type { ExtractedReceiptData, ReceiptCategory } from '@/lib/types'
 
+// Gemini call plus up to 3 retries with backoff can exceed Vercel's default
+// 10s function limit; allow up to 60s (Hobby max).
+export const maxDuration = 60
+
 const GEMINI_MODEL = 'gemini-3-pro-preview'
 const MAX_RETRIES = 3
 const INITIAL_DELAY = 1000

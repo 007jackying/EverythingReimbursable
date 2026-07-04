@@ -1,0 +1,74 @@
+@import 'tailwindcss';
+
+/* EverythingReimbursable design tokens — Material 3 palette from CLAUDE.md.
+   Single source of truth for colors; never hardcode hex in components. */
+@theme {
+  --color-primary: #070235;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1e1b4b;
+  --color-on-primary-container: #8683ba;
+  --color-primary-fixed: #e3dfff;
+  --color-primary-fixed-dim: #c4c1fb;
+  --color-secondary: #006c49;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #6cf8bb;
+  --color-on-secondary-container: #00714d;
+  --color-secondary-fixed: #6ffbbe;
+  --color-secondary-fixed-dim: #4edea3;
+  --color-background: #faf9f7;
+  --color-surface: #faf9f7;
+  --color-surface-bright: #faf9f7;
+  --color-surface-dim: #dbdad8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f3f1;
+  --color-surface-container: #efeeec;
+  --color-surface-container-high: #e9e8e6;
+  --color-surface-container-highest: #e3e2e0;
+  --color-on-surface: #1a1c1b;
+  --color-on-surface-variant: #47464f;
+  --color-outline: #787680;
+  --color-outline-variant: #c8c5d0;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-inverse-surface: #2f3130;
+  --color-inverse-on-surface: #f1f1ef;
+
+  --font-headline: var(--font-jakarta), sans-serif;
+  --font-body: var(--font-jakarta), sans-serif;
+  --font-label: var(--font-grotesk), monospace;
+
+  --shadow-editorial: 0 12px 32px rgba(26, 28, 27, 0.04);
+  --shadow-hero: 0 8px 32px rgba(7, 2, 53, 0.2);
+}
+
+.material-symbols-outlined,
+.material-symbols-filled {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.material-symbols-filled {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}

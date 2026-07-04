@@ -19,7 +19,9 @@ export const extractReceiptData = async (image: Blob): Promise<ExtractedReceiptD
 
   const data = await res.json()
   if (!res.ok) {
-    throw new Error(data.error ?? 'Extraction failed')
+    const error = new Error(data.error ?? 'Extraction failed')
+    if (data.notReceipt) (error as Error & { notReceipt?: boolean }).notReceipt = true
+    throw error
   }
   return data as ExtractedReceiptData
 }
